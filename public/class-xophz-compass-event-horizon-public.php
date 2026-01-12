@@ -81,7 +81,7 @@ class Xophz_Compass_Event_Horizon_Public {
 <?php if ( $this->is_dev_server() ) : ?>
     <!-- Dev Server Assets -->
     <script type="module" src="http://localhost:9000/@vite/client"></script>
-    <script type="module" src="http://localhost:9000/src/mount-public.ts"></script>
+    <script type="module" src="http://localhost:9000/apps/youmeos/mount-youmeos.ts"></script>
 <?php else : ?>
     <!-- Production Assets -->
     <script type="module" src="<?php echo plugin_dir_url( __FILE__ ) . 'dist/js/youmeos.js'; ?>"></script>
