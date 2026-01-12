@@ -20,39 +20,37 @@ var youniverse = {
 
 var GALAXY_TOUR = [
   /////////////////
-  // INTRO
+  // THE AWAKENING
   /////////////////
   {
-    rx: -0.12216429754294249,
-    ry: 1.9989722678912,
-    z: 7999999,
+    rx: -0.12,
+    ry: 2.0,
+    z: 4000000,
     travelTime: 2500,
     restTime: 2500,
-    message: "“Welcome to YouMeOS.”"
+    message: "“Welcome to the Youniverse.”",
+    callback: function () {
+      window.overrideGalaxyOpacity = 0;
+    }
   },
   {
-    rx: -0.12216429754294249,
-    ry: 1.9989722678912,
-    z: 7999999,
-    travelTime: 0,
+    rx: -0.12,
+    ry: 2.5,
+    z: 2000000,
+    travelTime: 1200,
     restTime: 2000,
     message: "“A YOU, Me, O.S.”"
   },
   {
-    rx: -0.12216429754294249,
-    ry: 1.9989722678912,
-    z: 7999999,
-    travelTime: 500,
-    restTime: 2000,
-    message: '"Let us begin our Journey!”'
-  },
-  {
-    rx: -0.12216429754294249,
-    ry: 6.9989722678912,
-    z: 1999999,
-    travelTime: 2500,
+    rx: 0.1,
+    ry: 3.5,
+    z: 1000000,
+    travelTime: 2000,
     restTime: 3000,
-    message: '"WE are hitchhacking the 5th Dimension of the Infinite Web…”'
+    message: "“Behold... the Infinite Web of Information.”",
+    callback: function () {
+      materializeGalaxy(5000);
+    }
   },
   {
     rx: -0.12216429754294249,
@@ -501,6 +499,12 @@ var GALAXY_TOUR = [
 ];
 var cinematic_width = 5;
 
+// Statics
+Tour.Easing = TWEEN.Easing.Quartic.InOut;
+Tour.Duration = 800;
+Tour.meta = $("#meta");
+Tour.timeouts = [];
+
 var Tour = function (stops) {
   this.current = 0;
   this.states = stops;
@@ -517,22 +521,38 @@ var Tour = function (stops) {
       left: 0,
       right: 0,
       bottom: 0,
-      width: 100 + "%",
-      height: 100 + "%"
+      width: "100%",
+      height: "100%",
+      background: "transparent",
+      fontFamily: "'Orbitron', sans-serif"
     })
     .html(
-      '<div class="top-bar"></div><div class="bottom-bar"></div><div class="message" style="display: none;"></div>'
+      '<div class="top-bar"></div>' +
+        '<div class="bottom-bar"></div>' +
+        '<div class="message-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 10;">' +
+        '  <div class="message" style="display: none; text-align: center; max-width: 80%; padding: 2.5rem 4rem; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); pointer-events: auto;"></div>' +
+        "</div>"
     );
 
   this.top = this.domElement.find(".top-bar");
   this.bottom = this.domElement.find(".bottom-bar");
   this.content = this.domElement.find(".message");
+
+  this.content.css({
+    color: "#fff",
+    fontSize: "2.4rem",
+    fontWeight: "600",
+    letterSpacing: "0.12em",
+    lineHeight: "1.4",
+    textTransform: "uppercase",
+    textShadow: "0 0 15px rgba(255, 255, 255, 0.3), 0 0 30px rgba(14, 165, 233, 0.2)"
+  });
+
   this.content.html("<p>" + this.states[0].message + "</p>");
 };
 
 // Statics
-Tour.Easing = TWEEN.Easing.Sinusoidal.InOut;
-Tour.Duration = 250;
+// Statics moved to top
 Tour.meta = $("#meta");
 Tour.timeouts = [];
 
@@ -753,10 +773,6 @@ Tour.prototype = {
 
     _.each(Tour.timeouts, clearTimeout);
 
-    if (this.current === this.states.length - 1) {
-      //Tour.meta.find('a').html('Stop');
-    }
-
     if (!state) {
       this.stop();
       return this;
@@ -766,14 +782,23 @@ Tour.prototype = {
     if (state.callback) this.arrivalCallback = state.callback;
     else this.arrivalCallback = undefined;
 
-    if (this.content.css("display") != "none") {
-      this.content.fadeOut(function () {
-        _this.content.html("<p><span>" + state.message + "</span></p>");
-      });
+    // Fluid message transition
+    var updateContent = function () {
+      _this.content.html("<p><span>" + state.message + "</span></p>");
+      // If we are stationary (travelTime 0), show it immediately
+      if (state.travelTime === 0) {
+        _this.content.fadeIn(600);
+      }
+    };
+
+    if (this.content.is(":visible")) {
+      // Fade out while camera starts moving
+      this.content.fadeOut(state.travelTime > 0 ? 600 : 300, updateContent);
     } else {
-      this.content.html("<p><span>" + state.message + "</span></p>");
+      updateContent();
     }
 
+    // Camera move
     this.rotating_tween = new TWEEN.Tween(rotating.rotation)
       .to(
         {
@@ -796,7 +821,20 @@ Tour.prototype = {
       .onComplete(function () {
         camera.position.target.z = camera.position.z;
         if (_this.arrivalCallback) _this.arrivalCallback();
-        _this.content.fadeIn(function () {
+
+        // Reveal message upon arrival if not already shown
+        if (state.travelTime > 0) {
+          _this.content.fadeIn(1000, function () {
+            Tour.timeouts.push(
+              setTimeout(function () {
+                if (continuous) {
+                  _this.next(true);
+                }
+              }, state.restTime)
+            );
+          });
+        } else {
+          // Stationary step, just wait the restTime
           Tour.timeouts.push(
             setTimeout(function () {
               if (continuous) {
@@ -804,7 +842,7 @@ Tour.prototype = {
               }
             }, state.restTime)
           );
-        });
+        }
       })
       .start();
 

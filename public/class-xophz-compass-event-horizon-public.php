@@ -107,4 +107,79 @@ class Xophz_Compass_Event_Horizon_Public {
   public function render_shortcode( $atts ) {
     return 'YouMeOS Shortcode not fully implemented for standalone app mode.';
   }
+  /**
+   * Register custom REST API routes
+   */
+  public function register_api_routes() {
+    register_rest_route( 'xophz-compass/v1', '/register', array(
+      'methods' => 'POST',
+      'callback' => array( $this, 'handle_user_registration' ),
+      'permission_callback' => '__return_true', // Public endpoint
+    ) );
+
+    register_rest_route( 'xophz-compass/v1', '/login', array(
+      'methods' => 'POST',
+      'callback' => array( $this, 'handle_user_login' ),
+      'permission_callback' => '__return_true', // Public endpoint
+    ) );
+  }
+
+  /**
+   * Handle user login via API
+   */
+  public function handle_user_login( $request ) {
+    $creds = array(
+        'user_login'    => $request->get_param( 'username' ),
+        'user_password' => $request->get_param( 'password' ),
+        'remember'      => true
+    );
+ 
+    $user = wp_signon( $creds, false );
+ 
+    if ( is_wp_error( $user ) ) {
+        return new WP_Error( 'invalid_credentials', 'Invalid username or password.', array( 'status' => 403 ) );
+    }
+    
+    return rest_ensure_response( array(
+        'message' => 'Login successful',
+        'user_email' => $user->user_email,
+        'user_nicename' => $user->user_nicename,
+        'user_display_name' => $user->display_name,
+        'nonce' => wp_create_nonce( 'wp_rest' ),
+    ) );
+  }
+
+  /**
+   * Handle user registration via API
+   */
+  public function handle_user_registration( $request ) {
+    $parameters = $request->get_json_params();
+    
+    $username = sanitize_text_field( $parameters['username'] ?? '' );
+    $email = sanitize_email( $parameters['email'] ?? '' );
+    $password = sanitize_text_field( $parameters['password'] ?? '' );
+    
+    if ( empty( $username ) || empty( $email ) || empty( $password ) ) {
+      return new WP_Error( 'missing_fields', 'Please provide username, email and password.', array( 'status' => 400 ) );
+    }
+
+    if ( username_exists( $username ) ) {
+        return new WP_Error( 'username_exists', 'Username already exists.', array( 'status' => 400 ) );
+    }
+
+    if ( email_exists( $email ) ) {
+        return new WP_Error( 'email_exists', 'Email already exists.', array( 'status' => 400 ) );
+    }
+    
+    $user_id = wp_create_user( $username, $password, $email );
+    
+    if ( is_wp_error( $user_id ) ) {
+        return $user_id;
+    }
+    
+    return rest_ensure_response( array(
+        'message' => 'User registered successfully.',
+        'user_id' => $user_id
+    ) );
+  }
 }

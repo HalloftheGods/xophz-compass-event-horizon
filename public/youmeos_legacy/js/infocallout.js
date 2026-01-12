@@ -60,6 +60,24 @@ function highlightMilkyWay() {
   }, seconds * 1000.0);
 }
 
+function materializeGalaxy(duration) {
+  var d = duration || 4000;
+  var target = { opacity: 0 };
+  window.overrideGalaxyOpacity = 0;
+
+  new TWEEN.Tween(target)
+    .to({ opacity: 1 }, d)
+    .easing(TWEEN.Easing.Quadratic.Out)
+    .onUpdate(function () {
+      window.overrideGalaxyOpacity = this.opacity;
+    })
+    .onComplete(function () {
+      // Don't delete it immediately as the next tour stop might depend on it
+      // But we can set a timer to release control if needed
+    })
+    .start();
+}
+
 function fadeInRegForm() {
   fadeInLoginForm(true);
 }

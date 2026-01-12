@@ -20,367 +20,210 @@ var youniverse = {
 
 var GALAXY_TOUR = [
   /////////////////
-  // INTRO
+  // THE AWAKENING
   /////////////////
   {
-    rx: -0.12216429754294249,
-    ry: 1.9989722678912,
-    z: 7999999,
+    rx: -0.12,
+    ry: 2.0,
+    z: 4000000,
     travelTime: 2500,
     restTime: 2500,
-    message: "“Welcome to YouMeOS.”"
+    message: "“Welcome to the Youniverse.”",
+    callback: function () {
+      window.overrideGalaxyOpacity = 0;
+    }
   },
   {
-    rx: -0.12216429754294249,
-    ry: 1.9989722678912,
-    z: 7999999,
-    travelTime: 0,
+    rx: -0.12,
+    ry: 2.5,
+    z: 2000000,
+    travelTime: 1200,
     restTime: 2000,
-    message: "“Your Personal Operating System for the Web.”"
+    message: "“A YOU, Me, O.S.”"
   },
   {
-    rx: -0.12216429754294249,
-    ry: 1.9989722678912,
-    z: 7999999,
-    travelTime: 500,
-    restTime: 2000,
-    message: '"Let us begin our Journey!”'
-  },
-  {
-    rx: -0.12216429754294249,
-    ry: 6.9989722678912,
-    z: 1999999,
-    travelTime: 2500,
-    restTime: 3000,
-    message: '"Connecting to the Infinite Web…”'
-  },
-  {
-    rx: -0.12216429754294249,
-    ry: 6.9989722678912,
-    z: 1999999,
-    travelTime: 0,
-    restTime: 2500,
-    message: '"…visualizing data not just as lists, but as a universe.”'
-  },
-  {
-    rx: 1,
-    ry: 1,
-    z: 999999,
-    travelTime: 4000,
-    restTime: 3000,
-    message: "“Until now, we’ve been limited by traditional interfaces…”"
-  },
-  {
-    rx: 1,
-    ry: 1,
-    z: 999999,
-    travelTime: 0,
-    restTime: 2500,
-    message: '"…but here, you can see the bigger picture.”'
-  },
-  {
-    rx: 1,
-    ry: 6,
-    z: 499999,
-    travelTime: 4000,
-    restTime: 3000,
-    message: "“I’m here to give you the Key to your Digital Universe…”"
-  },
-  {
-    rx: 1,
-    ry: 6,
-    z: 499999,
-    travelTime: 0,
-    restTime: 4000,
-    message: "“…opening shortcuts through your data at Godspeed…”",
-    callback: highlightMilkyWay
-  },
-  {
-    rx: 1,
-    ry: 6,
-    z: 499999,
-    travelTime: 0,
-    restTime: 4000,
-    message: "“…unraveling a new Operating System to navigate the Internet!”"
-  },
-  {
-    rx: 7,
-    ry: 0.9,
-    z: 99999,
-    travelTime: 3000,
-    restTime: 4000,
-    message: "“Welcome to a revolutionary way to visualize the Web.”"
-  },
-  {
-    rx: 7,
-    ry: 0.9,
-    z: 99999,
-    travelTime: 0,
-    restTime: 4000,
-    message: "“YOUR virtual Castle in the Cloud, where YOU reign Supreme!”"
-  },
-  {
-    rx: 7,
-    ry: 0.9,
-    z: 99999,
-    travelTime: 0,
-    restTime: 4000,
-    message: '“Here, YOU have Super Freedom of Expression, Access, and Privacy!"'
-  },
-  /////////////////
-  // END INTRO
-  /////////////////
-
-  // THE Galaxy of Stars
-  {
-    rx: 0,
-    ry: 0.9,
-    z: 199999,
+    rx: 0.1,
+    ry: 3.5,
+    z: 1000000,
     travelTime: 2000,
+    restTime: 3000,
+    message: "“Behold... the Infinite Web of Information.”",
+    callback: function () {
+      materializeGalaxy(5000);
+    }
+  },
+  {
+    rx: 0.2,
+    ry: 4.5,
+    z: 500000,
+    travelTime: 3000,
+    restTime: 3000,
+    message: "“Until Now, we’ve been locked away from an O.ptical S.olution…”"
+  },
+  {
+    rx: 0.5,
+    ry: 5.5,
+    z: 250000,
+    travelTime: 2000,
+    restTime: 3500,
+    message: "“...to the Internet, to our Technology, and this Dimensional Reality.”"
+  },
+  {
+    rx: 1.0,
+    ry: 6.0,
+    z: 99999,
+    travelTime: 4000,
     restTime: 4000,
     message: "“In this Space, every Person, Place and Idea is a Star…”",
     callback: highlightMilkyWay
   },
-
   {
-    rx: 0,
-    ry: 0.9,
-    z: 199999,
-    travelTime: 2500,
+    rx: 1.2,
+    ry: 6.5,
+    z: 49999,
+    travelTime: 2000,
     restTime: 3000,
-    message: "“…Organized Synchronically as a 4D Galaxy.”"
+    message: "“…O.rganized S.ynchronically as a 4D Galaxy.”"
   },
-
-  //////////////
-  // The NEXUS
-  //////////////
+  /////////////////
+  // THE NEXUS
+  /////////////////
   {
-    rx: 1.4395420537811414,
-    ry: 6.281532559509658,
+    rx: 1.439,
+    ry: 6.281,
     z: 1377,
     travelTime: 6000,
     restTime: 4000,
-    message: "“This is YOUR NEXUS. Connecting Individuals, Groups, and whole Platforms…”"
+    message: "“This is YOUR NEXUS.”"
   },
+  /////////////////
   {
-    rx: 1.4395420537811414,
-    ry: 6.281532559509658,
+    rx: 1.439,
+    ry: 6.281,
     z: 1077,
     travelTime: 1500,
-    restTime: 3000,
-    message: "“Your Nexus connects you with new People, Projects and Entities.”"
-  },
-
-  {
-    rx: 6.281532559509658,
-    ry: 1.4395420537811414,
-    z: 800.99999999994,
-    travelTime: 2000,
-    restTime: 3000,
-    message: "“As Time passes, your interactions Shine Brighter…”"
-  },
-  {
-    rx: 6.281532559509658,
-    ry: 1.4395420537811414,
-    z: 500.99999999994,
-    travelTime: 500,
-    restTime: 3000,
-    message: "“…bringing all that is important CLOSER to YOU.”"
-  },
-
-  {
-    rx: 7,
-    ry: 0.9,
-    z: 99999,
-    travelTime: 3000,
-    restTime: 2000,
-    message: "“What YOU interact with least…”"
-  },
-  {
-    rx: 7,
-    ry: 0.9,
-    z: 99999,
-    travelTime: 0,
     restTime: 3500,
-    message: "“…drifts away into the distance of your Galaxy.”",
+    message: "“Integrating Individuals, Groups, and whole Platforms.”"
+  },
+
+  {
+    rx: 6.281,
+    ry: 1.439,
+    z: 800,
+    travelTime: 2500,
+    restTime: 3000,
+    message: "“As Time passes, your interactions Shine Brighter…”",
     callback: highlightStarHeat
   },
-
-  ////////
-  // ENTER YOU: The SUN of the Universe
-  ////////
   {
-    rx: 1.4395420537811414,
-    ry: 6.281532559509658,
-    z: 777.97,
+    rx: 6.281,
+    ry: 1.439,
+    z: 400,
+    travelTime: 1500,
+    restTime: 3500,
+    message: "“…magnetically gravitating all that is important to YOU.”"
+  },
+
+  /////////////////
+  // THE CORE (USER)
+  /////////////////
+  {
+    rx: 1.439,
+    ry: 6.281,
+    z: 777,
     travelTime: 3000,
-    restTime: 5000,
-    message: "“In your Universe, you determine your Gravitational Influence.”"
+    restTime: 3000,
+    message: "“In your YOUniverse, you determine your Gravitational Influence.”"
   },
   {
-    rx: 1.4395420537811414,
-    ry: 6.281532559509658,
+    rx: 1.439,
+    ry: 6.281,
     z: 0.97,
     travelTime: 6000,
     restTime: 5000,
-    message: "“This is YOUR SUN, your Universal Core.”"
+    message: "“This is YOUR SUN. YOUR YOUniversal Core.”"
   },
   {
-    rx: -0.18605511827781787,
-    ry: -3.464222597755626,
+    rx: -0.186,
+    ry: -3.464,
     z: 0.87,
-    travelTime: 1000,
-    restTime: 2000,
-    message: '"You are the center of your Digital Life!"'
+    travelTime: 1500,
+    restTime: 3000,
+    message: '"Emanating YOUR Glorious Magnificence!"'
   },
 
   {
-    rx: 0.4395420537811414,
-    ry: 5.281532559509658,
+    rx: 0.439,
+    ry: 5.281,
     z: 0.77,
     travelTime: 2000,
-    restTime: 1500,
-    message: '"You control your data..."'
+    restTime: 2000,
+    message: '"I… am… YOU…"'
   },
   {
-    rx: -0.18605511827781787,
-    ry: -2.464222597755626,
+    rx: -0.186,
+    ry: -2.464,
     z: 0.67,
     travelTime: 1000,
     restTime: 2000,
-    message: "“...and who you share it with.”"
+    message: "“…YOU… are… ME…”"
   },
   {
-    rx: -0.18605511827781787,
-    ry: -3.464222597755626,
+    rx: -0.186,
+    ry: -3.464,
     z: 0.57,
     travelTime: 1000,
-    restTime: 2000,
-    message: "“YOU are the MASTER of this Universe!”"
+    restTime: 3000,
+    message: "“…YOU are the MASTER of this YOU-IN-Verse!”"
   },
 
+  /////////////////
+  // THE CALL
+  /////////////////
   {
-    rx: 0.8369933670834534,
-    ry: 1.837770087331788,
-    z: 5.148607771018531,
-    travelTime: 1500,
-    restTime: 2000,
+    rx: 0.836,
+    ry: 1.837,
+    z: 5.148,
+    travelTime: 2000,
+    restTime: 3000,
     message: '"YOU are the Center of Your Web…"',
     callback: displaySunEarthDiagram
   },
-
   {
-    rx: 0.6424544063335803,
-    ry: -0.0031800804774647718,
-    z: 7.23179619362583,
-    travelTime: 1000,
-    restTime: 2000,
-    message: "“…weaving your own website…”"
-  },
-  {
-    rx: 0.6424544063335803,
-    ry: -0.0031800804774647718,
-    z: 17.23179619362583,
-    travelTime: 1000,
+    rx: 0.642,
+    ry: -0.003,
+    z: 277,
+    travelTime: 2000,
     restTime: 3000,
-
-    message: '“…Sharing your thoughts on blogs or in group forums…"'
-  },
-  {
-    rx: 0.6424544063335803,
-    ry: -0.0031800804774647718,
-    z: 277.23179619362583,
-    travelTime: 1000,
-    restTime: 2000,
-    message: "“…Opening Shop, promoting your own endeavors…“"
-  },
-  {
-    rx: 0.6424544063335803,
-    ry: -0.0031800804774647718,
-    z: 677.23179619362583,
-    travelTime: 1000,
-    restTime: 2000,
-    message: "“…Offering Services and gifts YOU have for the WORLD.“"
-  },
-  {
-    rx: youniverse.x.nexus,
-    ry: youniverse.y.nexus,
-    z: youniverse.z.nexus * 0.25,
-    travelTime: 1000,
-    restTime: 2000,
-    message: '“All from YOUR Interconnected Universe."'
+    message: "“...weaving your O.wn webbed S.ite.”"
   },
   {
     rx: youniverse.x.nexus,
     ry: youniverse.y.nexus,
     z: youniverse.z.nexus * 0.5,
-    travelTime: 1500,
-    restTime: 2000,
-    message: "“Let us build and improve Open Solutions together…”"
-  },
-  {
-    rx: youniverse.x.nexus,
-    ry: youniverse.y.nexus,
-    z: youniverse.z.nexus * 0.75,
-    travelTime: 1000,
-    restTime: 2000,
-    message: "“The Future is Ours!”"
-  },
-
-  {
-    rx: 7,
-    ry: 0.9,
-    z: youniverse.z.nexus,
-    travelTime: 2000,
-    restTime: 2000,
-    message: "“Expand to other Domains and Devices…”"
-  },
-  {
-    rx: 7,
-    ry: 0.9,
-    z: youniverse.z.galaxy * 0.15,
-
-    travelTime: 1000,
-    restTime: 2000,
-    message: '"…Connect with Everyone!”'
-  },
-  {
-    rx: youniverse.x.nexus,
-    ry: youniverse.y.nexus,
-    z: youniverse.z.galaxy * 0.55,
-
     travelTime: 3000,
     restTime: 3000,
-    message: "“YouMeOS is only the Beginning!”"
-  },
-
-  {
-    rx: youniverse.x.nexus,
-    ry: youniverse.y.nexus,
-    z: youniverse.z.nexus * 0.5,
-
-    travelTime: 2000,
-    restTime: 2000,
-    message: "“Be a part of the Next Best Thing!”"
+    message: "“WE are Infinite, WE are the Future!”"
   },
   {
     rx: 7,
     ry: 0.9,
     z: youniverse.z.galaxy * 0.75,
-
-    travelTime: 1200,
-    restTime: 2000,
+    travelTime: 2000,
+    restTime: 2500,
     message: "“Do YOU want to PLAY?”"
   },
-
   {
     rx: 7,
     ry: 0.9,
     z: youniverse.z.galaxy,
-    travelTime: 500,
-    restTime: 2000,
-    message: "“Get Started Today!”",
-    callback: timeoutLogin
+    travelTime: 1000,
+    restTime: 3000,
+    message: "“KINNEXUS!”",
+    callback: function () {
+      window.overrideGalaxyOpacity = undefined; // Release control
+      timeoutLogin();
+    }
   }
 ];
 var cinematic_width = 5;
@@ -401,22 +244,45 @@ var Tour = function (stops) {
       left: 0,
       right: 0,
       bottom: 0,
-      width: 100 + "%",
-      height: 100 + "%"
+      width: "100%",
+      height: "100%",
+      background: "transparent",
+      pointerEvents: "none"
     })
     .html(
-      '<div class="top-bar"></div><div class="bottom-bar"></div><div class="message" style="display: none;"></div>'
+      '<div class="top-bar" style="display:none;"></div>' +
+        '<div class="bottom-bar" style="display:none;"></div>' +
+        '<div class="message" style="display: none; position: absolute; bottom: 10%; left: 50%; transform: translateX(-50%); text-align: center; width: 95%; max-width: 1600px; padding: 2.5rem 3rem; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); pointer-events: auto; z-index: 10; display: flex; align-items: center; justify-content: center;"></div>'
     );
 
   this.top = this.domElement.find(".top-bar");
   this.bottom = this.domElement.find(".bottom-bar");
   this.content = this.domElement.find(".message");
-  this.content.html("<p>" + this.states[0].message + "</p>");
+
+  this.content.css({
+    color: "#fff",
+    fontFamily: "'Orbitron', sans-serif",
+    fontSize: "1.8rem",
+    fontWeight: "300",
+    letterSpacing: "0.1em",
+    lineHeight: "1.5",
+    textShadow: "0 2px 15px rgba(0, 0, 0, 0.8)"
+  });
+
+  // Aggressive reset for legacy styles from styles/style.css
+  $("<style>")
+    .prop("type", "text/css")
+    .html(
+      "#theater .message { background: rgba(0, 0, 0, 0.65) !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 2.5rem 3.5rem !important; } " +
+        "#theater .message p { margin: 0 !important; padding: 0 !important; height: auto !important; line-height: 1.5 !important; color: #fff !important; background: transparent !important; text-shadow: 0 2px 15px rgba(0,0,0,0.8) !important; font-style: normal !important; } " +
+        "#theater .message p span { background: transparent !important; padding: 0 !important; display: inline !important; }"
+    )
+    .appendTo("head");
 };
 
 // Statics
-Tour.Easing = TWEEN.Easing.Sinusoidal.InOut;
-Tour.Duration = 250;
+Tour.Easing = TWEEN.Easing.Quartic.InOut;
+Tour.Duration = 800;
 Tour.meta = $("#meta");
 Tour.timeouts = [];
 
@@ -498,6 +364,13 @@ Tour.prototype = {
     rotateY = rotating.rotation.y;
     TWEEN.removeAll();
     $("#minimap").fadeIn();
+
+    if (typeof window.showOverlay === "function") {
+      window.showOverlay();
+    }
+    if (typeof window.showLegacyUI === "function") {
+      window.showLegacyUI();
+    }
 
     return this;
   },
@@ -591,6 +464,13 @@ Tour.prototype = {
           _this.clearTimers();
           firstTime = false;
           $(window).trigger("resize");
+
+          if (typeof window.showOverlay === "function") {
+            window.showOverlay();
+          }
+          if (typeof window.showLegacyUI === "function") {
+            window.showLegacyUI();
+          }
         });
       var p = Tour.meta.find("p").html(next);
       Tour.meta.css({
@@ -650,12 +530,18 @@ Tour.prototype = {
     if (state.callback) this.arrivalCallback = state.callback;
     else this.arrivalCallback = undefined;
 
-    if (this.content.css("display") != "none") {
-      this.content.fadeOut(function () {
-        _this.content.html("<p><span>" + state.message + "</span></p>");
-      });
+    // Fluid message transition: Fade out when move starts, fade in on arrival
+    var updateContent = function () {
+      _this.content.html("<p><span>" + state.message + "</span></p>");
+      if (state.travelTime === 0) {
+        _this.content.fadeIn(600);
+      }
+    };
+
+    if (this.content.is(":visible")) {
+      this.content.fadeOut(state.travelTime > 0 ? 600 : 300, updateContent);
     } else {
-      this.content.html("<p><span>" + state.message + "</span></p>");
+      updateContent();
     }
 
     this.rotating_tween = new TWEEN.Tween(rotating.rotation)
@@ -680,7 +566,18 @@ Tour.prototype = {
       .onComplete(function () {
         camera.position.target.z = camera.position.z;
         if (_this.arrivalCallback) _this.arrivalCallback();
-        _this.content.fadeIn(function () {
+
+        if (state.travelTime > 0) {
+          _this.content.fadeIn(1000, function () {
+            Tour.timeouts.push(
+              setTimeout(function () {
+                if (continuous) {
+                  _this.next(true);
+                }
+              }, state.restTime)
+            );
+          });
+        } else {
           Tour.timeouts.push(
             setTimeout(function () {
               if (continuous) {
@@ -688,7 +585,7 @@ Tour.prototype = {
               }
             }, state.restTime)
           );
-        });
+        }
       })
       .start();
 

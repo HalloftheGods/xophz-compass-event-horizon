@@ -177,6 +177,7 @@ class Xophz_Compass_Event_Horizon {
     $this->loader->add_action( 'init', $plugin_public, 'register_shortcodes' );
     $this->loader->add_action( 'init', $plugin_public, 'register_endpoints' );
     $this->loader->add_action( 'template_redirect', $plugin_public, 'template_redirect' );
+    $this->loader->add_action( 'rest_api_init', $plugin_public, 'register_api_routes' );
 
 	}
 

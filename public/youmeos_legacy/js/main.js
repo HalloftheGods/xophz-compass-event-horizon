@@ -332,6 +332,9 @@ function initScene() {
     // $iconNav.fadeIn();
     $iconNav.isReady = true;
 
+    // Unified Boot: The legacy engine should not auto-trigger the tour or login.
+    // The modern Vue controller (youmeos.controller.ts) handles this choreography.
+    /*
     if (firstTime) {
       displayIntroMessage();
       if (localStorage) localStorage.setItem("first", 0);
@@ -341,6 +344,7 @@ function initScene() {
         fadeInLoginForm();
       }, 500);
     }
+    */
 
     if (markers.length > 0) markers[0].select();
   }, 1000);
