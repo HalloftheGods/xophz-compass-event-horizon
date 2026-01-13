@@ -1,114 +1,65 @@
-=== Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: http://example.com/
-Tags: comments, spam
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
+=== Xophz You Me OS (Event Horizon) ===
+Contributors: xopher
+Donate link: http://www.mycompassconsulting.com/
+Tags: 3D, Heat Map, Galaxy, Visualization, YouMeOS, Three.js, WebGL
+Requires at least: 5.0
+Tested up to: 6.4
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Bring transparency to your user-to-media connectivity by observing a real life 3D interactive heat map. From micro to macro and unto the avoided.
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+The **Xophz You Me OS (Event Horizon)** plugin is the core cosmic engine for the COMPASS ecosystem. It delivers a high-performance 3D visualization of the "Youniverse," rendering over 100,000 stars with interactive heat mapping and cinematic transitions.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+Built on a modernized Three.js architecture, Event Horizon bridges legacy procedural generation with modern reactive interfaces, providing a seamless "micro-to-macro" navigation experience.
 
-A few notes about the sections above:
-
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
-
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
-
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+Key Features:
+*   **High-Density Starfield**: Efficiently renders 100,000+ stars using custom GLSL shaders.
+*   **3D Interactive Heat Map**: Visualizes user-to-media connectivity in a spatial context.
+*   **Cinematic Tour Choreography**: Automated onboarding sequences with smooth quartic easing.
+*   **Manifest-Driven Loading**: Dynamic asset and script management for optimal performance.
+*   **Modular Architecture**: Integrated seamlessly with the COMPASS Vue 3 frontend via the Global Event Bridge.
+*   **Visionary Boot Sequence**: A choreographed high-tech startup experience.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload `xophz-compass-event-horizon.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+1. Upload the `xophz-compass-event-horizon` folder to the `/wp-content/plugins/` directory.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Ensure the main **Xophz COMPASS** plugin is also active, as this plugin depends on its core services.
+4. Navigate to the COMPASS dashboard to access the YouMeOS portal.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Does this require a GPU? =
 
-An answer to that question.
+Yes, Event Horizon uses WebGL for high-performance rendering. A modern browser and decent graphics acceleration are recommended for the best experience.
 
-= What about foo bar? =
+= How do I customize the loader messages? =
 
-Answer to foo bar dilemma.
+Loader messages are configured in the `apps/youmeos/config/loader-messages.ts` file within the COMPASS application directory.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. The YouMeOS starfield at full saturation.
+2. The interactive 3D heat map showing active nodes.
 
 == Changelog ==
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
+= 1.0.0 =
+* Ported legacy 100,000 stars engine logic to COMPASS integration.
+* Implemented Manifest-driven asset loading.
+* Established Global Event Bridge for Vue-to-Three.js communication.
+* Refined Cosmic Tour choreography and visionary boot sequence.
+* Relocated engine assets to a centralized plugin directory.
 
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
+== Architecture ==
 
-== Upgrade Notice ==
+Event Horizon uses a hybrid integration model:
+*   **Backend**: PHP handles WordPress integration, capability checks, and asset enqueuing.
+*   **Engine**: Three.js (modernized) manages the WebGL context and 3D rendering.
+*   **Frontend**: Vue 3 (COMPASS) provides the HUD, controls, and reactive state management.
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above.  This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation."  Arbitrary sections will be shown below the built-in sections outlined above.
-
-== A brief Markdown Example ==
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+The engine state is bridged to the COMPASS Pinia stores, allowing for real-time manipulation of the cosmic environment through the standard UI controls.
