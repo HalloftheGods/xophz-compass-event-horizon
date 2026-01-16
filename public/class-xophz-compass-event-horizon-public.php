@@ -42,15 +42,16 @@ class Xophz_Compass_Event_Horizon_Public {
    */
   public function register_endpoints() {
     add_rewrite_endpoint( 'youmeos', EP_ROOT );
+    add_rewrite_endpoint( 'os', EP_ROOT );
   }
 
   /**
-   * Handle template redirect for /youmeos/
+   * Handle template redirect for /youmeos/ and /os/
    */
   public function template_redirect() {
     global $wp_query;
  
-    if ( isset( $wp_query->query_vars['youmeos'] ) ) {
+    if ( isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] ) ) {
         // Disable Admin Bar
         show_admin_bar(false);
 
