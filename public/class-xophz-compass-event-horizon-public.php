@@ -123,6 +123,12 @@ class Xophz_Compass_Event_Horizon_Public {
       'callback' => array( $this, 'handle_user_login' ),
       'permission_callback' => '__return_true', // Public endpoint
     ) );
+    
+    register_rest_route( 'xophz-compass/v1', '/logout', array(
+      'methods' => 'POST',
+      'callback' => array( $this, 'handle_user_logout' ),
+      'permission_callback' => 'is_user_logged_in',
+    ) );
   }
 
   /**
@@ -147,6 +153,17 @@ class Xophz_Compass_Event_Horizon_Public {
         'user_nicename' => $user->user_nicename,
         'user_display_name' => $user->display_name,
         'nonce' => wp_create_nonce( 'wp_rest' ),
+    ) );
+  }
+
+  /**
+   * Handle user logout via API
+   */
+  public function handle_user_logout( $request ) {
+    wp_logout();
+    return rest_ensure_response( array(
+      'success' => true,
+      'message' => 'Logged out successfully'
     ) );
   }
 
