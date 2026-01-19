@@ -38,11 +38,20 @@ class Xophz_Compass_Event_Horizon_Public {
   }
 
   /**
-   * Register rewrite endpoint for /youmeos/
+   * Register rewrite rules for /youmeos/ and /os/ including all subpaths
    */
   public function register_endpoints() {
-    add_rewrite_endpoint( 'youmeos', EP_ROOT );
-    add_rewrite_endpoint( 'os', EP_ROOT );
+    add_rewrite_rule('^youmeos(/.*)?$', 'index.php?youmeos=1', 'top');
+    add_rewrite_rule('^os(/.*)?$', 'index.php?os=1', 'top');
+  }
+
+  /**
+   * Register query variables
+   */
+  public function register_query_vars( $vars ) {
+    $vars[] = 'youmeos';
+    $vars[] = 'os';
+    return $vars;
   }
 
   /**
@@ -57,6 +66,11 @@ class Xophz_Compass_Event_Horizon_Public {
 
         // Prepare Settings
         $current_user = wp_get_current_user();
+        $home_url = home_url();
+        $site_path = parse_url($home_url, PHP_URL_PATH) ?: '';
+        $site_path = rtrim($site_path, '/');
+        $app_base = isset($wp_query->query_vars['youmeos']) ? 'youmeos' : 'os';
+
         $settings = [
             'currentUser' => [
                 'ID' => $current_user->ID,
@@ -64,6 +78,9 @@ class Xophz_Compass_Event_Horizon_Public {
             ],
             'nonce' => wp_create_nonce( 'wp_rest' ),
             'restUrl' => get_rest_url(),
+            'sitePath' => $site_path,
+            'appBase' => $app_base,
+            'homeUrl' => $home_url,
         ];
         
         // Render Raw HTML (No wp_head/wp_footer)
@@ -149,6 +166,7 @@ class Xophz_Compass_Event_Horizon_Public {
     
     return rest_ensure_response( array(
         'message' => 'Login successful',
+        'user_id' => $user->ID,
         'user_email' => $user->user_email,
         'user_nicename' => $user->user_nicename,
         'user_display_name' => $user->display_name,
