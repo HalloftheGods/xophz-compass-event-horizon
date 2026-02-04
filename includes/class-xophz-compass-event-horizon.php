@@ -122,6 +122,11 @@ class Xophz_Compass_Event_Horizon {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-xophz-compass-event-horizon-public.php';
 
+		/**
+		 * The class responsible for the Spark Registry REST API.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-spark-registry.php';
+
 		$this->loader = new Xophz_Compass_Event_Horizon_Loader();
 
 	}
@@ -170,6 +175,7 @@ class Xophz_Compass_Event_Horizon {
 	private function define_public_hooks() {
 
 		$plugin_public = new Xophz_Compass_Event_Horizon_Public( $this->get_xophz_compass_event_horizon(), $this->get_version() );
+		$spark_registry = new Xophz_Compass_Event_Horizon_Spark_Registry();
 
 		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -179,6 +185,9 @@ class Xophz_Compass_Event_Horizon {
     $this->loader->add_filter( 'query_vars', $plugin_public, 'register_query_vars' );
     $this->loader->add_action( 'template_redirect', $plugin_public, 'template_redirect' );
     $this->loader->add_action( 'rest_api_init', $plugin_public, 'register_api_routes' );
+		
+		// Register Spark Registry Routes
+		$this->loader->add_action( 'rest_api_init', $spark_registry, 'register_routes' );
 
 	}
 
