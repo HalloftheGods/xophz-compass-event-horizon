@@ -159,9 +159,10 @@ class Xophz_Compass_Event_Horizon {
 
 		$plugin_admin = new Xophz_Compass_Event_Horizon_Admin( $this->get_xophz_compass_event_horizon(), $this->get_version() );
 
-		// $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		// $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'addToMenu' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
+		add_action( 'update_option_youmeos_load_mode', array( $plugin_admin, 'flush_rewrites_on_save' ), 10, 2 );
+		add_action( 'update_option_youmeos_load_page_id', array( $plugin_admin, 'flush_rewrites_on_save' ), 10, 2 );
 
 	}
 
