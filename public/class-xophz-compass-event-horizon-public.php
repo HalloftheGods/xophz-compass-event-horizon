@@ -165,6 +165,32 @@ class Xophz_Compass_Event_Horizon_Public {
 			)
 		) );
 		
+		register_rest_route( 'xophz-compass/v1', '/nexos-statement', array(
+			array(
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_nexos_statement' ),
+				'permission_callback' => 'is_user_logged_in',
+			),
+			array(
+				'methods' => 'POST',
+				'callback' => array( $this, 'update_nexos_statement' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		) );
+
+		register_rest_route( 'xophz-compass/v1', '/noosphere-statement', array(
+			array(
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_noosphere_statement' ),
+				'permission_callback' => 'is_user_logged_in',
+			),
+			array(
+				'methods' => 'POST',
+				'callback' => array( $this, 'update_noosphere_statement' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		) );
+		
 		register_rest_route( 'xophz-compass/v1', '/profile', array(
 			array(
 				'methods' => 'GET',
@@ -361,6 +387,51 @@ class Xophz_Compass_Event_Horizon_Public {
 		) );
 	}
 
+	public function get_nexos_statement( $request ) {
+		$user_id = get_current_user_id();
+		$stance = get_user_meta( $user_id, 'youmeos_nexos_statement', true );
+		
+		if ( empty( $stance ) ) {
+			return rest_ensure_response( array(
+				'target1' => '', 'target2' => '', 'target3' => '',
+				'foundation1' => '', 'foundation2' => '', 'foundation3' => ''
+			) );
+		}
+		
+		return rest_ensure_response( $stance );
+	}
+
+	public function update_nexos_statement( $request ) {
+		$user_id = get_current_user_id();
+		$parameters = $request->get_json_params();
+		
+		$stance = array(
+			'target1' => sanitize_text_field( $parameters['target1'] ?? '' ),
+			'target2' => sanitize_text_field( $parameters['target2'] ?? '' ),
+			'target3' => sanitize_text_field( $parameters['target3'] ?? '' ),
+			'foundation1' => sanitize_text_field( $parameters['foundation1'] ?? '' ),
+			'foundation2' => sanitize_text_field( $parameters['foundation2'] ?? '' ),
+			'foundation3' => sanitize_text_field( $parameters['foundation3'] ?? '' ),
+		);
+		
+		update_user_meta( $user_id, 'youmeos_nexos_statement', $stance );
+
+		// Sync tags natively to WordPress Taxonomy using the same tags pool
+		foreach( array('target1', 'target2', 'target3', 'foundation1', 'foundation2', 'foundation3') as $k ) {
+			if ( !empty($stance[$k]) ) {
+				$clean_tag = strtolower( trim( $stance[$k] ) );
+				if ( ! term_exists( $clean_tag, 'post_tag' ) ) {
+					wp_insert_term( $clean_tag, 'post_tag' );
+				}
+			}
+		}
+		
+		return rest_ensure_response( array(
+			'message' => 'Nexos statement committed successfully.',
+			'stance' => $stance
+		) );
+	}
+
 	public function get_user_profile( $request ) {
 		$user_id = get_current_user_id();
 		$user = get_userdata( $user_id );
@@ -395,7 +466,46 @@ class Xophz_Compass_Event_Horizon_Public {
 		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
-		
+
 		return rest_ensure_response( array( 'message' => 'Profile updated successfully.' ) );
+	}
+
+	public function get_noosphere_statement( $request ) {
+		$user_id = get_current_user_id();
+		$statement = get_user_meta( $user_id, 'youmeos_noosphere_statement', true );
+		
+		if ( empty( $statement ) ) {
+			return rest_ensure_response( array(
+				'signal1' => '', 'signal2' => '', 'signal3' => '',
+				'amp1' => '', 'amp2' => '', 'amp3' => ''
+			) );
+		}
+		
+		return rest_ensure_response( $statement );
+	}
+
+	public function update_noosphere_statement( $request ) {
+		$user_id = get_current_user_id();
+		$parameters = $request->get_json_params();
+		
+		$statement = array(
+			'signal1' => sanitize_text_field( $parameters['signal1'] ?? '' ),
+			'signal2' => sanitize_text_field( $parameters['signal2'] ?? '' ),
+			'signal3' => sanitize_text_field( $parameters['signal3'] ?? '' ),
+			'amp1' => sanitize_text_field( $parameters['amp1'] ?? '' ),
+			'amp2' => sanitize_text_field( $parameters['amp2'] ?? '' ),
+			'amp3' => sanitize_text_field( $parameters['amp3'] ?? '' ),
+		);
+		
+		update_user_meta( $user_id, 'youmeos_noosphere_statement', $statement );
+
+		// Sync tags natively to WordPress Taxonomy using the same tags pool
+		foreach( array('signal1', 'signal2', 'signal3', 'amp1', 'amp2', 'amp3') as $k ) {
+			if ( !empty( $statement[$k] ) ) {
+				$this->ensure_mission_tag_exists( strtolower( trim( $statement[$k] ) ) );
+			}
+		}
+
+		return rest_ensure_response( array( 'success' => true ) );
 	}
 }
