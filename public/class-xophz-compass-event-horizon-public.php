@@ -139,6 +139,83 @@ class Xophz_Compass_Event_Horizon_Public {
 			'callback' => array( $this, 'handle_user_logout' ),
 			'permission_callback' => 'is_user_logged_in',
 		) );
+
+		register_rest_route( 'xophz-compass/v1', '/discord/token', array(
+			'methods' => 'POST',
+			'callback' => array( $this, 'handle_discord_token_exchange' ),
+			'permission_callback' => '__return_true', // You might want to restrict this to logged in users if they already have an account
+		) );
+		
+		register_rest_route( 'xophz-compass/v1', '/mission-tags', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'get_mission_tags' ),
+			'permission_callback' => '__return_true',
+		) );
+		
+		register_rest_route( 'xophz-compass/v1', '/mission-statement', array(
+			array(
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_mission_statement' ),
+				'permission_callback' => 'is_user_logged_in',
+			),
+			array(
+				'methods' => 'POST',
+				'callback' => array( $this, 'update_mission_statement' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		) );
+		
+		register_rest_route( 'xophz-compass/v1', '/profile', array(
+			array(
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_user_profile' ),
+				'permission_callback' => 'is_user_logged_in',
+			),
+			array(
+				'methods' => 'POST',
+				'callback' => array( $this, 'update_user_profile' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		) );
+	}
+
+	public function handle_discord_token_exchange( $request ) {
+		$code = $request->get_param( 'code' );
+
+		if ( ! $code ) {
+			return new WP_Error( 'missing_code', 'No authorization code provided.', array( 'status' => 400 ) );
+		}
+
+		// Check constants, options, and environment variables
+		$client_id     = defined( 'DISCORD_CLIENT_ID' ) ? DISCORD_CLIENT_ID : ( $_ENV['DISCORD_CLIENT_ID'] ?? get_option( 'discord_client_id' ) );
+		$client_secret = defined( 'DISCORD_CLIENT_SECRET' ) ? DISCORD_CLIENT_SECRET : ( $_ENV['DISCORD_CLIENT_SECRET'] ?? get_option( 'discord_client_secret' ) );
+		$redirect_uri  = defined( 'DISCORD_REDIRECT_URI' ) ? DISCORD_REDIRECT_URI : ( $_ENV['DISCORD_REDIRECT_URI'] ?? get_option( 'discord_redirect_uri' ) );
+
+		if ( ! $client_id || ! $client_secret || ! $redirect_uri ) {
+			return new WP_Error( 'missing_config', 'Discord API configuration is missing on the server.', array( 'status' => 500 ) );
+		}
+
+		$response = wp_remote_post( 'https://discord.com/api/oauth2/token', array(
+			'body' => array(
+				'client_id' => $client_id,
+				'client_secret' => $client_secret,
+				'grant_type' => 'authorization_code',
+				'code' => $code,
+				'redirect_uri' => $redirect_uri,
+			),
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( isset( $body['error'] ) ) {
+			return new WP_Error( 'discord_api_error', $body['error_description'] ?? $body['error'], array( 'status' => 400 ) );
+		}
+
+		return rest_ensure_response( $body );
 	}
 
 	public function handle_user_login( $request ) {
@@ -203,5 +280,122 @@ class Xophz_Compass_Event_Horizon_Public {
 			'message' => 'User registered successfully.',
 			'user_id' => $user_id
 		) );
+	}
+
+	public function get_mission_statement( $request ) {
+		$user_id = get_current_user_id();
+		$mission = get_user_meta( $user_id, 'youmeos_mission_statement', true );
+		
+		if ( empty( $mission ) ) {
+			return rest_ensure_response( array(
+				'trait1' => '', 'trait2' => '', 'trait3' => '',
+				'env1' => '', 'env2' => '', 'env3' => '',
+				'feel1' => '', 'feel2' => '', 'feel3' => ''
+			) );
+		}
+		
+		return rest_ensure_response( $mission );
+	}
+
+	public function get_mission_tags( $request ) {
+		// Use native WordPress get_terms to fetch all tags
+		$tags = get_terms( array(
+			'taxonomy' => 'post_tag',
+			'fields' => 'names',
+			'hide_empty' => false,
+		) );
+		
+		if ( is_wp_error( $tags ) ) {
+			$tags = array();
+		}
+		
+		return rest_ensure_response( $tags );
+	}
+
+	public function update_mission_statement( $request ) {
+		$user_id = get_current_user_id();
+		$parameters = $request->get_json_params();
+		
+		$mission = array(
+			'trait1' => sanitize_text_field( $parameters['trait1'] ?? '' ),
+			'trait2' => sanitize_text_field( $parameters['trait2'] ?? '' ),
+			'trait3' => sanitize_text_field( $parameters['trait3'] ?? '' ),
+			'env1' => sanitize_text_field( $parameters['env1'] ?? '' ),
+			'env2' => sanitize_text_field( $parameters['env2'] ?? '' ),
+			'env3' => sanitize_text_field( $parameters['env3'] ?? '' ),
+			'feel1' => sanitize_text_field( $parameters['feel1'] ?? '' ),
+			'feel2' => sanitize_text_field( $parameters['feel2'] ?? '' ),
+			'feel3' => sanitize_text_field( $parameters['feel3'] ?? '' ),
+		);
+		
+		update_user_meta( $user_id, 'youmeos_mission_statement', $mission );
+
+		// Sync tags natively to WordPress Taxonomy
+		foreach( array('trait1', 'trait2', 'trait3', 'env1', 'env2', 'env3', 'feel1', 'feel2', 'feel3') as $k ) {
+			if ( !empty($mission[$k]) ) {
+				$clean_tag = strtolower( trim( $mission[$k] ) );
+				// wp_insert_term natively handles checking if it exists, creates it if not.
+				if ( ! term_exists( $clean_tag, 'post_tag' ) ) {
+					wp_insert_term( $clean_tag, 'post_tag' );
+				}
+			}
+		}
+		
+		$compiled = sprintf(
+			"I am a %s, %s, and %s being. I create an environment of %s, %s, and %s. Where others feel %s, %s, and %s.",
+			$mission['trait1'], $mission['trait2'], $mission['trait3'],
+			$mission['env1'], $mission['env2'], $mission['env3'],
+			$mission['feel1'], $mission['feel2'], $mission['feel3']
+		);
+		
+		// Optional: avoid inserting weird punctuation if all fields are empty
+		if ( trim($compiled) === "I am a , , and  being. I create an environment of , , and . Where others feel , , and ." ) {
+			$compiled = '';
+		}
+
+		wp_update_user( array( 'ID' => $user_id, 'description' => trim( $compiled ) ) );
+		
+		return rest_ensure_response( array(
+			'message' => 'Mission statement committed successfully.',
+			'mission' => $mission
+		) );
+	}
+
+	public function get_user_profile( $request ) {
+		$user_id = get_current_user_id();
+		$user = get_userdata( $user_id );
+		
+		return rest_ensure_response( array(
+			'user_login' => $user->user_login,
+			'first_name' => $user->first_name,
+			'last_name' => $user->last_name,
+			'nickname' => $user->nickname,
+			'display_name' => $user->display_name,
+			'user_email' => $user->user_email,
+			'user_url' => $user->user_url,
+			'avatar_url' => get_avatar_url( $user_id, array( 'size' => 150 ) ),
+		) );
+	}
+
+	public function update_user_profile( $request ) {
+		$user_id = get_current_user_id();
+		$parameters = $request->get_json_params();
+		
+		$args = array( 'ID' => $user_id );
+		
+		if ( isset( $parameters['first_name'] ) ) $args['first_name'] = sanitize_text_field( $parameters['first_name'] );
+		if ( isset( $parameters['last_name'] ) ) $args['last_name'] = sanitize_text_field( $parameters['last_name'] );
+		if ( isset( $parameters['nickname'] ) ) $args['nickname'] = sanitize_text_field( $parameters['nickname'] );
+		if ( isset( $parameters['display_name'] ) ) $args['display_name'] = sanitize_text_field( $parameters['display_name'] );
+		if ( isset( $parameters['user_email'] ) ) $args['user_email'] = sanitize_email( $parameters['user_email'] );
+		if ( isset( $parameters['user_url'] ) ) $args['user_url'] = esc_url_raw( $parameters['user_url'] );
+		
+		$result = wp_update_user( $args );
+		
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+		
+		return rest_ensure_response( array( 'message' => 'Profile updated successfully.' ) );
 	}
 }

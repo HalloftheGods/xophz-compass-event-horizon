@@ -6,7 +6,7 @@
 
 ## What is YouMeOS?
 
-**YouMeOS** is not just software. It is a _movement_—a philosophical reimagining of how humanity relates to the digital cosmos. At its core, YouMeOS is a **4D, spatial operating system** layered atop WordPress, transforming the static dashboard into a living, breathing _Youniverse_ where every user is a Star, every website is a Sun, and collective human thought forms the NoOSphere.
+**YouMeOS** is not just software. It is a _movement_—a philosophical reimagining of how humanity relates to the digital cosmos. At its core, YouMeOS is a **4D, spatial operating system** layered atop WordPress, transforming the static dashboard into a living, breathing _Youniverse_ where every user is a Star, every website is a Sun, and collective human thought forms the Noosphere.
 
 Born from a vision of global balance, individual sovereignty, and collective unity, YouMeOS represents a departure from the flat, utilitarian internet of the past. It is an invitation to _inhabit_ the digital space—not merely browse it.
 
@@ -17,7 +17,7 @@ Born from a vision of global balance, individual sovereignty, and collective uni
 YouMeOS draws from the oldest human traditions and the most forward-thinking technology. It believes:
 
 1.  **Every Individual is Sovereign.** You are the center of your Youniverse. Your data, your identity, your digital footprint—they are _yours_.
-2.  **We Are Interconnected.** The stars do not shine in isolation. The NoOSphere—the sphere of human thought—connects all of us. Your actions ripple across the galaxy.
+2.  **We Are Interconnected.** The stars do not shine in isolation. The Noosphere—the sphere of human thought—connects all of us. Your actions ripple across the galaxy.
 3.  **Technology Should Empower, Not Enslave.** The internet was meant to be a great equalizer. YouMeOS aims to reclaim that promise by creating a human-centric operating layer over the web.
 4.  **Balance is Key.** Between the individual and the collective. Between privacy and connection. Between the micro and the macro. YouMeOS is the Compass that guides us to equilibrium.
 
@@ -32,11 +32,11 @@ YouMeOS replaces traditional "pages," "dashboards," and "menus" with a celestial
 | Entity         | Description                                                                                                       |
 | :------------- | :---------------------------------------------------------------------------------------------------------------- |
 | **Youniverse** | An individual instance of YouMeOS. A 4D galaxy where your digital life unfolds.                                   |
-| **Star**       | Every user is represented as a Star—a point of light in the collective NoOSphere.                                 |
+| **Star**       | Every user is represented as a Star—a point of light in the collective Noosphere.                                 |
 | **Main Star**  | The WordPress site itself. The central sun around which the system orbits.                                        |
 | **Helios**     | Your personal dashboard (the Sun Level). The warm, central core where you manage your digital existence.          |
-| **NexOS**      | The social layer (the Hipparcos Level). It visualizes your relationships and connections to other Stars.          |
-| **NoOSphere**  | The highest perspective (the Galaxy Level). The collective mind. All Stars, all content, all connections.         |
+| **Nexos**      | The social layer (the Hipparcos Level). It visualizes your relationships and connections to other Stars.          |
+| **Noosphere**  | The highest perspective (the Galaxy Level). The collective mind. All Stars, all content, all connections.         |
 | **Oort Cloud** | A user's content cloud—their links, media, consumption. The outer layer of their digital footprint.               |
 | **Satellites** | Wapps (Web-Apps) that orbit your Sun. Functional modules like Blog (Saturn), Messages (Mercury), Gallery (Earth). |
 
@@ -53,7 +53,7 @@ Today, websites are isolated islands. Data is siloed. Users are fragmented acros
 - Your identity is _yours_—portable, sovereign, encrypted.
 - Your content forms a cloud around your Star, visible to those you permit.
 - Connections between people are visualized, not hidden. You can see _how_ you relate to others in space and time.
-- Navigation is _spatial_. You fly through the Youniverse. You zoom into a Sun. You observe the NoOSphere from above.
+- Navigation is _spatial_. You fly through the Youniverse. You zoom into a Sun. You observe the Noosphere from above.
 
 This is not science fiction. This is the trajectory we are on.
 
@@ -104,7 +104,7 @@ By 2076, the Operational Internet will have matured into humanity's primary inte
 
 - **Spatial Browsing is the Norm.** The flat browser is a relic, like the command-line terminal of the 1980s. Children learn to navigate information in 3D/4D space as naturally as we scroll today.
 - **Identity is Decentralized \& Sovereign.** Your Star (digital identity) is yours, cryptographically secured and portable. There are no "logins"—only authentication handshakes between Stars.
-- **The NoOSphere is Real.** The collective layer of human thought is visualized, indexed, and queryable. Disinformation is harder to propagate when connections are visible and provenance is transparent.
+- **The Noosphere is Real.** The collective layer of human thought is visualized, indexed, and queryable. Disinformation is harder to propagate when connections are visible and provenance is transparent.
 - **Wapps Replace Apps.** Native applications are a memory. Wapps (Web-Apps) orbit your Star, subscribe to your data streams, and provide services without data harvesting.
 - **Community-Driven Governance.** YouMeOS instances can federate. Communities decide their own rules. The Compass plugins form the foundation of decentralized governance modules.
 - **The "Oort Cloud" as Digital Estate.** A person's content cloud—their writings, media, creations, interactions—becomes a legacy, inheritable and preservable like property.
@@ -116,13 +116,13 @@ By 2076, the Operational Internet will have matured into humanity's primary inte
 By 2126, the distinction between the "Internet" and "Reality" has blurred. YouMeOS and its descendants have enabled a new form of human civilization.
 
 - **The Youniverse is a Second Home.** Humans spend as much conscious time in spatial digital environments as they do in physical ones. Work, creation, connection—all happen in the Youniverse.
-- **AI Co-Pilots Navigate with You.** Intelligent agents, aligned with your sovereign will, help you traverse the NoOSphere. They curate, protect, and advocate on your behalf.
+- **AI Co-Pilots Navigate with You.** Intelligent agents, aligned with your sovereign will, help you traverse the Noosphere. They curate, protect, and advocate on your behalf.
 - **Intergalactic Federation of Sites.** What started as WordPress instances are now nodes in a vast, interoperable mesh. Youniverses can dock with each other, creating shared spaces for collaboration.
 - **The Oort Cloud Contains Consciousness.** Advanced preservation techniques allow aspects of human memory and personality to persist within Oort Clouds, creating a new form of legacy and continuity.
 - **Global Balance Achieved.** The philosophical foundation of YouMeOS—individual sovereignty, collective unity, and technological empowerment—has contributed to a more balanced, equitable, and conscious global civilization.
-- **You Are Not Forgotten.** Every Star that ever shone in the NoOSphere leaves a permanent trace. The contributions of every individual—from thought leaders to quiet observers—are woven into the fabric of the collective.
+- **You Are Not Forgotten.** Every Star that ever shone in the Noosphere leaves a permanent trace. The contributions of every individual—from thought leaders to quiet observers—are woven into the fabric of the collective.
 
-> _"A hundred years ago, a group of visionaries dared to ask: 'What if the internet could be a cosmos?' Today, we live in the answer to that question. We are all Stars, orbiting the suns we choose, contributing to a NoOSphere that remembers everything and forgets no one. This is the legacy of YouMeOS."_
+> _"A hundred years ago, a group of visionaries dared to ask: 'What if the internet could be a cosmos?' Today, we live in the answer to that question. We are all Stars, orbiting the suns we choose, contributing to a Noosphere that remembers everything and forgets no one. This is the legacy of YouMeOS."_
 
 ---
 
