@@ -77,6 +77,10 @@ class Xophz_Compass_Event_Horizon_Public {
 			'currentUser' => [
 				'ID' => $current_user->ID,
 				'admin_color' => get_user_option( 'admin_color', $current_user->ID ),
+				'roles' => $current_user->roles,
+				'display_name' => $current_user->display_name,
+				'user_email' => $current_user->user_email,
+				'user_nicename' => $current_user->user_nicename,
 			],
 			'nonce' => wp_create_nonce( 'wp_rest' ),
 			'restUrl' => get_rest_url(),
@@ -84,6 +88,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			'appBase' => $app_base,
 			'homeUrl' => $home_url,
 			'loadMode' => get_option( 'youmeos_load_mode', 'routes_only' ),
+			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
 		];
 
 		?><!DOCTYPE html>
@@ -187,6 +192,19 @@ class Xophz_Compass_Event_Horizon_Public {
 			array(
 				'methods' => 'POST',
 				'callback' => array( $this, 'update_noosphere_statement' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		) );
+
+		register_rest_route( 'xophz-compass/v1', '/rhythm-matrix', array(
+			array(
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_rhythm_matrix' ),
+				'permission_callback' => 'is_user_logged_in',
+			),
+			array(
+				'methods' => 'POST',
+				'callback' => array( $this, 'update_rhythm_matrix' ),
 				'permission_callback' => 'is_user_logged_in',
 			)
 		) );
@@ -327,6 +345,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			'user_email' => $user->user_email,
 			'user_nicename' => $user->user_nicename,
 			'user_display_name' => $user->display_name,
+			'user_roles' => $user->roles,
 			'nonce' => wp_create_nonce( 'wp_rest' ),
 		) );
 	}
@@ -571,5 +590,42 @@ class Xophz_Compass_Event_Horizon_Public {
 		}
 
 		return rest_ensure_response( array( 'success' => true ) );
+	}
+
+	public function get_rhythm_matrix( $request ) {
+		$user_id = get_current_user_id();
+		$matrix = get_user_meta( $user_id, 'youmeos_rhythm_matrix', true );
+		
+		if ( empty( $matrix ) ) {
+			return rest_ensure_response( new stdClass() );
+		}
+		
+		return rest_ensure_response( $matrix );
+	}
+
+	public function update_rhythm_matrix( $request ) {
+		$user_id = get_current_user_id();
+		$parameters = $request->get_json_params();
+		
+		$matrix = array();
+		if ( is_array( $parameters ) ) {
+			foreach ( $parameters as $key => $val ) {
+				// Each entry should be an array of exactly 3 integers
+				if ( is_array( $val ) && count( $val ) === 3 ) {
+					$matrix[ sanitize_text_field( $key ) ] = array(
+						intval( $val[0] ),
+						intval( $val[1] ),
+						intval( $val[2] )
+					);
+				}
+			}
+		}
+		
+		update_user_meta( $user_id, 'youmeos_rhythm_matrix', $matrix );
+
+		return rest_ensure_response( array( 
+			'success' => true,
+			'message' => 'Rhythm Matrix synchronized.'
+		) );
 	}
 }
