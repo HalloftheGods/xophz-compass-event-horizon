@@ -203,6 +203,70 @@ class Xophz_Compass_Event_Horizon_Public {
 				'permission_callback' => 'is_user_logged_in',
 			)
 		) );
+
+		register_rest_route( 'xophz-compass/v1', '/nexos-chat', array(
+			array(
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_nexos_chat' ),
+				'permission_callback' => 'is_user_logged_in',
+			),
+			array(
+				'methods' => 'POST',
+				'callback' => array( $this, 'post_nexos_chat' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		) );
+	}
+
+	public function get_nexos_chat( $request ) {
+		$args = array(
+			'post_type'      => 'nexos_message',
+			'post_status'    => 'publish',
+			'posts_per_page' => 50,
+			'orderby'        => 'date',
+			'order'          => 'DESC'
+		);
+		$query = new WP_Query( $args );
+		$messages = array();
+		
+		foreach( $query->posts as $post ) {
+			$sender_id = $post->post_author;
+			$user = get_userdata( $sender_id );
+			$messages[] = array(
+				'id' => $post->ID,
+				'sender' => $user ? $user->display_name : 'Unknown Node',
+				'text' => $post->post_content,
+				'timestamp' => get_the_date( 'h:i A', $post ),
+				'raw_date' => $post->post_date_gmt,
+				'author_id' => $sender_id
+			);
+		}
+		
+		// Return chronological order
+		return rest_ensure_response( array_reverse( $messages ) );
+	}
+
+	public function post_nexos_chat( $request ) {
+		$params = $request->get_json_params();
+		$text   = sanitize_textarea_field( $params['text'] ?? '' );
+		
+		if ( empty( $text ) ) {
+			return new WP_Error( 'empty_message', 'No message sent', array( 'status' => 400 ) );
+		}
+		
+		$post_id = wp_insert_post( array(
+			'post_type'    => 'nexos_message',
+			'post_title'   => wp_trim_words( $text, 5 ),
+			'post_content' => $text,
+			'post_status'  => 'publish',
+			'post_author'  => get_current_user_id()
+		) );
+		
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
+		
+		return rest_ensure_response( array( 'success' => true, 'id' => $post_id ) );
 	}
 
 	public function handle_discord_token_exchange( $request ) {
