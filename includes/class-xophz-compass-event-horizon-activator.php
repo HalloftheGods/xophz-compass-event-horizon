@@ -30,7 +30,7 @@ class Xophz_Compass_Event_Horizon_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-	    if ( !is_plugin_active( 'xophz-compass/xophz-compass.php' ) ) {  
+	    if ( !class_exists( 'Xophz_Compass' ) ) {  
 	    	die('This plugin requires COMPASS to be active.</a></div>');
 	    } 
 	}

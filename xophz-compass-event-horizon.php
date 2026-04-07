@@ -75,14 +75,14 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-xophz-compass-event-horizo
  * @since    1.0.0
  */
 function run_xophz_compass_event_horizon() {
-  if( !function_exists('is_plugin_active') ) {
-    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-  }
-  if ( !is_plugin_active( 'xophz-compass/xophz-compass.php' ) ) {
+  if ( ! class_exists( 'Xophz_Compass' ) ) {
     add_action( 'admin_init', 'shutoff_xophz_compass_event_horizon' );
     add_action( 'admin_notices', 'admin_notice_xophz_compass_event_horizon' );
 
     function shutoff_xophz_compass_event_horizon() {
+      if ( ! function_exists( 'deactivate_plugins' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+      }
       deactivate_plugins( plugin_basename( __FILE__ ) );
     }
 
@@ -97,4 +97,4 @@ function run_xophz_compass_event_horizon() {
   }
   
 }
-run_xophz_compass_event_horizon();
+add_action( 'plugins_loaded', 'run_xophz_compass_event_horizon' );
