@@ -1,4 +1,103 @@
 /**
- * All of the CSS for your admin-specific functionality should be
- * included in this file.
+ * YouMeOS Event Horizon — Admin Bar Styles
+ *
+ * Matches the native WP logo dropdown sizing and spacing so our
+ * custom menus feel identical to the WordPress core ones.
  */
+
+/* ── Shared: Match WP-logo dropdown width & item padding ── */
+#wpadminbar .youmeos-admin-bar-btn .ab-sub-wrapper,
+#wpadminbar .compass-admin-bar-btn .ab-sub-wrapper {
+	min-width: 160px;
+}
+
+#wpadminbar .youmeos-admin-bar-btn .ab-submenu a,
+#wpadminbar .compass-admin-bar-btn .ab-submenu a {
+	padding: 0 12px !important;
+	height: 28px;
+	line-height: 28px;
+}
+
+/* ── YouMeOS Button ───────────────────────────────────── */
+#wpadminbar .youmeos-admin-bar-btn > a {
+	display: flex !important;
+	align-items: center;
+	gap: 6px;
+	padding: 0 8px !important;
+	height: 32px;
+}
+
+#wpadminbar .youmeos-admin-bar-btn > a img {
+	height: 20px;
+	width: 20px;
+	display: block;
+}
+
+#wpadminbar .youmeos-admin-bar-btn .youmeos-ab-label {
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 0.02em;
+	background: linear-gradient(135deg, #62c9ff 0%, #a78bfa 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+#wpadminbar .youmeos-admin-bar-btn > a:hover {
+	background: rgba(98, 201, 255, 0.08) !important;
+}
+
+#wpadminbar .youmeos-admin-bar-btn > a:hover .youmeos-ab-label {
+	background: linear-gradient(135deg, #fff 0%, #62c9ff 100%);
+	-webkit-background-clip: text;
+	background-clip: text;
+}
+
+/* ── My Compass Button (Gold Omega) ───────────────────── */
+#wpadminbar .compass-admin-bar-btn > a {
+	display: flex !important;
+	align-items: center;
+	gap: 4px;
+	padding: 0 8px !important;
+	height: 32px;
+}
+
+#wpadminbar .compass-admin-bar-btn .compass-ab-omega {
+	font-size: 20px !important;
+	color: rgb(217, 190, 111) !important;
+	width: 20px !important;
+	height: 32px !important;
+	line-height: 32px !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	display: inline-block !important;
+	vertical-align: middle !important;
+	box-sizing: border-box;
+}
+
+#wpadminbar .compass-admin-bar-btn .compass-ab-label {
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 0.02em;
+	color: rgb(217, 190, 111) !important;
+}
+
+#wpadminbar .compass-admin-bar-btn > a:hover {
+	background: rgba(217, 190, 111, 0.08) !important;
+}
+
+#wpadminbar .compass-admin-bar-btn > a:hover .compass-ab-label {
+	color: #fff !important;
+}
+
+#wpadminbar .compass-admin-bar-btn > a:hover .compass-ab-omega {
+	color: #fff !important;
+}
+
+/* ── Responsive: hide labels on small screens ─────────── */
+@media screen and (max-width: 782px) {
+	#wpadminbar .youmeos-admin-bar-btn .youmeos-ab-label,
+	#wpadminbar .compass-admin-bar-btn .compass-ab-label {
+		display: none;
+	}
+}

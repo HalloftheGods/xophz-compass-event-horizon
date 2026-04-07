@@ -21,6 +21,173 @@ class Xophz_Compass_Event_Horizon_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/xophz-compass-event-horizon-admin.js', array( 'jquery' ), $this->version, false );
 	}
 
+	/**
+	 * Add YouMeOS dropdown menu to the WordPress admin bar, before the WP logo.
+	 * Mirrors the WP logo menu pattern with YouMeOS-specific links.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar The admin bar instance.
+	 */
+	public function add_admin_bar_button( $wp_admin_bar ) {
+		$icon_url = plugin_dir_url( __FILE__ ) . 'images/youmeos-logo.png';
+
+		$icon_html = '<img src="' . esc_url( $icon_url ) . '" '
+			. 'alt="YouMeOS" '
+			. 'style="height:20px;width:20px;vertical-align:middle;padding:6px 0;" />';
+
+		// ── Parent node (the clickable logo + label) ──
+		$wp_admin_bar->add_node( array(
+			'id'    => 'youmeos-menu',
+			'title' => $icon_html . '<span class="youmeos-ab-label">YouMeOS</span>',
+			'href'  => home_url( '/youmeos/' ),
+			'meta'  => array(
+				'class' => 'youmeos-admin-bar-btn',
+				'title' => 'YouMeOS',
+			),
+		) );
+
+		// ── Group 1: Local links ──
+		$wp_admin_bar->add_node( array(
+			'parent' => 'youmeos-menu',
+			'id'     => 'youmeos-portal',
+			'title'  => 'Open Portal',
+			'href'   => home_url( '/youmeos/' ),
+			'meta'   => array( 'title' => 'Launch the local YouMeOS portal' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'youmeos-menu',
+			'id'     => 'youmeos-about',
+			'title'  => 'About YouMeOS',
+			'href'   => home_url( '/youmeos/#/about' ),
+			'meta'   => array( 'title' => 'About YouMeOS' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'youmeos-menu',
+			'id'     => 'youmeos-get-involved',
+			'title'  => 'Get Involved',
+			'href'   => 'https://youmeos.com/community',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+
+		// ── Group 2: External links (separated by divider) ──
+		$wp_admin_bar->add_group( array(
+			'parent' => 'youmeos-menu',
+			'id'     => 'youmeos-external',
+			'meta'   => array( 'class' => 'ab-sub-secondary' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'youmeos-external',
+			'id'     => 'youmeos-website',
+			'title'  => 'YouMeOS.com',
+			'href'   => 'https://youmeos.com',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'youmeos-external',
+			'id'     => 'youmeos-docs',
+			'title'  => 'Documentation',
+			'href'   => 'https://youmeos.com/docs',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'youmeos-external',
+			'id'     => 'youmeos-community',
+			'title'  => 'Community',
+			'href'   => 'https://youmeos.com/community',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'youmeos-external',
+			'id'     => 'youmeos-support',
+			'title'  => 'Support',
+			'href'   => 'https://youmeos.com/support',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'youmeos-external',
+			'id'     => 'youmeos-feedback',
+			'title'  => 'Feedback',
+			'href'   => 'https://youmeos.com/feedback',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+	}
+
+	/**
+	 * Add My Compass button to the admin bar with the Gold Omega icon.
+	 * Uses the same dashicon + color as the sidebar menu item.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar The admin bar instance.
+	 */
+	public function add_compass_admin_bar_button( $wp_admin_bar ) {
+		$omega_html = '<span class="ab-icon dashicons dashicons-editor-customchar compass-ab-omega"></span>';
+
+		$menu_title = class_exists( 'Xophz_Compass_Branding' )
+			? Xophz_Compass_Branding::get_menu_title()
+			: 'My Compass';
+
+		$wp_admin_bar->add_node( array(
+			'id'    => 'compass-menu',
+			'title' => $omega_html . '<span class="compass-ab-label">' . esc_html( $menu_title ) . '</span>',
+			'href'  => admin_url( 'admin.php?page=xophz-compass' ),
+			'meta'  => array(
+				'class' => 'compass-admin-bar-btn',
+				'title' => $menu_title,
+			),
+		) );
+
+		// ── Group 1: Dashboard links ──
+		$wp_admin_bar->add_node( array(
+			'parent' => 'compass-menu',
+			'id'     => 'compass-dashboard',
+			'title'  => 'Dashboard',
+			'href'   => admin_url( 'admin.php?page=xophz-compass#/' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'compass-menu',
+			'id'     => 'compass-settings',
+			'title'  => 'Settings',
+			'href'   => admin_url( 'admin.php?page=xophz-compass#/settings' ),
+		) );
+
+		// ── Group 2: External links ──
+		$wp_admin_bar->add_group( array(
+			'parent' => 'compass-menu',
+			'id'     => 'compass-external',
+			'meta'   => array( 'class' => 'ab-sub-secondary' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'compass-external',
+			'id'     => 'compass-website',
+			'title'  => 'MyCompassConsulting.com',
+			'href'   => 'https://mycompassconsulting.com',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'compass-external',
+			'id'     => 'compass-docs',
+			'title'  => 'Documentation',
+			'href'   => 'https://mycompassconsulting.com/docs',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+
+		$wp_admin_bar->add_node( array(
+			'parent' => 'compass-external',
+			'id'     => 'compass-support',
+			'title'  => 'Support',
+			'href'   => 'https://mycompassconsulting.com/support',
+			'meta'   => array( 'target' => '_blank' ),
+		) );
+	}
+
 	public function addToMenu() {
 		Xophz_Compass::add_submenu( $this->plugin_name );
 

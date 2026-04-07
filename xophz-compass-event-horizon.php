@@ -13,7 +13,7 @@
  * @package           Xophz_Compass_
  *
  * @wordpress-plugin
- * Category:          Marketing
+ * Category:          Command Deck
  * Plugin Name:       Xophz You Me OS 
  * Plugin URI:        http://www.mycompassconsulting.com/
  * Description:       Bring transparency to your user-to-media connectivity by observing a real life 3D interactive heat map. From micro to macro and unto the avoided.

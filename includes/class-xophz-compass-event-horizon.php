@@ -164,6 +164,16 @@ class Xophz_Compass_Event_Horizon {
 		add_action( 'update_option_youmeos_load_mode', array( $plugin_admin, 'flush_rewrites_on_save' ), 10, 2 );
 		add_action( 'update_option_youmeos_load_page_id', array( $plugin_admin, 'flush_rewrites_on_save' ), 10, 2 );
 
+		// YouMeOS admin bar button — priority 0 places it before the WP logo (priority 10).
+		$this->loader->add_action( 'admin_bar_menu', $plugin_admin, 'add_admin_bar_button', 0 );
+
+		// My Compass admin bar button — priority 1, right after YouMeOS.
+		$this->loader->add_action( 'admin_bar_menu', $plugin_admin, 'add_compass_admin_bar_button', 1 );
+
+		// Enqueue admin bar styles on both admin and front-end.
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+
 	}
 
 	/**
