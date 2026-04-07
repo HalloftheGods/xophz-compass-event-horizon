@@ -25,7 +25,29 @@ class Xophz_Compass_Event_Horizon_Public {
 		return $vars;
 	}
 
+	public function expose_menus_to_rest( $args, $taxonomy_name ) {
+		if ( 'nav_menu' === $taxonomy_name ) {
+			$args['show_in_rest'] = true;
+		}
+		return $args;
+	}
+
+	public function expose_menu_items_to_rest( $args, $post_type ) {
+		if ( 'nav_menu_item' === $post_type ) {
+			$args['show_in_rest'] = true;
+		}
+		return $args;
+	}
+
+	public function allow_rest_menu_read_access( $has_access, $request = null ) {
+		return true;
+	}
+
 	public function template_redirect() {
+		$menus = wp_get_nav_menus();
+		$blocks = get_posts(['post_type' => 'wp_navigation', 'posts_per_page' => -1]);
+		file_put_contents('/tmp/wp_menus_dump.json', json_encode(['traditional' => $menus, 'blocks' => $blocks]));
+        
 		global $wp_query;
 
 		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] );
@@ -234,6 +256,108 @@ class Xophz_Compass_Event_Horizon_Public {
 				'permission_callback' => 'is_user_logged_in',
 			)
 		) );
+
+		register_rest_route( 'xophz-compass/v1', '/site-navigation', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'get_unified_site_menus' ),
+			'permission_callback' => '__return_true',
+		) );
+	}
+
+	public function get_unified_site_menus( $request ) {
+		$menus_output = [];
+
+		// 1. Fetch Classic Menus
+		$classic_menus = wp_get_nav_menus();
+		if ( ! empty( $classic_menus ) && ! is_wp_error( $classic_menus ) ) {
+			foreach ( $classic_menus as $menu ) {
+				$items = wp_get_nav_menu_items( $menu->term_id );
+				$tree = [];
+				if ( $items ) {
+					$lookup = [];
+					foreach ( $items as $item ) {
+						$lookup[ $item->ID ] = [
+							'id' => $item->ID,
+							'title' => $item->title,
+							'url' => $item->url,
+							'children' => []
+						];
+					}
+					foreach ( $items as $item ) {
+						if ( $item->menu_item_parent == 0 ) {
+							$tree[] = &$lookup[ $item->ID ];
+						} elseif ( isset( $lookup[ $item->menu_item_parent ] ) ) {
+							$lookup[ $item->menu_item_parent ]['children'][] = &$lookup[ $item->ID ];
+						}
+					}
+				}
+				if ( ! empty( $tree ) ) {
+					$menus_output[] = [
+						'id' => 'classic-' . $menu->term_id,
+						'name' => $menu->name,
+						'items' => $tree
+					];
+				}
+			}
+		}
+
+		// 2. Fetch FSE Block Menus (wp_navigation)
+		$block_menus = get_posts([
+			'post_type' => 'wp_navigation',
+			'post_status' => 'publish',
+			'posts_per_page' => -1
+		]);
+
+		if ( ! empty( $block_menus ) ) {
+			foreach ( $block_menus as $menu_post ) {
+				$blocks = parse_blocks( $menu_post->post_content );
+				$tree = $this->parse_navigation_blocks( $blocks );
+				if ( ! empty( $tree ) ) {
+					$menus_output[] = [
+						'id' => 'fse-' . $menu_post->ID,
+						'name' => $menu_post->post_title ?: 'Navigation',
+						'items' => $tree
+					];
+				}
+			}
+		}
+
+		return rest_ensure_response( $menus_output );
+	}
+
+	private function parse_navigation_blocks( $blocks ) {
+		$items = [];
+		foreach ( $blocks as $block ) {
+			if ( empty( $block['blockName'] ) ) continue;
+
+			$item = [
+				'id' => crc32( wp_json_encode( $block ) . rand() ),
+				'title' => '',
+				'url' => '',
+				'children' => []
+			];
+
+			if ( isset( $block['attrs']['label'] ) ) {
+				$item['title'] = $block['attrs']['label'];
+			}
+			if ( isset( $block['attrs']['url'] ) ) {
+				$item['url'] = urldecode( $block['attrs']['url'] );
+			}
+
+			// Some blocks might use plain inner HTML for titles if label attr isn't set
+			if ( empty( $item['title'] ) && ! empty( $block['innerHTML'] ) ) {
+				$item['title'] = wp_strip_all_tags( $block['innerHTML'] );
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$item['children'] = $this->parse_navigation_blocks( $block['innerBlocks'] );
+			}
+
+			if ( ! empty( $item['title'] ) || ! empty( $item['children'] ) ) {
+				$items[] = $item;
+			}
+		}
+		return $items;
 	}
 
 	public function get_nexos_chat( $request ) {
