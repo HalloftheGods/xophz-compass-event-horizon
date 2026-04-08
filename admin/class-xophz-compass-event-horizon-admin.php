@@ -22,7 +22,7 @@ class Xophz_Compass_Event_Horizon_Admin {
 	}
 
 	/**
-	 * Add YouMeOS dropdown menu to the WordPress admin bar, before the WP logo.
+	 * Add YouMeOS dropdown menu to the WordPress admin bar, after the WP logo.
 	 * Mirrors the WP logo menu pattern with YouMeOS-specific links.
 	 *
 	 * @param WP_Admin_Bar $wp_admin_bar The admin bar instance.
