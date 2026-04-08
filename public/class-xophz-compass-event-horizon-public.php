@@ -69,18 +69,17 @@ class Xophz_Compass_Event_Horizon_Public {
 		}
 
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
-		$target_url = home_url( '/youmeos?sparks=logos&target=' . urlencode( $current_url ) );
+		$target_url = home_url( '/youmeos?sparks=logos&logos_target=' . urlencode( $current_url ) );
 		?>
 		<style>
 			#youmeos-pi-trigger {
 				position: fixed;
 				bottom: 12px;
-				right: 18px;
+				left: 18px;
 				font-size: 24px;
 				color: rgba(98, 201, 255, 0.4);
 				text-decoration: none;
 				z-index: 999999;
-				transition: transform 0.3s ease, color 0.3s ease;
 				cursor: pointer;
 				font-family: monospace;
 				display: flex;
@@ -89,13 +88,42 @@ class Xophz_Compass_Event_Horizon_Public {
 				padding: 8px;
 				line-height: 1;
 				user-select: none;
+				filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.15));
 			}
-			#youmeos-pi-trigger:hover {
+			#youmeos-pi-trigger .pi-symbol {
+				transition: transform 0.3s ease;
+				display: inline-block;
+			}
+			#youmeos-pi-trigger:hover .pi-symbol,
+			#youmeos-pi-trigger:hover .pi-text {
+				background: linear-gradient(135deg, #62c9ff 0%, #a78bfa 100%);
+				-webkit-background-clip: text;
+				background-clip: text;
+				-webkit-text-fill-color: transparent;
+				color: transparent;
+			}
+			#youmeos-pi-trigger:hover .pi-symbol {
 				transform: rotate(180deg);
-				color: #62c9ff;
+			}
+			#youmeos-pi-trigger .pi-text {
+				max-width: 0;
+				overflow: hidden;
+				opacity: 0;
+				white-space: nowrap;
+				transition: max-width 0.3s ease, opacity 0.3s ease;
+				font-size: 18px;
+				display: inline-block;
+				margin-top: 3px;
+			}
+			#youmeos-pi-trigger:hover .pi-text {
+				max-width: 80px;
+				opacity: 1;
 			}
 		</style>
-		<a id="youmeos-pi-trigger" href="<?php echo esc_url( $target_url ); ?>" title="Load YouMeOS">π</a>
+		<a id="youmeos-pi-trigger" href="<?php echo esc_url( $target_url ); ?>" title="Load YouMeOS">
+			<span class="pi-symbol">π</span>
+			<span class="pi-text">meos</span>
+		</a>
 		<?php
 	}
 
