@@ -60,6 +60,45 @@ class Xophz_Compass_Event_Horizon_Public {
 		}
 	}
 
+	public function inject_pi_trigger() {
+		global $wp_query;
+		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] );
+		
+		if ( $isRouteMatch || $this->is_configured_page() ) {
+			return;
+		}
+
+		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
+		$target_url = home_url( '/youmeos?sparks=logos&target=' . urlencode( $current_url ) );
+		?>
+		<style>
+			#youmeos-pi-trigger {
+				position: fixed;
+				bottom: 12px;
+				right: 18px;
+				font-size: 24px;
+				color: rgba(98, 201, 255, 0.4);
+				text-decoration: none;
+				z-index: 999999;
+				transition: transform 0.3s ease, color 0.3s ease;
+				cursor: pointer;
+				font-family: monospace;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 8px;
+				line-height: 1;
+				user-select: none;
+			}
+			#youmeos-pi-trigger:hover {
+				transform: rotate(180deg);
+				color: #62c9ff;
+			}
+		</style>
+		<a id="youmeos-pi-trigger" href="<?php echo esc_url( $target_url ); ?>" title="Load YouMeOS">π</a>
+		<?php
+	}
+
 	private function is_configured_page() {
 		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
 

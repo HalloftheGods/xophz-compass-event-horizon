@@ -205,6 +205,9 @@ class Xophz_Compass_Event_Horizon {
 		// Register Spark Registry Routes
 		$this->loader->add_action( 'rest_api_init', $spark_registry, 'register_routes' );
 
+		// Inject Pi Trigger on Frontend
+		$this->loader->add_action( 'wp_footer', $plugin_public, 'inject_pi_trigger' );
+
 	}
 
 	/**
