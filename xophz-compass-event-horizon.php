@@ -18,7 +18,7 @@
  * Plugin URI:        http://www.mycompassconsulting.com/
  * Description:       Bring transparency to your user-to-media connectivity by observing a real life 3D interactive heat map. From micro to macro and unto the avoided.
  * Version:           0.0.1
- * Author:            Xoph
+ * Author:            Hall of the Gods, Inc.
  * Author URI:        http://www.midnightnerd.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
