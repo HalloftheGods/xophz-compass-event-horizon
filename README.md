@@ -89,7 +89,7 @@ YouMeOS uses a hybrid architecture that bridges legacy power with modern reactiv
 ## 🚀 Getting Started
 
 1.  **Activate**: Ensure both `Xophz COMPASS` and `Event Horizon` plugins are active in WordPress.
-2.  **Access**: Navigate to the COMPASS dashboard and click **Enter Youniverse**.
+2.  **Access**: Navigate to the My Compass dashboard and click **Enter Youniverse**.
 3.  **Navigate**: Use mouse/touch controls to orbit, zoom, and fly through the cosmic heat map. Click on Stars to explore their Oort Clouds.
 
 ---
