@@ -53,7 +53,11 @@ class Xophz_Compass_Event_Horizon_Public {
 		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] );
 		$isConfiguredPageMatch = $this->is_configured_page();
 
-		if ( $isRouteMatch || $isConfiguredPageMatch ) {
+		// Intercept 404s when in homepage mode so we can route SPA sub-paths.
+		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+		$isHomepage404Fallback = ( $loadMode === 'homepage' && is_404() );
+
+		if ( $isRouteMatch || $isConfiguredPageMatch || $isHomepage404Fallback ) {
 			$app_base = $this->resolve_app_base( $wp_query, $isRouteMatch );
 			$this->render_youmeos_shell( $app_base );
 			exit;
