@@ -199,9 +199,17 @@ class Xophz_Compass_Event_Horizon_Public {
 <?php if ( $this->is_dev_server() ) : ?>
     <script type="module" src="http://localhost:9000/@vite/client"></script>
     <script type="module" src="http://localhost:9000/apps/youmeos/mount-youmeos.ts"></script>
-<?php else : ?>
-    <script type="module" src="<?php echo plugin_dir_url( __FILE__ ) . 'dist/js/youmeos.js'; ?>"></script>
-    <link rel="stylesheet" href="<?php echo plugin_dir_url( __FILE__ ) . 'dist/css/youmeos.css'; ?>">
+<?php else : 
+    $manifest_path = plugin_dir_path( __FILE__ ) . 'dist/.vite/manifest.json';
+    $manifest = file_exists($manifest_path) ? json_decode(file_get_contents($manifest_path), true) : null;
+    $entry_js = isset($manifest['apps/youmeos/index.html']) ? 'dist/' . $manifest['apps/youmeos/index.html']['file'] : 'dist/js/youmeos.js';
+    ?>
+    <script type="module" src="<?php echo plugin_dir_url( __FILE__ ) . $entry_js; ?>"></script>
+    <?php if (isset($manifest['apps/youmeos/index.html']['css'])) : 
+        foreach ($manifest['apps/youmeos/index.html']['css'] as $css_file) : ?>
+            <link rel="stylesheet" href="<?php echo plugin_dir_url( __FILE__ ) . 'dist/' . $css_file; ?>">
+        <?php endforeach; 
+    endif; ?>
 <?php endif; ?>
 
 </head>

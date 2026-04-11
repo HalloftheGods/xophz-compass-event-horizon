@@ -1,0 +1,1230 @@
+{
+  "_accessibility.store-ajfLAay_.js": {
+    "file": "js/accessibility.store-ajfLAay_.js",
+    "name": "accessibility.store",
+    "imports": [
+      "_vendor-dbBqnUSm.js"
+    ]
+  },
+  "_discord.store-CYn87ic-.js": {
+    "file": "js/discord.store-CYn87ic-.js",
+    "name": "discord.store",
+    "imports": [
+      "_vendor-dbBqnUSm.js"
+    ]
+  },
+  "_slug-utils-jqxVsoY7.js": {
+    "file": "js/slug-utils-jqxVsoY7.js",
+    "name": "slug-utils"
+  },
+  "_sub-app-billboard-BpyEX_TA.css": {
+    "file": "css/sub-app-billboard-BpyEX_TA.css",
+    "src": "_sub-app-billboard-BpyEX_TA.css"
+  },
+  "_sub-app-billboard-Bw-pn7t0.js": {
+    "file": "js/sub-app-billboard-Bw-pn7t0.js",
+    "name": "sub-app-billboard",
+    "isDynamicEntry": true,
+    "imports": [
+      "_useSubAppNavigation-DS4L6o12.js",
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_slug-utils-jqxVsoY7.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/sub-app-billboard-BpyEX_TA.css"
+    ]
+  },
+  "_u-shortcut-CRbaW0DS.js": {
+    "file": "js/u-shortcut-CRbaW0DS.js",
+    "name": "u-shortcut",
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js"
+    ],
+    "css": [
+      "css/u-shortcut-D3bNMFED.css"
+    ]
+  },
+  "_u-shortcut-D3bNMFED.css": {
+    "file": "css/u-shortcut-D3bNMFED.css",
+    "src": "_u-shortcut-D3bNMFED.css"
+  },
+  "_u-spark-view-DTuRSksn.css": {
+    "file": "css/u-spark-view-DTuRSksn.css",
+    "src": "_u-spark-view-DTuRSksn.css"
+  },
+  "_u-spark-view-DsBWp76t.js": {
+    "file": "js/u-spark-view-DsBWp76t.js",
+    "name": "u-spark-view",
+    "imports": [
+      "_vuetify-CIirE0s9.js",
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html"
+    ],
+    "css": [
+      "css/u-spark-view-DTuRSksn.css"
+    ]
+  },
+  "_useDiscord-CRCgwdBq.js": {
+    "file": "js/useDiscord-CRCgwdBq.js",
+    "name": "useDiscord",
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "_discord.store-CYn87ic-.js"
+    ]
+  },
+  "_useIconMapper-DF1ReNgY.js": {
+    "file": "js/useIconMapper-DF1ReNgY.js",
+    "name": "useIconMapper"
+  },
+  "_useSubAppNavigation-DS4L6o12.js": {
+    "file": "js/useSubAppNavigation-DS4L6o12.js",
+    "name": "useSubAppNavigation",
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html"
+    ]
+  },
+  "_vendor-_qdicobF.css": {
+    "file": "css/vendor-_qdicobF.css",
+    "src": "_vendor-_qdicobF.css"
+  },
+  "_vendor-dbBqnUSm.js": {
+    "file": "js/vendor-dbBqnUSm.js",
+    "name": "vendor",
+    "css": [
+      "css/vendor-_qdicobF.css"
+    ]
+  },
+  "_vuetify-B1OPp4Vg.css": {
+    "file": "css/vuetify-B1OPp4Vg.css",
+    "src": "_vuetify-B1OPp4Vg.css"
+  },
+  "_vuetify-CIirE0s9.js": {
+    "file": "js/vuetify-CIirE0s9.js",
+    "name": "vuetify",
+    "imports": [
+      "_vendor-dbBqnUSm.js"
+    ],
+    "css": [
+      "css/vuetify-B1OPp4Vg.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/app-launcher/app-launcher-spark.vue": {
+    "file": "js/app-launcher-spark-B3c5DKnu.js",
+    "name": "app-launcher-spark",
+    "src": "apps/youmeos/app/sparks/app-launcher/app-launcher-spark.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_u-shortcut-CRbaW0DS.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/app-launcher-spark-yoTjpDga.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/blackbox/blackbox-app.vue": {
+    "file": "js/blackbox-app-CoI2wn48.js",
+    "name": "blackbox-app",
+    "src": "apps/youmeos/app/sparks/blackbox/blackbox-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js",
+      "_vendor-dbBqnUSm.js"
+    ],
+    "css": [
+      "css/blackbox-app-DT7THRDG.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/blackjack/blackjack-app.vue": {
+    "file": "js/blackjack-app-BF1akiqU.js",
+    "name": "blackjack-app",
+    "src": "apps/youmeos/app/sparks/blackjack/blackjack-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/blackjack-app-BlBnxJSO.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/cafeteria/cafeteria-app.vue": {
+    "file": "js/cafeteria-app-BS71QqSo.js",
+    "name": "cafeteria-app",
+    "src": "apps/youmeos/app/sparks/cafeteria/cafeteria-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/cafeteria-app-C74w17Za.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/calculator/calculator-app.vue": {
+    "file": "js/calculator-app-DL1ZFt4A.js",
+    "name": "calculator-app",
+    "src": "apps/youmeos/app/sparks/calculator/calculator-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/calculator-app-DBxHNuDD.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/chronos/chronos-app.vue": {
+    "file": "js/chronos-app-Bfg7VoBw.js",
+    "name": "chronos-app",
+    "src": "apps/youmeos/app/sparks/chronos/chronos-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/chronos-app-3qaTTZP4.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/cookie-jar/cookie-jar-app.vue": {
+    "file": "js/cookie-jar-app-DheFUOHN.js",
+    "name": "cookie-jar-app",
+    "src": "apps/youmeos/app/sparks/cookie-jar/cookie-jar-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/cookie-jar-app-DiS_v-b7.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/debug-console/debug-console-app.vue": {
+    "file": "js/debug-console-app-B8ccrCrW.js",
+    "name": "debug-console-app",
+    "src": "apps/youmeos/app/sparks/debug-console/debug-console-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/debug-console-app-GuZeBihC.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/enchiridion/enchiridion-app.vue": {
+    "file": "js/enchiridion-app-BsomvrWe.js",
+    "name": "enchiridion-app",
+    "src": "apps/youmeos/app/sparks/enchiridion/enchiridion-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/enchiridion-app-C747qNXg.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/generic-spark/u-generic-spark.vue": {
+    "file": "js/u-generic-spark-CCFxmssS.js",
+    "name": "u-generic-spark",
+    "src": "apps/youmeos/app/sparks/generic-spark/u-generic-spark.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js",
+      "_vendor-dbBqnUSm.js"
+    ],
+    "dynamicImports": [
+      "apps/youmeos/index.html"
+    ]
+  },
+  "apps/youmeos/app/sparks/jukebox/jukebox-app.vue": {
+    "file": "js/jukebox-app-CuDVuOZm.js",
+    "name": "jukebox-app",
+    "src": "apps/youmeos/app/sparks/jukebox/jukebox-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/jukebox-app-3jxKe4AW.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/lemon-aid/lemon-aid-app.vue": {
+    "file": "js/lemon-aid-app-CJU5_b9B.js",
+    "name": "lemon-aid-app",
+    "src": "apps/youmeos/app/sparks/lemon-aid/lemon-aid-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/lemon-aid-app-CrxemOLi.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/local-produce/local-produce-app.vue": {
+    "file": "js/local-produce-app-D7n3RUBH.js",
+    "name": "local-produce-app",
+    "src": "apps/youmeos/app/sparks/local-produce/local-produce-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/local-produce-app-DMUbsdP7.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/logos/logos-app.vue": {
+    "file": "js/logos-app-B21Ebqc7.js",
+    "name": "logos-app",
+    "src": "apps/youmeos/app/sparks/logos/logos-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_useIconMapper-DF1ReNgY.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/logos-app-DcCkVjBC.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/minesweeper/minesweeper-app.vue": {
+    "file": "js/minesweeper-app-BkG67mh0.js",
+    "name": "minesweeper-app",
+    "src": "apps/youmeos/app/sparks/minesweeper/minesweeper-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/minesweeper-app-D6gKakkP.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/my-compass-suite/my-compass-suite-app.vue": {
+    "file": "js/my-compass-suite-app-cKOIc-73.js",
+    "name": "my-compass-suite-app",
+    "src": "apps/youmeos/app/sparks/my-compass-suite/my-compass-suite-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js",
+      "_slug-utils-jqxVsoY7.js",
+      "_u-spark-view-DsBWp76t.js"
+    ],
+    "css": [
+      "css/my-compass-suite-app-CDZun8o0.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/neon-notes/neon-notes-app.vue": {
+    "file": "js/neon-notes-app-B3B8V98e.js",
+    "name": "neon-notes-app",
+    "src": "apps/youmeos/app/sparks/neon-notes/neon-notes-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/neon-notes-app-DMeIjxGx.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/notepad/notepad-app.vue": {
+    "file": "js/notepad-app-BBa4-3JS.js",
+    "name": "notepad-app",
+    "src": "apps/youmeos/app/sparks/notepad/notepad-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_useIconMapper-DF1ReNgY.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/notepad-app-bc-K1BYo.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/paint/paint-app.vue": {
+    "file": "js/paint-app-BlqMbHeZ.js",
+    "name": "paint-app",
+    "src": "apps/youmeos/app/sparks/paint/paint-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/paint-app-Duua9Lz5.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/settings/settings-app.vue": {
+    "file": "js/settings-app-p7erLUZs.js",
+    "name": "settings-app",
+    "src": "apps/youmeos/app/sparks/settings/settings-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js",
+      "_accessibility.store-ajfLAay_.js",
+      "_useDiscord-CRCgwdBq.js",
+      "_discord.store-CYn87ic-.js"
+    ],
+    "css": [
+      "css/settings-app-C89-Ewnh.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/snake/snake-app.vue": {
+    "file": "js/snake-app-ItvvOhnp.js",
+    "name": "snake-app",
+    "src": "apps/youmeos/app/sparks/snake/snake-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/snake-app-CXuNJkFZ.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/solitaire/solitaire-app.vue": {
+    "file": "js/solitaire-app-DMBXLdhz.js",
+    "name": "solitaire-app",
+    "src": "apps/youmeos/app/sparks/solitaire/solitaire-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/solitaire-app-BAKc7lgx.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/sys-monitor/sys-monitor-app.vue": {
+    "file": "js/sys-monitor-app-CK_JL-kO.js",
+    "name": "sys-monitor-app",
+    "src": "apps/youmeos/app/sparks/sys-monitor/sys-monitor-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/sys-monitor-app-BvjIG1P7.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/terminal/terminal-app.vue": {
+    "file": "js/terminal-app-RPzjKTfd.js",
+    "name": "terminal-app",
+    "src": "apps/youmeos/app/sparks/terminal/terminal-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/terminal-app-DQCOXiEk.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/tourguide/tourguide-app.vue": {
+    "file": "js/tourguide-app-BETaStu7.js",
+    "name": "tourguide-app",
+    "src": "apps/youmeos/app/sparks/tourguide/tourguide-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/tourguide-app-6s3RXlHi.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/trenchess/trenchess-app.vue": {
+    "file": "js/trenchess-app-BoGSQDCr.js",
+    "name": "trenchess-app",
+    "src": "apps/youmeos/app/sparks/trenchess/trenchess-app.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/trenchess-app-J0bAcUgw.css"
+    ]
+  },
+  "apps/youmeos/app/sparks/welcome-u/welcome-u-spark.vue": {
+    "file": "js/welcome-u-spark-B-lz6pOZ.js",
+    "name": "welcome-u-spark",
+    "src": "apps/youmeos/app/sparks/welcome-u/welcome-u-spark.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_accessibility.store-ajfLAay_.js",
+      "_u-shortcut-CRbaW0DS.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/welcome-u-spark-LUBTo1Vz.css"
+    ]
+  },
+  "apps/youmeos/assets/logos/y-logo-v2.png": {
+    "file": "assets/y-logo-v2-Cuv_iiBM.png",
+    "src": "apps/youmeos/assets/logos/y-logo-v2.png"
+  },
+  "apps/youmeos/assets/patreon/patreon-key.png": {
+    "file": "assets/patreon-key-BXqT-1Ft.png",
+    "src": "apps/youmeos/assets/patreon/patreon-key.png"
+  },
+  "apps/youmeos/engine/webgl/generators/dust.ts": {
+    "file": "js/dust-DTpGKQyz.js",
+    "name": "dust",
+    "src": "apps/youmeos/engine/webgl/generators/dust.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgl/generators/galaxy.ts": {
+    "file": "js/galaxy-CLkIRS2y.js",
+    "name": "galaxy",
+    "src": "apps/youmeos/engine/webgl/generators/galaxy.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgl/generators/gas.ts": {
+    "file": "js/gas-CqPLm_hR.js",
+    "name": "gas",
+    "src": "apps/youmeos/engine/webgl/generators/gas.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgl/generators/hipparcos.ts": {
+    "file": "js/hipparcos-CgJNel1q.js",
+    "name": "hipparcos",
+    "src": "apps/youmeos/engine/webgl/generators/hipparcos.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgl/generators/starfield.ts": {
+    "file": "js/starfield-CuYPN5ZK.js",
+    "name": "starfield",
+    "src": "apps/youmeos/engine/webgl/generators/starfield.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgpu/generators/galactic-clusters.ts": {
+    "file": "js/galactic-clusters-P-UBT1Wf.js",
+    "name": "galactic-clusters",
+    "src": "apps/youmeos/engine/webgpu/generators/galactic-clusters.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgpu/generators/nexus/stars.ts": {
+    "file": "js/stars-DM5ZhSU0.js",
+    "name": "stars",
+    "src": "apps/youmeos/engine/webgpu/generators/nexus/stars.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-dust.ts": {
+    "file": "js/interstellar-dust-DU9vFsQp.js",
+    "name": "interstellar-dust",
+    "src": "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-dust.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-gas.ts": {
+    "file": "js/interstellar-gas-CqPLm_hR.js",
+    "name": "interstellar-gas",
+    "src": "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-gas.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgpu/generators/noosphere/milky-way.ts": {
+    "file": "js/milky-way-DnZyaI6Z.js",
+    "name": "milky-way",
+    "src": "apps/youmeos/engine/webgpu/generators/noosphere/milky-way.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/engine/webgpu/generators/noosphere/starfield.ts": {
+    "file": "js/starfield-BPrY9p6W.js",
+    "name": "starfield",
+    "src": "apps/youmeos/engine/webgpu/generators/noosphere/starfield.ts",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/index.html": {
+    "file": "js/youmeos-DlZS2Ngy.js",
+    "name": "youmeos",
+    "src": "apps/youmeos/index.html",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "dynamicImports": [
+      "apps/youmeos/engine/webgpu/generators/noosphere/milky-way.ts",
+      "apps/youmeos/engine/webgl/generators/galaxy.ts",
+      "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-dust.ts",
+      "apps/youmeos/engine/webgl/generators/dust.ts",
+      "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-gas.ts",
+      "apps/youmeos/engine/webgl/generators/gas.ts",
+      "apps/youmeos/engine/webgpu/generators/nexus/stars.ts",
+      "apps/youmeos/engine/webgl/generators/hipparcos.ts",
+      "apps/youmeos/engine/webgpu/generators/noosphere/starfield.ts",
+      "apps/youmeos/engine/webgl/generators/starfield.ts",
+      "apps/youmeos/engine/webgpu/generators/galactic-clusters.ts",
+      "apps/youmeos/app/sparks/my-compass-suite/my-compass-suite-app.vue",
+      "apps/youmeos/app/sparks/settings/settings-app.vue",
+      "apps/youmeos/app/sparks/calculator/calculator-app.vue",
+      "apps/youmeos/app/sparks/minesweeper/minesweeper-app.vue",
+      "apps/youmeos/app/sparks/solitaire/solitaire-app.vue",
+      "apps/youmeos/app/sparks/notepad/notepad-app.vue",
+      "apps/youmeos/app/sparks/terminal/terminal-app.vue",
+      "apps/youmeos/app/sparks/sys-monitor/sys-monitor-app.vue",
+      "apps/youmeos/app/sparks/chronos/chronos-app.vue",
+      "apps/youmeos/app/sparks/jukebox/jukebox-app.vue",
+      "apps/youmeos/app/sparks/paint/paint-app.vue",
+      "apps/youmeos/app/sparks/generic-spark/u-generic-spark.vue",
+      "apps/youmeos/app/sparks/debug-console/debug-console-app.vue",
+      "apps/youmeos/routes/helios/helios.vue",
+      "apps/youmeos/routes/nexus/nexus.vue",
+      "apps/youmeos/routes/noosphere/noosphere.vue",
+      "apps/youmeos/app/sparks/tourguide/tourguide-app.vue",
+      "apps/youmeos/app/sparks/welcome-u/welcome-u-spark.vue",
+      "apps/youmeos/app/sparks/enchiridion/enchiridion-app.vue",
+      "apps/youmeos/app/sparks/app-launcher/app-launcher-spark.vue",
+      "apps/youmeos/app/sparks/blackbox/blackbox-app.vue",
+      "apps/youmeos/app/sparks/neon-notes/neon-notes-app.vue",
+      "apps/youmeos/app/sparks/snake/snake-app.vue",
+      "apps/youmeos/app/sparks/cookie-jar/cookie-jar-app.vue",
+      "apps/youmeos/app/sparks/lemon-aid/lemon-aid-app.vue",
+      "apps/youmeos/app/sparks/logos/logos-app.vue",
+      "apps/youmeos/app/sparks/local-produce/local-produce-app.vue",
+      "apps/youmeos/app/sparks/trenchess/trenchess-app.vue",
+      "apps/youmeos/app/sparks/blackjack/blackjack-app.vue",
+      "apps/youmeos/app/sparks/cafeteria/cafeteria-app.vue",
+      "apps/youmeos/app/sparks/generic-spark/u-generic-spark.vue",
+      "apps/youmeos/routes/welcome/WelcomeView.vue",
+      "apps/youmeos/routes/welcome/WelcomeLanding.vue",
+      "apps/youmeos/routes/auth/LoginView.vue",
+      "apps/youmeos/routes/auth/RegisterView.vue",
+      "apps/youmeos/routes/auth/ResetView.vue",
+      "apps/youmeos/routes/support/SupportView.vue",
+      "apps/youmeos/routes/auth/DiscordCallback.vue",
+      "apps/youmeos/routes/portal/PortalView.vue",
+      "apps/youmeos/routes/portal/PortalDashboard.vue",
+      "apps/youmeos/app/sparks/my-compass-suite/my-compass-suite-app.vue",
+      "src/components/blueprints/layouts/x-sub-app-layout/x-sub-app-layout.vue",
+      "src/components/blueprints/layouts/x-sub-route-layout/x-sub-route-layout.vue",
+      "_sub-app-billboard-Bw-pn7t0.js",
+      "src/components/constructs/routes-navigation-drawer/routes-navigation-drawer.vue",
+      "src/components/prefabs/animated-number/animated-number.vue",
+      "src/components/prefabs/compass-circle/compass-circle.vue",
+      "src/components/prefabs/plugin-grid-circle/plugin-grid-circle.vue",
+      "src/components/atoms/x-declaration.vue"
+    ],
+    "css": [
+      "css/youmeos-5Z3gwhl_.css"
+    ],
+    "assets": [
+      "assets/y-logo-v2-Cuv_iiBM.png",
+      "assets/fa-brands-400-DOJ3d8S2.eot",
+      "assets/fa-brands-400-BoGazL5X.woff2",
+      "assets/fa-brands-400-BppY2YH5.woff",
+      "assets/fa-brands-400-Cvq_JjcI.ttf",
+      "assets/fa-brands-400-CUMtpxsL.svg",
+      "assets/fa-duotone-900-BxSDDPoS.eot",
+      "assets/fa-duotone-900-ePr-_0-U.woff2",
+      "assets/fa-duotone-900-D8bJUhZ3.woff",
+      "assets/fa-duotone-900-JJ7JpdMD.ttf",
+      "assets/fa-duotone-900-kg1a_TEX.svg",
+      "assets/fa-light-300-Cjd8zpgO.eot",
+      "assets/fa-light-300-JjeHsR9Q.woff2",
+      "assets/fa-light-300-DmSVN63B.woff",
+      "assets/fa-light-300-BqEkzVTj.ttf",
+      "assets/fa-light-300-DPjzRXa1.svg",
+      "assets/fa-regular-400-pAvjlHJy.eot",
+      "assets/fa-regular-400-BMnJ9gFZ.woff2",
+      "assets/fa-regular-400-Do3gprBG.woff",
+      "assets/fa-regular-400-DLWfwCKD.ttf",
+      "assets/fa-regular-400-D7GIZYaW.svg",
+      "assets/fa-solid-900-DRn1iMFJ.eot",
+      "assets/fa-solid-900-CYmgTyZd.woff2",
+      "assets/fa-solid-900-DGcrDHd0.woff",
+      "assets/fa-solid-900-C-BFdRQh.ttf",
+      "assets/fa-solid-900-zJJCaBLX.svg",
+      "assets/Roboto-Thin-NicBC1pN.woff2",
+      "assets/Roboto-Thin-BfJvJcog.woff",
+      "assets/Roboto-ThinItalic-CKlCjrO_.woff2",
+      "assets/Roboto-ThinItalic-DnIWFxRE.woff",
+      "assets/Roboto-Light-DHTugVNA.woff2",
+      "assets/Roboto-Light-Cu-PAxXt.woff",
+      "assets/Roboto-LightItalic-JQyp2Y3P.woff2",
+      "assets/Roboto-LightItalic-CZg5kHIB.woff",
+      "assets/Roboto-Regular-C6rbFxYz.woff2",
+      "assets/Roboto-Regular-BX5l9hRW.woff",
+      "assets/Roboto-RegularItalic-CvPUdkvM.woff2",
+      "assets/Roboto-RegularItalic-BjnLZsam.woff",
+      "assets/Roboto-Medium-ByKogCTi.woff2",
+      "assets/Roboto-Medium-b81vv18W.woff",
+      "assets/Roboto-MediumItalic-i1eR0KbF.woff2",
+      "assets/Roboto-MediumItalic-DFQ-RYa0.woff",
+      "assets/Roboto-Bold-hN3duQhD.woff2",
+      "assets/Roboto-Bold-D9plYbeK.woff",
+      "assets/Roboto-BoldItalic-BWDm51uc.woff2",
+      "assets/Roboto-BoldItalic-CyLKvOHD.woff",
+      "assets/Roboto-Black-VhoA2qKx.woff2",
+      "assets/Roboto-Black-B0ZKieaB.woff",
+      "assets/Roboto-BlackItalic-D4yie1YO.woff2",
+      "assets/Roboto-BlackItalic-D0gSnuIb.woff"
+    ]
+  },
+  "apps/youmeos/routes/auth/DiscordCallback.vue": {
+    "file": "js/DiscordCallback-DwMzg5YQ.js",
+    "name": "DiscordCallback",
+    "src": "apps/youmeos/routes/auth/DiscordCallback.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "_discord.store-CYn87ic-.js",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "apps/youmeos/routes/auth/LoginView.vue": {
+    "file": "js/LoginView-Dru8lWgd.js",
+    "name": "LoginView",
+    "src": "apps/youmeos/routes/auth/LoginView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_useDiscord-CRCgwdBq.js",
+      "_vuetify-CIirE0s9.js",
+      "_discord.store-CYn87ic-.js"
+    ],
+    "css": [
+      "css/LoginView-DiKkvdHm.css"
+    ]
+  },
+  "apps/youmeos/routes/auth/RegisterView.vue": {
+    "file": "js/RegisterView-umK476Zu.js",
+    "name": "RegisterView",
+    "src": "apps/youmeos/routes/auth/RegisterView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/RegisterView-DSBGBlaH.css"
+    ]
+  },
+  "apps/youmeos/routes/auth/ResetView.vue": {
+    "file": "js/ResetView-CY8y1N0C.js",
+    "name": "ResetView",
+    "src": "apps/youmeos/routes/auth/ResetView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/ResetView-iQd09-KT.css"
+    ]
+  },
+  "apps/youmeos/routes/helios/helios.vue": {
+    "file": "js/helios-BA5uLDz6.js",
+    "name": "helios",
+    "src": "apps/youmeos/routes/helios/helios.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_u-spark-view-DsBWp76t.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/helios-DwWef-jz.css"
+    ]
+  },
+  "apps/youmeos/routes/nexus/nexus.vue": {
+    "file": "js/nexus-DcqgeRTN.js",
+    "name": "nexus",
+    "src": "apps/youmeos/routes/nexus/nexus.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_u-spark-view-DsBWp76t.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/nexus-CqaQPLcm.css"
+    ]
+  },
+  "apps/youmeos/routes/noosphere/noosphere.vue": {
+    "file": "js/noosphere-B6Czr5U3.js",
+    "name": "noosphere",
+    "src": "apps/youmeos/routes/noosphere/noosphere.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_u-spark-view-DsBWp76t.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/noosphere-Ccj5W7Lb.css"
+    ]
+  },
+  "apps/youmeos/routes/portal/PortalDashboard.vue": {
+    "file": "js/PortalDashboard-BTDjORu_.js",
+    "name": "PortalDashboard",
+    "src": "apps/youmeos/routes/portal/PortalDashboard.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/PortalDashboard-B4AyRBfr.css"
+    ]
+  },
+  "apps/youmeos/routes/portal/PortalView.vue": {
+    "file": "js/PortalView-DVl-LrNA.js",
+    "name": "PortalView",
+    "src": "apps/youmeos/routes/portal/PortalView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/PortalView-CFtY2Zcd.css"
+    ]
+  },
+  "apps/youmeos/routes/support/SupportView.vue": {
+    "file": "js/SupportView-C452BsWv.js",
+    "name": "SupportView",
+    "src": "apps/youmeos/routes/support/SupportView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/SupportView-Pc5mniO5.css"
+    ],
+    "assets": [
+      "assets/patreon-key-BXqT-1Ft.png"
+    ]
+  },
+  "apps/youmeos/routes/welcome/WelcomeLanding.vue": {
+    "file": "js/WelcomeLanding-CioMb4MH.js",
+    "name": "WelcomeLanding",
+    "src": "apps/youmeos/routes/welcome/WelcomeLanding.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_u-shortcut-CRbaW0DS.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/WelcomeLanding-UMxSVF2S.css"
+    ]
+  },
+  "apps/youmeos/routes/welcome/WelcomeView.vue": {
+    "file": "js/WelcomeView-sBNML84A.js",
+    "name": "WelcomeView",
+    "src": "apps/youmeos/routes/welcome/WelcomeView.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/WelcomeView-D0poKCtk.css"
+    ]
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.eot": {
+    "file": "assets/fa-brands-400-DOJ3d8S2.eot",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.eot"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.svg": {
+    "file": "assets/fa-brands-400-CUMtpxsL.svg",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.svg"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.ttf": {
+    "file": "assets/fa-brands-400-Cvq_JjcI.ttf",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.ttf"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.woff": {
+    "file": "assets/fa-brands-400-BppY2YH5.woff",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.woff"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.woff2": {
+    "file": "assets/fa-brands-400-BoGazL5X.woff2",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-brands-400.woff2"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.eot": {
+    "file": "assets/fa-duotone-900-BxSDDPoS.eot",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.eot"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.svg": {
+    "file": "assets/fa-duotone-900-kg1a_TEX.svg",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.svg"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.ttf": {
+    "file": "assets/fa-duotone-900-JJ7JpdMD.ttf",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.ttf"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.woff": {
+    "file": "assets/fa-duotone-900-D8bJUhZ3.woff",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.woff"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.woff2": {
+    "file": "assets/fa-duotone-900-ePr-_0-U.woff2",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-duotone-900.woff2"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.eot": {
+    "file": "assets/fa-light-300-Cjd8zpgO.eot",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.eot"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.svg": {
+    "file": "assets/fa-light-300-DPjzRXa1.svg",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.svg"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.ttf": {
+    "file": "assets/fa-light-300-BqEkzVTj.ttf",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.ttf"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.woff": {
+    "file": "assets/fa-light-300-DmSVN63B.woff",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.woff"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.woff2": {
+    "file": "assets/fa-light-300-JjeHsR9Q.woff2",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-light-300.woff2"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.eot": {
+    "file": "assets/fa-regular-400-pAvjlHJy.eot",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.eot"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.svg": {
+    "file": "assets/fa-regular-400-D7GIZYaW.svg",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.svg"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.ttf": {
+    "file": "assets/fa-regular-400-DLWfwCKD.ttf",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.ttf"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.woff": {
+    "file": "assets/fa-regular-400-Do3gprBG.woff",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.woff"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.woff2": {
+    "file": "assets/fa-regular-400-BMnJ9gFZ.woff2",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-regular-400.woff2"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.eot": {
+    "file": "assets/fa-solid-900-DRn1iMFJ.eot",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.eot"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.svg": {
+    "file": "assets/fa-solid-900-zJJCaBLX.svg",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.svg"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.ttf": {
+    "file": "assets/fa-solid-900-C-BFdRQh.ttf",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.ttf"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.woff": {
+    "file": "assets/fa-solid-900-DGcrDHd0.woff",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.woff"
+  },
+  "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.woff2": {
+    "file": "assets/fa-solid-900-CYmgTyZd.woff2",
+    "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Black.woff": {
+    "file": "assets/Roboto-Black-B0ZKieaB.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Black.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Black.woff2": {
+    "file": "assets/Roboto-Black-VhoA2qKx.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Black.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-BlackItalic.woff": {
+    "file": "assets/Roboto-BlackItalic-D0gSnuIb.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-BlackItalic.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-BlackItalic.woff2": {
+    "file": "assets/Roboto-BlackItalic-D4yie1YO.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-BlackItalic.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Bold.woff": {
+    "file": "assets/Roboto-Bold-D9plYbeK.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Bold.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Bold.woff2": {
+    "file": "assets/Roboto-Bold-hN3duQhD.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Bold.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-BoldItalic.woff": {
+    "file": "assets/Roboto-BoldItalic-CyLKvOHD.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-BoldItalic.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-BoldItalic.woff2": {
+    "file": "assets/Roboto-BoldItalic-BWDm51uc.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-BoldItalic.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Light.woff": {
+    "file": "assets/Roboto-Light-Cu-PAxXt.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Light.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Light.woff2": {
+    "file": "assets/Roboto-Light-DHTugVNA.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Light.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-LightItalic.woff": {
+    "file": "assets/Roboto-LightItalic-CZg5kHIB.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-LightItalic.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-LightItalic.woff2": {
+    "file": "assets/Roboto-LightItalic-JQyp2Y3P.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-LightItalic.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Medium.woff": {
+    "file": "assets/Roboto-Medium-b81vv18W.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Medium.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Medium.woff2": {
+    "file": "assets/Roboto-Medium-ByKogCTi.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Medium.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-MediumItalic.woff": {
+    "file": "assets/Roboto-MediumItalic-DFQ-RYa0.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-MediumItalic.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-MediumItalic.woff2": {
+    "file": "assets/Roboto-MediumItalic-i1eR0KbF.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-MediumItalic.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Regular.woff": {
+    "file": "assets/Roboto-Regular-BX5l9hRW.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Regular.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Regular.woff2": {
+    "file": "assets/Roboto-Regular-C6rbFxYz.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Regular.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-RegularItalic.woff": {
+    "file": "assets/Roboto-RegularItalic-BjnLZsam.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-RegularItalic.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-RegularItalic.woff2": {
+    "file": "assets/Roboto-RegularItalic-CvPUdkvM.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-RegularItalic.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Thin.woff": {
+    "file": "assets/Roboto-Thin-BfJvJcog.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Thin.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Thin.woff2": {
+    "file": "assets/Roboto-Thin-NicBC1pN.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-Thin.woff2"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-ThinItalic.woff": {
+    "file": "assets/Roboto-ThinItalic-DnIWFxRE.woff",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-ThinItalic.woff"
+  },
+  "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-ThinItalic.woff2": {
+    "file": "assets/Roboto-ThinItalic-CKlCjrO_.woff2",
+    "src": "node_modules/.pnpm/roboto-fontface@0.10.0/node_modules/roboto-fontface/fonts/roboto/Roboto-ThinItalic.woff2"
+  },
+  "src/components/atoms/x-declaration.vue": {
+    "file": "js/x-declaration-B0DoV-W2.js",
+    "name": "x-declaration",
+    "src": "src/components/atoms/x-declaration.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/x-declaration-CHH2NPkv.css"
+    ]
+  },
+  "src/components/blueprints/layouts/x-sub-app-layout/x-sub-app-layout.vue": {
+    "file": "js/x-sub-app-layout-C-klTbNJ.js",
+    "name": "x-sub-app-layout",
+    "src": "src/components/blueprints/layouts/x-sub-app-layout/x-sub-app-layout.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_useSubAppNavigation-DS4L6o12.js",
+      "_sub-app-billboard-Bw-pn7t0.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js",
+      "_slug-utils-jqxVsoY7.js"
+    ],
+    "css": [
+      "css/x-sub-app-layout-BJhTkC9l.css"
+    ]
+  },
+  "src/components/blueprints/layouts/x-sub-route-layout/x-sub-route-layout.vue": {
+    "file": "js/x-sub-route-layout-CqnUHQuz.js",
+    "name": "x-sub-route-layout",
+    "src": "src/components/blueprints/layouts/x-sub-route-layout/x-sub-route-layout.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_useSubAppNavigation-DS4L6o12.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/x-sub-route-layout-CsW_0KrI.css"
+    ]
+  },
+  "src/components/constructs/routes-navigation-drawer/routes-navigation-drawer.vue": {
+    "file": "js/routes-navigation-drawer-3GRzgLrm.js",
+    "name": "routes-navigation-drawer",
+    "src": "src/components/constructs/routes-navigation-drawer/routes-navigation-drawer.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_useSubAppNavigation-DS4L6o12.js",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/routes-navigation-drawer-qE84Z5sx.css"
+    ]
+  },
+  "src/components/prefabs/animated-number/animated-number.vue": {
+    "file": "js/animated-number-5m6uMMBV.js",
+    "name": "animated-number",
+    "src": "src/components/prefabs/animated-number/animated-number.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ]
+  },
+  "src/components/prefabs/compass-circle/compass-circle.vue": {
+    "file": "js/compass-circle-BBQUdMIP.js",
+    "name": "compass-circle",
+    "src": "src/components/prefabs/compass-circle/compass-circle.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-dbBqnUSm.js",
+      "apps/youmeos/index.html",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/compass-circle-DmVNdbVr.css"
+    ]
+  },
+  "src/components/prefabs/plugin-grid-circle/plugin-grid-circle.vue": {
+    "file": "js/plugin-grid-circle-2Pb7zdzE.js",
+    "name": "plugin-grid-circle",
+    "src": "src/components/prefabs/plugin-grid-circle/plugin-grid-circle.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "apps/youmeos/index.html",
+      "_vendor-dbBqnUSm.js",
+      "_vuetify-CIirE0s9.js"
+    ],
+    "css": [
+      "css/plugin-grid-circle-B_BDjRfN.css"
+    ]
+  }
+}
