@@ -127,6 +127,11 @@ class Xophz_Compass_Event_Horizon {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-spark-registry.php';
 
+		/**
+		 * The class responsible for the Tasks (Bubblegum) CPT and REST API.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-tasks.php';
+
 		$this->loader = new Xophz_Compass_Event_Horizon_Loader();
 
 	}
@@ -184,6 +189,7 @@ class Xophz_Compass_Event_Horizon {
 
 		$plugin_public = new Xophz_Compass_Event_Horizon_Public( $this->get_xophz_compass_event_horizon(), $this->get_version() );
 		$spark_registry = new Xophz_Compass_Event_Horizon_Spark_Registry();
+		$tasks_api = new Xophz_Compass_Event_Horizon_Tasks();
 
 		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -201,6 +207,10 @@ class Xophz_Compass_Event_Horizon {
 
 		// Register Spark Registry Routes
 		$this->loader->add_action( 'rest_api_init', $spark_registry, 'register_routes' );
+
+		// Register Tasks (Bubblegum) CPT and API
+		$this->loader->add_action( 'init', $tasks_api, 'register_cpt' );
+		$this->loader->add_action( 'rest_api_init', $tasks_api, 'register_routes' );
 
 		// Inject Pi Trigger on Frontend
 		$this->loader->add_action( 'wp_footer', $plugin_public, 'inject_pi_trigger' );
