@@ -242,6 +242,8 @@ class Xophz_Compass_Event_Horizon_Public {
 		$home_url = home_url();
 		$site_path = parse_url( $home_url, PHP_URL_PATH ) ?: '';
 		$site_path = rtrim( $site_path, '/' );
+		$plugin_rel_path = parse_url( plugin_dir_url( __FILE__ ), PHP_URL_PATH );
+		$rest_rel_path = parse_url( get_rest_url(), PHP_URL_PATH );
 
 		$settings = [
 			'currentUser' => [
@@ -253,14 +255,14 @@ class Xophz_Compass_Event_Horizon_Public {
 				'user_nicename' => $current_user->user_nicename,
 			],
 			'nonce' => wp_create_nonce( 'wp_rest' ),
-			'restUrl' => get_rest_url(),
+			'restUrl' => $rest_rel_path,
 			'sitePath' => $site_path,
 			'appBase' => $app_base,
 			'homeUrl' => $home_url,
 			'loadMode' => get_option( 'youmeos_load_mode', 'routes_only' ),
 			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
-			'youmeosBaseUrl' => plugin_dir_url( __FILE__ ) . 'dist/youmeos/legacy',
-			'youmeosDataUrl' => plugin_dir_url( __FILE__ ) . 'dist/youmeos/data',
+			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ) . '/dist/youmeos/legacy',
+			'youmeosDataUrl' => rtrim( $plugin_rel_path, '/' ) . '/dist/youmeos/data',
 		];
 
 		?><!DOCTYPE html>
@@ -292,10 +294,10 @@ class Xophz_Compass_Event_Horizon_Public {
     $manifest = file_exists($manifest_path) ? json_decode(file_get_contents($manifest_path), true) : null;
     $entry_js = isset($manifest['apps/youmeos/index.html']) ? 'dist/' . $manifest['apps/youmeos/index.html']['file'] : 'dist/js/youmeos.js';
     ?>
-    <script type="module" src="<?php echo plugin_dir_url( __FILE__ ) . $entry_js; ?>"></script>
+    <script type="module" src="<?php echo rtrim( $plugin_rel_path, '/' ) . '/' . $entry_js; ?>"></script>
     <?php if (isset($manifest['apps/youmeos/index.html']['css'])) : 
         foreach ($manifest['apps/youmeos/index.html']['css'] as $css_file) : ?>
-            <link rel="stylesheet" href="<?php echo plugin_dir_url( __FILE__ ) . 'dist/' . $css_file; ?>">
+            <link rel="stylesheet" href="<?php echo rtrim( $plugin_rel_path, '/' ) . '/dist/' . $css_file; ?>">
         <?php endforeach; 
     endif; ?>
 <?php endif; ?>
