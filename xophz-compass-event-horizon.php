@@ -17,7 +17,7 @@
  * Plugin Name:       Xophz You Me OS 
  * Plugin URI:        http://www.mycompassconsulting.com/
  * Description:       Bring transparency to your user-to-media connectivity by observing a real life 3D interactive heat map. From micro to macro and unto the avoided.
- * Version:           26.4.15.844
+ * Version:           26.4.15.1122
  * Author:            Hall of the Gods, Inc.
  * Author URI:        http://www.hallofthegods.com/
  * License:           GPL-2.0+
@@ -37,7 +37,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'XOPHZ_COMPASS_EVENT_HORIZON_VERSION', '26.4.15.844' );
+define( 'XOPHZ_COMPASS_EVENT_HORIZON_VERSION', '26.4.15.1122' );
 
 /**
  * The code that runs during plugin activation.
