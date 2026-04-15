@@ -90,10 +90,16 @@ class Xophz_Compass_Event_Horizon_Public {
 		$file_path = $plugin_public_path . $relative_path;
 
 		// Fallback for critical data if requested from legacy path but moved to data
-		if ( ! file_exists( $file_path ) && strpos( $relative_path, 'youmeos_legacy/data/' ) !== false ) {
-			$fallback_relative = str_replace( 'youmeos_legacy/data/', 'youmeos_data/', $relative_path );
-			if ( file_exists( $plugin_public_path . $fallback_relative ) ) {
-				$file_path = $plugin_public_path . $fallback_relative;
+		$is_manifest = strpos( $relative_path, 'manifest.json' ) !== false;
+		$is_data_file = strpos( $relative_path, 'youmeos_legacy/data/' ) !== false;
+
+		if ( ! file_exists( $file_path ) || $is_manifest || $is_data_file ) {
+			// Check if we have a version in youmeos_data
+			$filename = basename( $file_path );
+			$data_fallback = $plugin_public_path . 'youmeos_data/' . $filename;
+			
+			if ( file_exists( $data_fallback ) ) {
+				$file_path = $data_fallback;
 			}
 		}
 
@@ -245,6 +251,8 @@ class Xophz_Compass_Event_Horizon_Public {
 			'homeUrl' => $home_url,
 			'loadMode' => get_option( 'youmeos_load_mode', 'routes_only' ),
 			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
+			'youmeosBaseUrl' => plugin_dir_url( __FILE__ ) . 'youmeos_legacy',
+			'youmeosDataUrl' => plugin_dir_url( __FILE__ ) . 'youmeos_data',
 		];
 
 		?><!DOCTYPE html>
