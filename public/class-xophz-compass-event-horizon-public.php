@@ -83,13 +83,13 @@ class Xophz_Compass_Event_Horizon_Public {
 
 		$relative_path = '';
 		if ( strpos( $clean_uri, 'youmeos_legacy/' ) !== false ) {
-			$relative_path = 'dist/youmeos/legacy/' . explode( 'youmeos_legacy/', $clean_uri )[1];
+			$relative_path = 'youmeos_legacy/' . explode( 'youmeos_legacy/', $clean_uri )[1];
 		} elseif ( strpos( $clean_uri, 'youmeos_data/' ) !== false ) {
-			$relative_path = 'dist/youmeos/data/' . explode( 'youmeos_data/', $clean_uri )[1];
+			$relative_path = 'youmeos_data/' . explode( 'youmeos_data/', $clean_uri )[1];
 		} elseif ( strpos( $clean_uri, 'youmeos/legacy/' ) !== false ) {
-			$relative_path = 'dist/youmeos/legacy/' . explode( 'youmeos/legacy/', $clean_uri )[1];
+			$relative_path = 'youmeos_legacy/' . explode( 'youmeos/legacy/', $clean_uri )[1];
 		} elseif ( strpos( $clean_uri, 'youmeos/data/' ) !== false ) {
-			$relative_path = 'dist/youmeos/data/' . explode( 'youmeos/data/', $clean_uri )[1];
+			$relative_path = 'youmeos_data/' . explode( 'youmeos/data/', $clean_uri )[1];
 		}
 
 		if ( empty( $relative_path ) ) {
@@ -104,7 +104,7 @@ class Xophz_Compass_Event_Horizon_Public {
 		if ( ! file_exists( $file_path ) || $is_manifest ) {
 			// Check if we have a version in youmeos_data
 			$filename = basename( $file_path );
-			$data_fallback = $plugin_public_path . 'dist/youmeos/data/' . $filename;
+			$data_fallback = $plugin_public_path . 'youmeos_data/' . $filename;
 			
 			if ( file_exists( $data_fallback ) ) {
 				$file_path = $data_fallback;
@@ -245,6 +245,8 @@ class Xophz_Compass_Event_Horizon_Public {
 		$plugin_rel_path = parse_url( plugin_dir_url( __FILE__ ), PHP_URL_PATH );
 		$rest_rel_path = parse_url( get_rest_url(), PHP_URL_PATH );
 
+		$compassVersion = defined('XOPHZ_COMPASS_VERSION') ? XOPHZ_COMPASS_VERSION : '0.0.0';
+
 		$settings = [
 			'currentUser' => [
 				'ID' => $current_user->ID,
@@ -261,8 +263,10 @@ class Xophz_Compass_Event_Horizon_Public {
 			'homeUrl' => $home_url,
 			'loadMode' => get_option( 'youmeos_load_mode', 'routes_only' ),
 			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
-			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ) . '/dist/youmeos/legacy',
-			'youmeosDataUrl' => rtrim( $plugin_rel_path, '/' ) . '/dist/youmeos/data',
+			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ) . '/youmeos_legacy',
+			'youmeosDataUrl' => rtrim( $plugin_rel_path, '/' ) . '/youmeos_data',
+			'compassVersion' => $compassVersion,
+			'eventHorizonVersion' => $this->version,
 		];
 
 		?><!DOCTYPE html>
