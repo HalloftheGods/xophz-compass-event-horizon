@@ -263,7 +263,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			'homeUrl' => $home_url,
 			'loadMode' => get_option( 'youmeos_load_mode', 'routes_only' ),
 			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
-			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ) . '/youmeos_legacy',
+			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ) . '/deprecated',
 			'youmeosDataUrl' => rtrim( $plugin_rel_path, '/' ) . '/youmeos_data',
 			'compassVersion' => $compassVersion,
 			'eventHorizonVersion' => $this->version,

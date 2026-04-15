@@ -1,0 +1,8 @@
+{
+  "scripts": [],
+  "styles": [],
+  "audio": {
+    "bgmusicA": "audio/bgmusic.ogg",
+    "bgmusicB": "audio/01_-_Carl_Sagans_Ghost_-_Travelers_Welcome.ogg"
+  }
+}
