@@ -366,7 +366,7 @@
   function unfocus(home) {
     $("#detailContainer").fadeOut();
     $("#css-container").css("display", "block");
-    if (!!home) {
+    if (home) {
       centerOnSun();
       setTimeout(hideSunButton, 500);
       zoomOut(555);

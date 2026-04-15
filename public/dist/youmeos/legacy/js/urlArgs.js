@@ -43,7 +43,7 @@
   };
 
   result.getHash = function() {
-    return !!location.hash ? location.hash.substr(1) : location.hash;
+    return location.hash ? location.hash.substr(1) : location.hash;
   };
 
   result.refresh = function(map, _base) {
