@@ -19,7 +19,7 @@
  * Description:       Bring transparency to your user-to-media connectivity by observing a real life 3D interactive heat map. From micro to macro and unto the avoided.
  * Version:           26.4.15.264
  * Author:            Hall of the Gods, Inc.
- * Author URI:        http://www.midnightnerd.com/
+ * Author URI:        http://www.hallofthegods.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       xophz-compass-event-horizon
