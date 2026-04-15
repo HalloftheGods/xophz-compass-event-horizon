@@ -46,9 +46,14 @@ class Xophz_Compass_Event_Horizon_Public {
 	public function template_redirect() {
 		global $wp_query;
 
-		// Handle static asset requests for youmeos_legacy and youmeos_data
+		// Handle static asset requests for youmeos/legacy and youmeos/data
 		$request_uri = $_SERVER['REQUEST_URI'] ?? '';
-		if ( strpos( $request_uri, 'youmeos_legacy/' ) !== false || strpos( $request_uri, 'youmeos_data/' ) !== false ) {
+		if ( 
+			strpos( $request_uri, 'youmeos_legacy/' ) !== false || 
+			strpos( $request_uri, 'youmeos_data/' ) !== false ||
+			strpos( $request_uri, 'youmeos/legacy/' ) !== false ||
+			strpos( $request_uri, 'youmeos/data/' ) !== false
+		) {
 			$this->serve_static_asset( $request_uri );
 		}
 
@@ -78,9 +83,13 @@ class Xophz_Compass_Event_Horizon_Public {
 
 		$relative_path = '';
 		if ( strpos( $clean_uri, 'youmeos_legacy/' ) !== false ) {
-			$relative_path = 'youmeos_legacy/' . explode( 'youmeos_legacy/', $clean_uri )[1];
+			$relative_path = 'dist/youmeos/legacy/' . explode( 'youmeos_legacy/', $clean_uri )[1];
 		} elseif ( strpos( $clean_uri, 'youmeos_data/' ) !== false ) {
-			$relative_path = 'youmeos_data/' . explode( 'youmeos_data/', $clean_uri )[1];
+			$relative_path = 'dist/youmeos/data/' . explode( 'youmeos_data/', $clean_uri )[1];
+		} elseif ( strpos( $clean_uri, 'youmeos/legacy/' ) !== false ) {
+			$relative_path = 'dist/youmeos/legacy/' . explode( 'youmeos/legacy/', $clean_uri )[1];
+		} elseif ( strpos( $clean_uri, 'youmeos/data/' ) !== false ) {
+			$relative_path = 'dist/youmeos/data/' . explode( 'youmeos/data/', $clean_uri )[1];
 		}
 
 		if ( empty( $relative_path ) ) {
@@ -89,14 +98,13 @@ class Xophz_Compass_Event_Horizon_Public {
 
 		$file_path = $plugin_public_path . $relative_path;
 
-		// Fallback for critical data if requested from legacy path but moved to data
+		// Fallback for critical data
 		$is_manifest = strpos( $relative_path, 'manifest.json' ) !== false;
-		$is_data_file = strpos( $relative_path, 'youmeos_legacy/data/' ) !== false;
-
-		if ( ! file_exists( $file_path ) || $is_manifest || $is_data_file ) {
+		
+		if ( ! file_exists( $file_path ) || $is_manifest ) {
 			// Check if we have a version in youmeos_data
 			$filename = basename( $file_path );
-			$data_fallback = $plugin_public_path . 'youmeos_data/' . $filename;
+			$data_fallback = $plugin_public_path . 'dist/youmeos/data/' . $filename;
 			
 			if ( file_exists( $data_fallback ) ) {
 				$file_path = $data_fallback;
@@ -251,8 +259,8 @@ class Xophz_Compass_Event_Horizon_Public {
 			'homeUrl' => $home_url,
 			'loadMode' => get_option( 'youmeos_load_mode', 'routes_only' ),
 			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
-			'youmeosBaseUrl' => plugin_dir_url( __FILE__ ) . 'youmeos_legacy',
-			'youmeosDataUrl' => plugin_dir_url( __FILE__ ) . 'youmeos_data',
+			'youmeosBaseUrl' => plugin_dir_url( __FILE__ ) . 'dist/youmeos/legacy',
+			'youmeosDataUrl' => plugin_dir_url( __FILE__ ) . 'dist/youmeos/data',
 		];
 
 		?><!DOCTYPE html>
