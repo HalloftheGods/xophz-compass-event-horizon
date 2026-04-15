@@ -44,12 +44,18 @@ class Xophz_Compass_Event_Horizon_Public {
 	}
 
 	public function template_redirect() {
+		global $wp_query;
+
+		// Handle static asset requests for youmeos_legacy and youmeos_data
+		$request_uri = $_SERVER['REQUEST_URI'] ?? '';
+		if ( strpos( $request_uri, 'youmeos_legacy/' ) !== false || strpos( $request_uri, 'youmeos_data/' ) !== false ) {
+			$this->serve_static_asset( $request_uri );
+		}
+
 		$menus = wp_get_nav_menus();
 		$blocks = get_posts(['post_type' => 'wp_navigation', 'posts_per_page' => -1]);
 		file_put_contents('/tmp/wp_menus_dump.json', json_encode(['traditional' => $menus, 'blocks' => $blocks]));
         
-		global $wp_query;
-
 		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] );
 		$isConfiguredPageMatch = $this->is_configured_page();
 
@@ -60,6 +66,63 @@ class Xophz_Compass_Event_Horizon_Public {
 		if ( $isRouteMatch || $isConfiguredPageMatch || $isHomepage404Fallback ) {
 			$app_base = $this->resolve_app_base( $wp_query, $isRouteMatch );
 			$this->render_youmeos_shell( $app_base );
+			exit;
+		}
+	}
+
+	private function serve_static_asset( $request_uri ) {
+		$plugin_public_path = plugin_dir_path( __FILE__ ); // This is in public/ folder already
+		
+		// Remove query strings
+		$clean_uri = explode( '?', $request_uri )[0];
+
+		$relative_path = '';
+		if ( strpos( $clean_uri, 'youmeos_legacy/' ) !== false ) {
+			$relative_path = 'youmeos_legacy/' . explode( 'youmeos_legacy/', $clean_uri )[1];
+		} elseif ( strpos( $clean_uri, 'youmeos_data/' ) !== false ) {
+			$relative_path = 'youmeos_data/' . explode( 'youmeos_data/', $clean_uri )[1];
+		}
+
+		if ( empty( $relative_path ) ) {
+			return;
+		}
+
+		$file_path = $plugin_public_path . $relative_path;
+
+		// Fallback for critical data if requested from legacy path but moved to data
+		if ( ! file_exists( $file_path ) && strpos( $relative_path, 'youmeos_legacy/data/' ) !== false ) {
+			$fallback_relative = str_replace( 'youmeos_legacy/data/', 'youmeos_data/', $relative_path );
+			if ( file_exists( $plugin_public_path . $fallback_relative ) ) {
+				$file_path = $plugin_public_path . $fallback_relative;
+			}
+		}
+
+		if ( file_exists( $file_path ) && ! is_dir( $file_path ) ) {
+			$extension = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
+			$mime_types = [
+				'js'   => 'application/javascript',
+				'css'  => 'text/css',
+				'json' => 'application/json',
+				'png'  => 'image/png',
+				'jpg'  => 'image/jpeg',
+				'jpeg' => 'image/jpeg',
+				'gif'  => 'image/gif',
+				'svg'  => 'image/svg+xml',
+				'fsh'  => 'text/plain',
+				'vsh'  => 'text/plain',
+				'ogg'  => 'audio/ogg',
+				'webp' => 'image/webp',
+				'woff' => 'font/woff',
+				'woff2'=> 'font/woff2',
+				'ttf'  => 'font/ttf',
+				'eot'  => 'application/vnd.ms-fontobject',
+			];
+
+			$content_type = $mime_types[ $extension ] ?? 'application/octet-stream';
+			
+			header( "Content-Type: $content_type" );
+			header( "Cache-Control: public, max-age=31536000" );
+			readfile( $file_path );
 			exit;
 		}
 	}
