@@ -339,6 +339,14 @@ class Xophz_Compass_Event_Horizon_Public {
 		return 'YouMeOS Shortcode not fully implemented for standalone app mode.';
 	}
 
+	public function ajax_refresh_nonce() {
+		// Since this is wp_ajax_, the user is implicitly authenticated via cookie.
+		// We can generate a new REST API nonce.
+		wp_send_json_success( array(
+			'nonce' => wp_create_nonce( 'wp_rest' )
+		) );
+	}
+
 	public function register_api_routes() {
 		register_rest_route( 'xophz-compass/v1', '/register', array(
 			'methods' => 'POST',
@@ -654,6 +662,9 @@ class Xophz_Compass_Event_Horizon_Public {
 			return new WP_Error( 'invalid_credentials', 'Invalid username or password.', array( 'status' => 403 ) );
 		}
 
+		// Ensure global user state is updated before generating the REST nonce
+		wp_set_current_user( $user->ID );
+
 		return rest_ensure_response( array(
 			'message' => 'Login successful',
 			'user_id' => $user->ID,
@@ -698,6 +709,28 @@ class Xophz_Compass_Event_Horizon_Public {
 
 		if ( is_wp_error( $user_id ) ) {
 			return $user_id;
+		}
+
+		// Auto-login after registration
+		$creds = array(
+			'user_login'    => $username,
+			'user_password' => $password,
+			'remember'      => true
+		);
+		$user = wp_signon( $creds, false );
+		
+		if ( ! is_wp_error( $user ) ) {
+			wp_set_current_user( $user->ID );
+			return rest_ensure_response( array(
+				'message' => 'User registered and logged in successfully.',
+				'user_id' => $user->ID,
+				'user_email' => $user->user_email,
+				'user_nicename' => $user->user_nicename,
+				'user_display_name' => $user->display_name,
+				'user_roles' => $user->roles,
+				'nonce' => wp_create_nonce( 'wp_rest' ),
+				'token' => wp_create_nonce( 'wp_rest' ) // Some flows might check token
+			) );
 		}
 
 		return rest_ensure_response( array(
