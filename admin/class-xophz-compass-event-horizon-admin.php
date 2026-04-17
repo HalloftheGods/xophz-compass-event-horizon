@@ -21,6 +21,22 @@ class Xophz_Compass_Event_Horizon_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/xophz-compass-event-horizon-admin.js', array( 'jquery' ), $this->version, false );
 	}
 
+	private function get_youmeos_base_url( $path = '' ) {
+		$loadMode = get_option( self::OPTION_LOAD_MODE, 'routes_only' );
+		$base_url = home_url( '/youmeos/' );
+
+		if ( $loadMode === 'homepage' ) {
+			$base_url = home_url( '/' );
+		} elseif ( $loadMode === 'specific_page' ) {
+			$page_id = get_option( self::OPTION_LOAD_PAGE, 0 );
+			if ( $page_id ) {
+				$base_url = trailingslashit( get_permalink( $page_id ) );
+			}
+		}
+
+		return $base_url . ltrim( $path, '/' );
+	}
+
 	/**
 	 * Add YouMeOS dropdown menu to the WordPress admin bar, after the WP logo.
 	 * Mirrors the WP logo menu pattern with YouMeOS-specific links.
@@ -38,7 +54,7 @@ class Xophz_Compass_Event_Horizon_Admin {
 		$wp_admin_bar->add_node( array(
 			'id'    => 'youmeos-menu',
 			'title' => $icon_html . '<span class="youmeos-ab-label">YouMeOS</span>',
-			'href'  => home_url( '/youmeos/' ),
+			'href'  => $this->get_youmeos_base_url(),
 			'meta'  => array(
 				'class' => 'youmeos-admin-bar-btn',
 				'title' => 'YouMeOS',
@@ -50,7 +66,7 @@ class Xophz_Compass_Event_Horizon_Admin {
 			'parent' => 'youmeos-menu',
 			'id'     => 'youmeos-portal',
 			'title'  => 'Open Portal',
-			'href'   => home_url( '/youmeos/' ),
+			'href'   => $this->get_youmeos_base_url(),
 			'meta'   => array( 'title' => 'Launch the local YouMeOS portal' ),
 		) );
 
@@ -58,7 +74,7 @@ class Xophz_Compass_Event_Horizon_Admin {
 			'parent' => 'youmeos-menu',
 			'id'     => 'youmeos-about',
 			'title'  => 'About YouMeOS',
-			'href'   => home_url( '/youmeos/#/about' ),
+			'href'   => $this->get_youmeos_base_url( '#/about' ),
 			'meta'   => array( 'title' => 'About YouMeOS' ),
 		) );
 

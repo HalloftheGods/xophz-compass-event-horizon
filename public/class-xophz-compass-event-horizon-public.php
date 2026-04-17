@@ -141,6 +141,22 @@ class Xophz_Compass_Event_Horizon_Public {
 		}
 	}
 
+	private function get_youmeos_base_url( $path = '' ) {
+		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+		$base_url = home_url( '/youmeos/' );
+
+		if ( $loadMode === 'homepage' ) {
+			$base_url = home_url( '/' );
+		} elseif ( $loadMode === 'specific_page' ) {
+			$page_id = get_option( 'youmeos_load_page_id', 0 );
+			if ( $page_id ) {
+				$base_url = trailingslashit( get_permalink( $page_id ) );
+			}
+		}
+
+		return $base_url . ltrim( $path, '/' );
+	}
+
 	public function inject_pi_trigger() {
 		global $wp_query;
 		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] );
@@ -150,7 +166,9 @@ class Xophz_Compass_Event_Horizon_Public {
 		}
 
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
-		$target_url = home_url( '/youmeos?sparks=logos&logos_target=' . urlencode( $current_url ) );
+		$base_url = rtrim( $this->get_youmeos_base_url(), '/' );
+		$separator = ( parse_url( $base_url, PHP_URL_QUERY ) == null ) ? '?' : '&';
+		$target_url = $base_url . $separator . 'sparks=logos&logos_target=' . urlencode( $current_url );
 		?>
 		<style>
 			#youmeos-pi-trigger {

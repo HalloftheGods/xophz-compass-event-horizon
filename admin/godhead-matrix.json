@@ -1,0 +1,1190 @@
+[
+  {
+    "name": "IV Emperor",
+    "color": "rgba(255, 30, 30, 0.55)",
+    "children": [
+      {
+        "name": "♈",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Leadership",
+                "value": 1
+              },
+              {
+                "name": "Direction",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Authority",
+                "value": 1
+              },
+              {
+                "name": "Structure",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "♂",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Action",
+                "value": 1
+              },
+              {
+                "name": "Conquest",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Discipline",
+                "value": 1
+              },
+              {
+                "name": "Endurance",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🔥",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Passion",
+                "value": 1
+              },
+              {
+                "name": "Inspiration",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Willpower",
+                "value": 1
+              },
+              {
+                "name": "Vigor",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "V Hierophant",
+    "color": "rgba(10, 150, 50, 0.55)",
+    "children": [
+      {
+        "name": "♉",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Wealth",
+                "value": 1
+              },
+              {
+                "name": "Growth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Stability",
+                "value": 1
+              },
+              {
+                "name": "Tradition",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "♀",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Beauty",
+                "value": 1
+              },
+              {
+                "name": "Assets",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Comfort",
+                "value": 1
+              },
+              {
+                "name": "Luxury",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🌍",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Cultivation",
+                "value": 1
+              },
+              {
+                "name": "Harvest",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Persistence",
+                "value": 1
+              },
+              {
+                "name": "Grounding",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "VI Lovers",
+    "color": "rgba(0, 191, 255, 0.55)",
+    "children": [
+      {
+        "name": "♊",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Curiosity",
+                "value": 1
+              },
+              {
+                "name": "Learning",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Logic",
+                "value": 1
+              },
+              {
+                "name": "Systems",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "☿",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Communication",
+                "value": 1
+              },
+              {
+                "name": "Writing",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Socializing",
+                "value": 1
+              },
+              {
+                "name": "Speaking",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🌬️",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Agility",
+                "value": 1
+              },
+              {
+                "name": "Speed",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Adaptability",
+                "value": 1
+              },
+              {
+                "name": "Inbound",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "VII Chariot",
+    "color": "rgba(16, 37, 107, 0.65)",
+    "children": [
+      {
+        "name": "♋",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Empathy",
+                "value": 1
+              },
+              {
+                "name": "Care",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Sanctuary",
+                "value": 1
+              },
+              {
+                "name": "Protection",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "☽",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Intuition",
+                "value": 1
+              },
+              {
+                "name": "Subconscious",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Memory",
+                "value": 1
+              },
+              {
+                "name": "Emotion",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "💧",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Healing",
+                "value": 1
+              },
+              {
+                "name": "Cleansing",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Flow",
+                "value": 1
+              },
+              {
+                "name": "Rest",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "XI Lust",
+    "color": "rgba(255, 30, 30, 0.55)",
+    "children": [
+      {
+        "name": "♌",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Charisma",
+                "value": 1
+              },
+              {
+                "name": "Radiance",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Sovereignty",
+                "value": 1
+              },
+              {
+                "name": "Honor",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "☉",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Vitality",
+                "value": 1
+              },
+              {
+                "name": "Courage",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Performance",
+                "value": 1
+              },
+              {
+                "name": "Expression",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🔥",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Warmth",
+                "value": 1
+              },
+              {
+                "name": "Joy",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Generosity",
+                "value": 1
+              },
+              {
+                "name": "Play",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "IX Hermit",
+    "color": "rgba(10, 150, 50, 0.55)",
+    "children": [
+      {
+        "name": "♍",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Optimization",
+                "value": 1
+              },
+              {
+                "name": "Routine",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Analysis",
+                "value": 1
+              },
+              {
+                "name": "Craft",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "☿",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Precision",
+                "value": 1
+              },
+              {
+                "name": "Editing",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Organization",
+                "value": 1
+              },
+              {
+                "name": "Service",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🌍",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Fitness",
+                "value": 1
+              },
+              {
+                "name": "Health",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Diet",
+                "value": 1
+              },
+              {
+                "name": "Purity",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Adjustment VIII",
+    "color": "rgba(0, 191, 255, 0.55)",
+    "children": [
+      {
+        "name": "♎",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Harmony",
+                "value": 1
+              },
+              {
+                "name": "Fairness",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Justice",
+                "value": 1
+              },
+              {
+                "name": "Balance",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "♀",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Negotiation",
+                "value": 1
+              },
+              {
+                "name": "Diplomacy",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Charm",
+                "value": 1
+              },
+              {
+                "name": "Grace",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🌬️",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Partnership",
+                "value": 1
+              },
+              {
+                "name": "Synergy",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Art",
+                "value": 1
+              },
+              {
+                "name": "Aesthetics",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Death XIII",
+    "color": "rgba(16, 37, 107, 0.65)",
+    "children": [
+      {
+        "name": "♏",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Transmutation",
+                "value": 1
+              },
+              {
+                "name": "Rebirth",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Shadow Work",
+                "value": 1
+              },
+              {
+                "name": "Letting Go",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "♇",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Intensity",
+                "value": 1
+              },
+              {
+                "name": "Focus",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Strategy",
+                "value": 1
+              },
+              {
+                "name": "Survival",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "💧",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Depth",
+                "value": 1
+              },
+              {
+                "name": "Mystery",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Psychology",
+                "value": 1
+              },
+              {
+                "name": "Therapy",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Art XIV",
+    "color": "rgba(255, 30, 30, 0.55)",
+    "children": [
+      {
+        "name": "♐",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Exploration",
+                "value": 1
+              },
+              {
+                "name": "Travel",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Philosophy",
+                "value": 1
+              },
+              {
+                "name": "Truth",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "♃",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Expansion",
+                "value": 1
+              },
+              {
+                "name": "Luck",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Wisdom",
+                "value": 1
+              },
+              {
+                "name": "Faith",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🔥",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Optimism",
+                "value": 1
+              },
+              {
+                "name": "Freedom",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Teaching",
+                "value": 1
+              },
+              {
+                "name": "Foresight",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Devil XV",
+    "color": "rgba(10, 150, 50, 0.55)",
+    "children": [
+      {
+        "name": "♑",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Reality",
+                "value": 1
+              },
+              {
+                "name": "Architecture",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Ambition",
+                "value": 1
+              },
+              {
+                "name": "Status",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "♄",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Admin",
+                "value": 1
+              },
+              {
+                "name": "Boundaries",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Rules",
+                "value": 1
+              },
+              {
+                "name": "Time",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🌍",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Deep Work",
+                "value": 1
+              },
+              {
+                "name": "Legacy",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Mastery",
+                "value": 1
+              },
+              {
+                "name": "Grit",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Star XVII",
+    "color": "rgba(0, 191, 255, 0.55)",
+    "children": [
+      {
+        "name": "♒",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Ideation",
+                "value": 1
+              },
+              {
+                "name": "Invention",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Rebellion",
+                "value": 1
+              },
+              {
+                "name": "Altruism",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "♅",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Technology",
+                "value": 1
+              },
+              {
+                "name": "Engineering",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Reform",
+                "value": 1
+              },
+              {
+                "name": "Data",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "🌬️",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Community",
+                "value": 1
+              },
+              {
+                "name": "Grid",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Paradigm",
+                "value": 1
+              },
+              {
+                "name": "Hope",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Moon XVIII",
+    "color": "rgba(16, 37, 107, 0.65)",
+    "children": [
+      {
+        "name": "♓",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Illusion",
+                "value": 1
+              },
+              {
+                "name": "Mysticism",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Oneness",
+                "value": 1
+              },
+              {
+                "name": "Surrender",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "♆",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Imagination",
+                "value": 1
+              },
+              {
+                "name": "Journaling",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Dreams",
+                "value": 1
+              },
+              {
+                "name": "Clairvoyance",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "💧",
+        "children": [
+          {
+            "name": "Force",
+            "children": [
+              {
+                "name": "Meditation",
+                "value": 1
+              },
+              {
+                "name": "Prayer",
+                "value": 1
+              }
+            ]
+          },
+          {
+            "name": "Form",
+            "children": [
+              {
+                "name": "Compassion",
+                "value": 1
+              },
+              {
+                "name": "Stillness",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

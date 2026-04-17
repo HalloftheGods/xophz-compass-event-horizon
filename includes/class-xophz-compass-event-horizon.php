@@ -132,6 +132,11 @@ class Xophz_Compass_Event_Horizon {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-tasks.php';
 
+		/**
+		 * The class responsible for the Godhead Taxonomy & Seeding.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-xophz-compass-event-horizon-godhead.php';
+
 		$this->loader = new Xophz_Compass_Event_Horizon_Loader();
 
 	}
@@ -175,6 +180,10 @@ class Xophz_Compass_Event_Horizon {
 		// Enqueue admin bar styles on both admin and front-end.
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+
+		// Hook YouMeOS specific taxonomies to the XP Engine
+		$plugin_godhead = new Xophz_Compass_Event_Horizon_Godhead( $this->get_xophz_compass_event_horizon(), $this->get_version() );
+		$this->loader->add_action( 'xophz_register_xp_taxonomies', $plugin_godhead, 'register_and_seed_godhead_taxonomy' );
 
 	}
 
