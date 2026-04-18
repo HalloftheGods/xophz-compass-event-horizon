@@ -273,6 +273,7 @@ class Xophz_Compass_Event_Horizon_Public {
 				'display_name' => $current_user->display_name,
 				'user_email' => $current_user->user_email,
 				'user_nicename' => $current_user->user_nicename,
+				'registered' => $current_user->user_registered,
 			],
 			'nonce' => wp_create_nonce( 'wp_rest' ),
 			'restUrl' => $rest_rel_path,
@@ -910,6 +911,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			'display_name' => $user->display_name,
 			'user_email' => $user->user_email,
 			'user_url' => $user->user_url,
+			'user_description' => $user->description,
 			'avatar_url' => get_avatar_url( $user_id, array( 'size' => 150 ) ),
 		) );
 	}
