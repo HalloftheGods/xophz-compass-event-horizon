@@ -295,13 +295,12 @@ class Xophz_Compass_Event_Horizon_Public {
 
 		$og_desc = get_option( 'youmeos_og_description', '' );
 		if ( empty( $og_desc ) ) {
-			$og_desc = get_bloginfo( 'description' );
-			if ( empty( $og_desc ) ) $og_desc = 'YouMeOS - A Compass Gateway';
+			$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
 		}
 
 		$og_image = get_option( 'youmeos_og_image', '' );
 		if ( empty( $og_image ) ) {
-			$og_image = home_url( '/takemymoney.jpg' );
+			$og_image = plugins_url( 'images/takemymoney.jpg', __FILE__ );
 		}
 
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
