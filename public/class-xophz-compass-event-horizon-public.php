@@ -287,11 +287,47 @@ class Xophz_Compass_Event_Horizon_Public {
 			'eventHorizonVersion' => $this->version,
 		];
 
+		$og_title = get_option( 'youmeos_og_title', '' );
+		if ( empty( $og_title ) ) {
+			$og_title = get_bloginfo( 'name' );
+			if ( empty( $og_title ) ) $og_title = 'YouMeOS';
+		}
+
+		$og_desc = get_option( 'youmeos_og_description', '' );
+		if ( empty( $og_desc ) ) {
+			$og_desc = get_bloginfo( 'description' );
+			if ( empty( $og_desc ) ) $og_desc = 'YouMeOS - A Compass Gateway';
+		}
+
+		$og_image = get_option( 'youmeos_og_image', '' );
+		if ( empty( $og_image ) ) {
+			$og_image = home_url( '/takemymoney.jpg' );
+		}
+
+		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
+
 		?><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="google" content="notranslate">
+<meta name="description" content="<?php echo esc_attr( $og_desc ); ?>">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="<?php echo esc_url( $current_url ); ?>">
+<meta property="og:title" content="<?php echo esc_attr( $og_title ); ?>">
+<meta property="og:description" content="<?php echo esc_attr( $og_desc ); ?>">
+<meta property="og:image" content="<?php echo esc_url( $og_image ); ?>">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="<?php echo esc_url( $current_url ); ?>">
+<meta name="twitter:title" content="<?php echo esc_attr( $og_title ); ?>">
+<meta name="twitter:description" content="<?php echo esc_attr( $og_desc ); ?>">
+<meta name="twitter:image" content="<?php echo esc_url( $og_image ); ?>">
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YHY2WZFMDM"></script>
 <script>
@@ -301,7 +337,7 @@ class Xophz_Compass_Event_Horizon_Public {
 
   gtag('config', 'G-YHY2WZFMDM');
 </script>
-<title>You Me OS</title>
+<title><?php echo esc_html( $og_title ); ?></title>
 <style>
     body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
     #youmeos-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }

@@ -7,6 +7,9 @@ class Xophz_Compass_Event_Horizon_Admin {
 
 	const OPTION_LOAD_MODE = 'youmeos_load_mode';
 	const OPTION_LOAD_PAGE = 'youmeos_load_page_id';
+	const OPTION_OG_TITLE  = 'youmeos_og_title';
+	const OPTION_OG_DESC   = 'youmeos_og_description';
+	const OPTION_OG_IMAGE  = 'youmeos_og_image';
 
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
@@ -181,6 +184,53 @@ class Xophz_Compass_Event_Horizon_Admin {
 			'youmeos-settings',
 			'youmeos_portal_section'
 		);
+
+		// Open Graph Settings
+		register_setting( 'youmeos_settings', self::OPTION_OG_TITLE, [
+			'type' => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+		] );
+
+		register_setting( 'youmeos_settings', self::OPTION_OG_DESC, [
+			'type' => 'string',
+			'sanitize_callback' => 'sanitize_textarea_field',
+		] );
+
+		register_setting( 'youmeos_settings', self::OPTION_OG_IMAGE, [
+			'type' => 'string',
+			'sanitize_callback' => 'esc_url_raw',
+		] );
+
+		add_settings_section(
+			'youmeos_seo_section',
+			'Open Graph & Social Sharing',
+			array( $this, 'render_seo_section_description' ),
+			'youmeos-settings'
+		);
+
+		add_settings_field(
+			'youmeos_og_title_field',
+			'Social Title',
+			array( $this, 'render_og_title_field' ),
+			'youmeos-settings',
+			'youmeos_seo_section'
+		);
+
+		add_settings_field(
+			'youmeos_og_desc_field',
+			'Social Description',
+			array( $this, 'render_og_desc_field' ),
+			'youmeos-settings',
+			'youmeos_seo_section'
+		);
+
+		add_settings_field(
+			'youmeos_og_image_field',
+			'Social Image URL',
+			array( $this, 'render_og_image_field' ),
+			'youmeos-settings',
+			'youmeos_seo_section'
+		);
 	}
 
 	public function sanitize_load_mode( $value ) {
@@ -246,6 +296,34 @@ class Xophz_Compass_Event_Horizon_Admin {
 			togglePageDropdown();
 		})();
 		</script>
+		<?php
+	}
+
+	public function render_seo_section_description() {
+		echo '<p>Configure the Open Graph and Twitter Card metadata to ensure the portal looks great when shared on social platforms.</p>';
+	}
+
+	public function render_og_title_field() {
+		$val = get_option( self::OPTION_OG_TITLE, '' );
+		?>
+		<input type="text" name="<?php echo self::OPTION_OG_TITLE; ?>" value="<?php echo esc_attr( $val ); ?>" class="regular-text" placeholder="e.g. YouMeOS" />
+		<p class="description">Falls back to the site title if left empty.</p>
+		<?php
+	}
+
+	public function render_og_desc_field() {
+		$val = get_option( self::OPTION_OG_DESC, '' );
+		?>
+		<textarea name="<?php echo self::OPTION_OG_DESC; ?>" rows="3" class="large-text" placeholder="e.g. YouMeOS - A Compass Gateway"><?php echo esc_textarea( $val ); ?></textarea>
+		<p class="description">Falls back to the site tagline if left empty.</p>
+		<?php
+	}
+
+	public function render_og_image_field() {
+		$val = get_option( self::OPTION_OG_IMAGE, '' );
+		?>
+		<input type="url" name="<?php echo self::OPTION_OG_IMAGE; ?>" value="<?php echo esc_attr( $val ); ?>" class="regular-text" placeholder="https://youmeos.com/takemymoney.jpg" />
+		<p class="description">The default image shown when the site is shared.</p>
 		<?php
 	}
 
