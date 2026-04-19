@@ -402,6 +402,12 @@ class Xophz_Compass_Event_Horizon_Public {
 			'permission_callback' => 'is_user_logged_in',
 		) );
 
+		register_rest_route( 'xophz-compass/v1', '/lostpassword', array(
+			'methods' => 'POST',
+			'callback' => array( $this, 'handle_lost_password' ),
+			'permission_callback' => '__return_true',
+		) );
+
 		register_rest_route( 'xophz-compass/v1', '/discord/token', array(
 			'methods' => 'POST',
 			'callback' => array( $this, 'handle_discord_token_exchange' ),
@@ -682,6 +688,53 @@ class Xophz_Compass_Event_Horizon_Public {
 			return new WP_Error( 'discord_api_error', $body['error_description'] ?? $body['error'], array( 'status' => 400 ) );
 		}
 
+		$access_token = $body['access_token'];
+
+		$user_response = wp_remote_get( 'https://discord.com/api/users/@me', array(
+			'headers' => array(
+				'Authorization' => 'Bearer ' . $access_token,
+			),
+		) );
+
+		if ( ! is_wp_error( $user_response ) ) {
+			$discord_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
+			if ( isset( $discord_user['email'] ) ) {
+				$user = get_user_by( 'email', $discord_user['email'] );
+
+				if ( ! $user ) {
+					$username = $discord_user['username'];
+					if ( username_exists( $username ) ) {
+						$username = $username . '_' . wp_generate_password( 4, false );
+					}
+					$password = wp_generate_password();
+					$user_id = wp_create_user( $username, $password, $discord_user['email'] );
+					
+					if ( ! is_wp_error( $user_id ) ) {
+						$user = get_user_by( 'id', $user_id );
+						wp_update_user( array(
+							'ID' => $user_id,
+							'display_name' => $discord_user['global_name'] ?? $discord_user['username']
+						) );
+					}
+				}
+
+				if ( $user && ! is_wp_error( $user ) ) {
+					wp_set_current_user( $user->ID );
+					wp_set_auth_cookie( $user->ID, true );
+					
+					$body['wp_user'] = array(
+						'user_id' => $user->ID,
+						'user_email' => $user->user_email,
+						'user_nicename' => $user->user_nicename,
+						'user_display_name' => $user->display_name,
+						'user_roles' => $user->roles,
+						'nonce' => wp_create_nonce( 'wp_rest' ),
+						'token' => wp_create_nonce( 'wp_rest' )
+					);
+				}
+			}
+		}
+
 		return rest_ensure_response( $body );
 	}
 
@@ -717,6 +770,38 @@ class Xophz_Compass_Event_Horizon_Public {
 		return rest_ensure_response( array(
 			'success' => true,
 			'message' => 'Logged out successfully'
+		) );
+	}
+
+	public function handle_lost_password( $request ) {
+		$user_login = $request->get_param( 'user_login' );
+
+		if ( empty( $user_login ) ) {
+			return new WP_Error( 'empty_user_login', 'Please enter a username or email address.', array( 'status' => 400 ) );
+		}
+
+		$user_data = get_user_by( 'email', $user_login );
+		if ( ! $user_data ) {
+			$user_data = get_user_by( 'login', $user_login );
+		}
+
+		if ( ! $user_data ) {
+			// Do not leak that the user exists or not for security reasons, just return success
+			return rest_ensure_response( array(
+				'success' => true,
+				'message' => 'If an account exists, a password reset link has been sent to the email address on file.'
+			) );
+		}
+
+		$result = retrieve_password( $user_login );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		return rest_ensure_response( array(
+			'success' => true,
+			'message' => 'If an account exists, a password reset link has been sent to the email address on file.'
 		) );
 	}
 
@@ -903,6 +988,13 @@ class Xophz_Compass_Event_Horizon_Public {
 		$user_id = get_current_user_id();
 		$user = get_userdata( $user_id );
 		
+		$avatar_url = get_user_meta( $user_id, 'youmeos_avatar_url', true );
+		if ( empty( $avatar_url ) ) {
+			$avatar_url = get_avatar_url( $user_id, array( 'size' => 150 ) );
+		}
+		
+		$portrait_url = get_user_meta( $user_id, 'youmeos_portrait_url', true );
+
 		return rest_ensure_response( array(
 			'user_login' => $user->user_login,
 			'first_name' => $user->first_name,
@@ -912,7 +1004,8 @@ class Xophz_Compass_Event_Horizon_Public {
 			'user_email' => $user->user_email,
 			'user_url' => $user->user_url,
 			'user_description' => $user->description,
-			'avatar_url' => get_avatar_url( $user_id, array( 'size' => 150 ) ),
+			'avatar_url' => $avatar_url,
+			'portrait_url' => $portrait_url,
 		) );
 	}
 
@@ -935,7 +1028,62 @@ class Xophz_Compass_Event_Horizon_Public {
 			return $result;
 		}
 
-		return rest_ensure_response( array( 'message' => 'Profile updated successfully.' ) );
+		if ( isset( $parameters['avatar_base64'] ) && ! empty( $parameters['avatar_base64'] ) ) {
+			$base64 = $parameters['avatar_base64'];
+			if ( preg_match( '/^data:image\/(\w+);base64,/', $base64, $type ) ) {
+				$data = substr( $base64, strpos( $base64, ',' ) + 1 );
+				$type = strtolower( $type[1] );
+				if ( in_array( $type, [ 'jpg', 'jpeg', 'gif', 'png', 'webp' ] ) ) {
+					$decoded = base64_decode( $data );
+					if ( $decoded !== false ) {
+						$filename = 'avatar_' . $user_id . '_' . time() . '.' . $type;
+						$upload = wp_upload_bits( $filename, null, $decoded );
+						if ( ! $upload['error'] ) {
+							update_user_meta( $user_id, 'youmeos_avatar_url', $upload['url'] );
+						}
+					}
+				}
+			}
+		}
+
+		$portrait_status = 'not_provided';
+		if ( isset( $parameters['portrait_base64'] ) && ! empty( $parameters['portrait_base64'] ) ) {
+			$portrait_status = 'provided';
+			$base64 = $parameters['portrait_base64'];
+			if ( preg_match( '/^data:image\/([\w\+\-]+);base64,/', $base64, $type ) ) {
+				$portrait_status = 'matched_regex';
+				$data = substr( $base64, strpos( $base64, ',' ) + 1 );
+				$ext = strtolower( $type[1] );
+				// If mime type is like svg+xml, we just use the first part or default to png
+				if (strpos($ext, 'svg') !== false) $ext = 'svg';
+				
+				if ( in_array( $ext, [ 'jpg', 'jpeg', 'gif', 'png', 'webp', 'svg' ] ) ) {
+					$portrait_status = 'valid_extension_' . $ext;
+					$decoded = base64_decode( $data );
+					if ( $decoded !== false ) {
+						$filename = 'portrait_' . $user_id . '_' . time() . '.' . $ext;
+						$upload = wp_upload_bits( $filename, null, $decoded );
+						if ( ! $upload['error'] ) {
+							update_user_meta( $user_id, 'youmeos_portrait_url', $upload['url'] );
+							$portrait_status = 'success';
+						} else {
+							$portrait_status = 'upload_error: ' . $upload['error'];
+						}
+					} else {
+						$portrait_status = 'decode_failed';
+					}
+				} else {
+					$portrait_status = 'invalid_extension: ' . $ext;
+				}
+			} else {
+				$portrait_status = 'regex_failed: ' . substr($base64, 0, 50);
+			}
+		}
+
+		return rest_ensure_response( array( 
+			'message' => 'Profile updated successfully.',
+			'portrait_debug' => $portrait_status 
+		) );
 	}
 
 	public function get_noosphere_statement( $request ) {
