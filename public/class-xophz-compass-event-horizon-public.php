@@ -891,6 +891,38 @@ class Xophz_Compass_Event_Horizon_Public {
 			'callback' => array( $this, 'get_unified_site_menus' ),
 			'permission_callback' => '__return_true',
 		) );
+
+		register_rest_route( 'xophz-compass/v1', '/gaea/telemetry', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'get_gaea_telemetry_simulation' ),
+			'permission_callback' => '__return_true',
+		) );
+	}
+
+	public function get_gaea_telemetry_simulation( $request ) {
+		// Simulate Fossil Reserves dropping slowly over time (100% in 1950, 0% in 2070)
+		$start_time = strtotime('1950-01-01');
+		$end_time = strtotime('2070-01-01');
+		$now = time();
+		$fossil_percent = 100 - (($now - $start_time) / ($end_time - $start_time)) * 100;
+		$fossil_percent = max(0, min(100, $fossil_percent));
+
+		// Simulate Grid Load fluctuating daily between 40% and 95% (Peak at 18:00)
+		$hour = (float) date('G') + (float) date('i') / 60;
+		$grid_load = 65 + 25 * sin((($hour - 12) / 24) * 2 * M_PI);
+		// Add some high-frequency noise
+		$grid_load += mt_rand(-200, 200) / 100;
+		$grid_load = max(0, min(100, $grid_load));
+
+		// Simulate Core Thermo stability fluctuating slightly around 65%
+		$thermo = 65 + 2 * sin($now / 86400) + mt_rand(-50, 50) / 100;
+
+		return rest_ensure_response( array(
+			'fossil_reserves' => round($fossil_percent, 2),
+			'grid_load' => round($grid_load, 2),
+			'core_thermo' => round($thermo, 2),
+			'timestamp' => $now
+		) );
 	}
 
 	public function get_unified_site_menus( $request ) {
