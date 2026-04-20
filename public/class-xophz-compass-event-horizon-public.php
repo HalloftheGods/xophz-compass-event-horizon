@@ -69,6 +69,12 @@ class Xophz_Compass_Event_Horizon_Public {
 		$isHomepage404Fallback = ( $loadMode === 'homepage' && is_404() );
 
 		if ( $isRouteMatch || $isConfiguredPageMatch || $isHomepage404Fallback ) {
+			$share_spark = isset($_GET['share_spark']) ? sanitize_text_field($_GET['share_spark']) : '';
+			if (!empty($share_spark)) {
+				$this->render_share_spark_interceptor($share_spark);
+				exit;
+			}
+
 			$app_base = $this->resolve_app_base( $wp_query, $isRouteMatch );
 			$this->render_youmeos_shell( $app_base );
 			exit;
@@ -365,6 +371,388 @@ class Xophz_Compass_Event_Horizon_Public {
 <div id="youmeos-container"></div>
 </body>
 </html><?php
+	}
+
+	private function render_share_spark_interceptor( $spark_id ) {
+		$width = isset($_GET['width']) ? (int)$_GET['width'] : 800;
+		$height = isset($_GET['height']) ? (int)$_GET['height'] : 600;
+		
+		// Build the URL to launch
+		$launch_url = esc_url( add_query_arg( [
+			'sparks' => $spark_id,
+			'fullscreen' => 'true',
+			'wormhole_toast' => 'true'
+		], remove_query_arg( ['share_spark', 'width', 'height'] ) ) );
+		
+		?>
+		<!DOCTYPE html>
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+			<title>Incoming Spark | YouMeOS</title>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+			<link rel="preconnect" href="https://fonts.googleapis.com">
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+			<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
+			<style>
+				@font-face {
+					font-family: 'LCD14';
+					src: url('<?php echo plugins_url('fonts/LCD14.otf', __FILE__); ?>') format('opentype');
+				}
+				body, html {
+					margin: 0; padding: 0; width: 100%; height: 100%; 
+					background: #000; color: #fff;
+					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+					display: flex; align-items: center; justify-content: center;
+					overflow: hidden;
+				}
+				.glass-panel {
+					background: rgba(25, 25, 30, 0.6);
+					backdrop-filter: blur(20px);
+					-webkit-backdrop-filter: blur(20px);
+					border: 1px solid rgba(255,255,255,0.1);
+					border-radius: 16px;
+					padding: 48px;
+					text-align: center;
+					box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+					max-width: 480px;
+					width: 90%;
+					display: none; /* Hidden by default until we know auto-launch failed */
+					position: relative;
+					z-index: 10;
+				}
+				h1 {
+					font-weight: 300;
+					margin: 0 0 16px 0;
+					font-size: 32px;
+				}
+				p {
+					opacity: 0.7;
+					line-height: 1.5;
+					margin: 0 0 32px 0;
+				}
+				button {
+					background: #62c9ff;
+					color: #000;
+					border: none;
+					padding: 16px 32px;
+					font-size: 18px;
+					font-weight: bold;
+					border-radius: 8px;
+					cursor: pointer;
+					transition: all 0.2s;
+					box-shadow: 0 4px 12px rgba(98, 201, 255, 0.3);
+				}
+				button:hover {
+					background: #7bd4ff;
+					transform: translateY(-2px);
+					box-shadow: 0 8px 16px rgba(98, 201, 255, 0.4);
+				}
+				.icon {
+					font-size: 64px;
+					margin-bottom: 24px;
+					color: #62c9ff;
+				}
+				#bg-container {
+					position: absolute;
+					top: 0; left: 0;
+					width: 100%; height: 100%;
+					z-index: 0;
+				}
+				#nostalgia-text {
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
+					z-index: 5;
+					text-align: center;
+					pointer-events: none;
+					user-select: none;
+					transition: opacity 1s ease;
+					display: none;
+				}
+				.brand-lockup {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
+					margin-bottom: 32px;
+				}
+				.brand-lockup .brand-y-logo {
+					height: 100px;
+					width: auto;
+					filter: drop-shadow(0 0 20px rgba(61, 238, 152, 0.4));
+					margin-right: -10px;
+					margin-top: -10px;
+				}
+				.brand-lockup .brand-title {
+					font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+					font-size: 72px;
+					font-weight: 200;
+					margin: 0;
+					letter-spacing: 4px;
+					line-height: 1;
+					background: linear-gradient(to right, #d56eff 0%, #ffd700 40%, #00f2fe 75%, #2962ff 100%);
+					background-size: 800px 100%;
+					background-position: center;
+					-webkit-background-clip: text;
+					background-clip: text;
+					-webkit-text-fill-color: transparent;
+					color: transparent;
+					filter: drop-shadow(0 0 15px rgba(213, 110, 255, 0.5)) drop-shadow(0 0 30px rgba(41, 98, 255, 0.4));
+				}
+				.full-banner-logo {
+					max-width: 800px;
+					width: 80vw;
+					height: auto;
+					filter: drop-shadow(0 0 30px rgba(61, 238, 152, 0.2));
+					margin-bottom: 40px;
+				}
+				.notice {
+					font-size: 22px;
+					font-weight: 300;
+					color: #ffffff;
+					letter-spacing: 1px;
+					font-family: "Source Sans Pro", -apple-system, sans-serif;
+					text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+					line-height: 1.5;
+				}
+				#self-destruct-container {
+					position: absolute;
+					bottom: 32px;
+					right: 32px;
+					z-index: 5;
+					text-align: right;
+					display: none;
+				}
+				.destruct-label {
+					font-size: 14px;
+					opacity: 0.6;
+					margin-bottom: 8px;
+					letter-spacing: 2px;
+					text-transform: uppercase;
+				}
+				#close-countdown {
+					font-family: "LCD14", monospace;
+					font-size: 48px;
+					color: #62c9ff;
+					text-shadow: 0 0 15px rgba(98, 201, 255, 0.8);
+					letter-spacing: 6px;
+				}
+			</style>
+		</head>
+		<body>
+			<div id="bg-container"></div>
+			
+			<div id="nostalgia-text">
+				<div class="brand-lockup">
+					<img src="<?php echo plugins_url('../admin/images/youmeos-logo.png', __FILE__); ?>" alt="Y" class="brand-y-logo">
+					<div class="brand-title">ouMeOS</div>
+				</div>
+				<div class="notice">
+					We have just folded time & space to create a wormhole straight to <strong style="color: #62c9ff; text-transform: capitalize;"><?php echo esc_html(str_replace('-', ' ', $spark_id)); ?></strong>!
+				</div>
+			</div>
+
+			<div id="self-destruct-container">
+				<div class="destruct-label">This window will self destruct in:</div>
+				<div id="close-countdown"></div>
+			</div>
+			
+			<div class="glass-panel" id="ui-panel">
+				<div class="icon">🚀</div>
+				<h1>Incoming Spark</h1>
+				<p>Your browser blocked the automatic launch. Click below to open your secure sandbox window.</p>
+				<button onclick="launchSpark()">Launch Spark</button>
+			</div>
+
+			<script>
+				const url = <?php echo json_encode( html_entity_decode( $launch_url ) ); ?>;
+				const width = <?php echo $width; ?>;
+				const height = <?php echo $height; ?>;
+
+				// --- Three.js Wormhole Logic ---
+				function initWormhole() {
+					const container = document.getElementById('bg-container');
+					if (!window.THREE) return;
+
+					const scene = new THREE.Scene();
+					scene.fog = new THREE.FogExp2(0x000000, 0.001);
+
+					const camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 4000);
+					camera.position.z = 0;
+
+					const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+					renderer.setSize(window.innerWidth, window.innerHeight);
+					renderer.setPixelRatio(window.devicePixelRatio);
+					container.appendChild(renderer.domElement);
+
+					const particleCount = 15000;
+					const particles = new THREE.BufferGeometry();
+					const posArray = new Float32Array(particleCount * 3);
+					const colorsArray = new Float32Array(particleCount * 3);
+					const dataArray = [];
+
+					const numArms = 24; 
+					const color = new THREE.Color();
+
+					for (let i = 0; i < particleCount; i++) {
+						const z = (Math.random() - 0.5) * 4000;
+						const arm = Math.floor(Math.random() * numArms);
+						const angle = ((Math.PI * 2) / numArms) * arm + z * 0.002 + (Math.random() - 0.5) * 0.2;
+						
+						// Epic wide tunnel (was 90 + Math.random() * 4)
+						const radius = 220 + Math.random() * 40;
+
+						dataArray.push({ angle, radius, z, speedOffset: Math.random() });
+
+						const hue = Math.random();
+						color.setHSL(hue, 0.9, 0.6);
+
+						colorsArray[i * 3] = color.r;
+						colorsArray[i * 3 + 1] = color.g;
+						colorsArray[i * 3 + 2] = color.b;
+					}
+
+					particles.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
+					particles.setAttribute("color", new THREE.BufferAttribute(colorsArray, 3));
+
+					const canvasObj = document.createElement("canvas");
+					canvasObj.width = 32;
+					canvasObj.height = 32;
+					const context = canvasObj.getContext("2d");
+					const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
+					gradient.addColorStop(0, "rgba(255,255,255,1)");
+					gradient.addColorStop(0.2, "rgba(255,255,255,0.8)");
+					gradient.addColorStop(0.5, "rgba(255,255,255,0.2)");
+					gradient.addColorStop(1, "rgba(0,0,0,0)");
+					context.fillStyle = gradient;
+					context.fillRect(0, 0, 32, 32);
+					const texture = new THREE.CanvasTexture(canvasObj);
+
+					const particleMaterial = new THREE.PointsMaterial({
+						size: 2.5,
+						vertexColors: true,
+						transparent: true,
+						opacity: 0.9,
+						map: texture,
+						blending: THREE.AdditiveBlending,
+						depthWrite: false
+					});
+
+					const particleMesh = new THREE.Points(particles, particleMaterial);
+					scene.add(particleMesh);
+
+					window.addEventListener('resize', () => {
+						camera.aspect = window.innerWidth / window.innerHeight;
+						camera.updateProjectionMatrix();
+						renderer.setSize(window.innerWidth, window.innerHeight);
+					});
+
+					let time = 0;
+					const animate = () => {
+						requestAnimationFrame(animate);
+						time += 0.006;
+
+						const positions = particleMesh.geometry.attributes.position.array;
+
+						for (let i = 0; i < particleCount; i++) {
+							const p = dataArray[i];
+							p.z += 1.5 + p.speedOffset * 1.5;
+							if (p.z > 200) p.z -= 4000;
+							p.angle -= 0.003;
+
+							const curveX = Math.sin(p.z * 0.001 + time * 0.5) * 40;
+							const curveY = Math.cos(p.z * 0.001 + time * 0.4) * 40;
+
+							positions[i * 3] = Math.cos(p.angle) * p.radius + curveX;
+							positions[i * 3 + 1] = Math.sin(p.angle) * p.radius + curveY;
+							positions[i * 3 + 2] = p.z;
+						}
+
+						particleMesh.geometry.attributes.position.needsUpdate = true;
+
+						camera.position.x = Math.sin(time * 0.5) * 10;
+						camera.position.y = Math.cos(time * 0.4) * 10;
+
+						camera.lookAt(
+							Math.sin(-1000 * 0.001 + time * 0.5) * 40,
+							Math.cos(-1000 * 0.001 + time * 0.4) * 40,
+							-1000
+						);
+
+						camera.rotation.z = Math.sin(time * 0.5) * 0.3;
+						renderer.render(scene, camera);
+					};
+					animate();
+				}
+
+				initWormhole();
+				// ------------------------------
+				
+				function startCountdown() {
+					const nostalgia = document.getElementById('nostalgia-text');
+					nostalgia.style.display = 'block';
+
+					const destructContainer = document.getElementById('self-destruct-container');
+					destructContainer.style.display = 'block';
+
+					const countdownEl = document.getElementById('close-countdown');
+					if (!countdownEl) return;
+					
+					let timeRemaining = 17;
+					
+					const formatTime = (secs) => {
+						const m = Math.floor(secs / 60).toString().padStart(2, '0');
+						const s = (secs % 60).toString().padStart(2, '0');
+						return `${m}:${s}`;
+					};
+
+					countdownEl.innerText = formatTime(timeRemaining);
+
+					const interval = setInterval(() => {
+						timeRemaining--;
+						if (timeRemaining <= 0) {
+							clearInterval(interval);
+							countdownEl.innerText = "00:00";
+							setTimeout(() => {
+								window.close();
+							}, 500);
+						} else {
+							countdownEl.innerText = formatTime(timeRemaining);
+						}
+					}, 1000);
+				}
+
+				function launchSpark() {
+					window.open(url, '_blank', `width=${width},height=${height}`);
+					
+					// Hide the UI to reveal the pure canvas
+					const panel = document.getElementById('ui-panel');
+					panel.style.display = 'none';
+					
+					startCountdown();
+				}
+
+				// Attempt auto-launch
+				window.onload = function() {
+					setTimeout(() => {
+						const popup = window.open(url, '_blank', `width=${width},height=${height}`);
+						
+						const panel = document.getElementById('ui-panel');
+						if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+							// Popup blocked, show the manual launch card
+							panel.style.display = 'block';
+						} else {
+							// Successfully auto-launched, leave the card hidden so they just see the wormhole!
+							panel.style.display = 'none';
+							startCountdown();
+						}
+					}, 100);
+				};
+			</script>
+		</html>
+		<?php
 	}
 
 	private function is_dev_server() {
