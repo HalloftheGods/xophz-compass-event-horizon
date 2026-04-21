@@ -710,7 +710,7 @@ if (!empty($spark_id)) {
 					if (!window.THREE) return;
 
 					const scene = new THREE.Scene();
-					scene.fog = new THREE.FogExp2(0x000000, 0.001);
+					scene.fog = new THREE.FogExp2(0x000000, 0.0005);
 
 					const camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 4000);
 					camera.position.z = 0;
@@ -720,7 +720,7 @@ if (!empty($spark_id)) {
 					renderer.setPixelRatio(window.devicePixelRatio);
 					container.appendChild(renderer.domElement);
 
-					const particleCount = 15000;
+					const particleCount = 3000;
 					const particles = new THREE.BufferGeometry();
 					const posArray = new Float32Array(particleCount * 3);
 					const colorsArray = new Float32Array(particleCount * 3);
@@ -742,7 +742,7 @@ if (!empty($spark_id)) {
 						dataArray.push({ angle, radius, z, speedOffset: Math.random() });
 
 						const hue = Math.random();
-						color.setHSL(hue, 0.9, 0.6);
+						color.setHSL(hue, 0.9, 0.75);
 
 						colorsArray[i * 3] = color.r;
 						colorsArray[i * 3 + 1] = color.g;
@@ -766,10 +766,10 @@ if (!empty($spark_id)) {
 					const texture = new THREE.CanvasTexture(canvasObj);
 
 					const particleMaterial = new THREE.PointsMaterial({
-						size: 2.5,
+						size: 10.0,
 						vertexColors: true,
 						transparent: true,
-						opacity: 0.9,
+						opacity: 1.0,
 						map: texture,
 						blending: THREE.AdditiveBlending,
 						depthWrite: false
@@ -793,9 +793,9 @@ if (!empty($spark_id)) {
 
 						for (let i = 0; i < particleCount; i++) {
 							const p = dataArray[i];
-							p.z += 1.5 + p.speedOffset * 1.5;
+							p.z += 8.0 + p.speedOffset * 6.0;
 							if (p.z > 200) p.z -= 4000;
-							p.angle -= 0.003;
+							p.angle -= 0.008;
 
 							const curveX = Math.sin(p.z * 0.001 + time * 0.5) * 40;
 							const curveY = Math.cos(p.z * 0.001 + time * 0.4) * 40;
