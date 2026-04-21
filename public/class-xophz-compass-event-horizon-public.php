@@ -343,10 +343,67 @@ class Xophz_Compass_Event_Horizon_Public {
 
   gtag('config', 'G-YHY2WZFMDM');
 </script>
-<title><?php echo esc_html( $og_title ); ?></title>
+
+<?php 
+$raw_sparks = isset($_GET['sparks']) ? wp_unslash($_GET['sparks']) : '';
+$spark_id = sanitize_text_field($raw_sparks);
+$is_lite = (isset($_GET['fullscreen']) && $_GET['fullscreen'] === 'true');
+$page_title = $og_title;
+
+if ($is_lite && !empty($raw_sparks)) {
+	$decoded = json_decode($raw_sparks, true);
+	$s_name = '';
+	if (is_array($decoded) && isset($decoded[0][0])) {
+		$s_name = $decoded[0][0];
+	} elseif (!is_array($decoded)) {
+		$s_name = $spark_id;
+	}
+	if (!empty($s_name)) {
+		$page_title = ucwords(str_replace('-', ' ', $s_name));
+		$spark_id = $s_name; // Use clean name for manifest
+	}
+}
+
+// For the manifest URL, we pass the spark_id if present, else empty for the main OS
+$manifest_url = rest_url( 'xophz-compass/v1/spark-manifest' );
+if (!empty($spark_id)) {
+	$manifest_url .= '?spark=' . $spark_id;
+}
+?>
+<link rel="manifest" href="<?php echo esc_url( $manifest_url ); ?>">
+
+<title><?php echo esc_html( $page_title ); ?></title>
 <style>
     body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
     #youmeos-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+	<?php if ($is_lite): ?>
+	:root {
+		--loader-start-bg: #ffffff;
+	}
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--loader-start-bg: #121212;
+		}
+	}
+	body {
+		background: linear-gradient(135deg, 
+			#000 0%, 
+			#000 25%, 
+			rgba(255,255,255,0.15) 30%, 
+			#000 35%, 
+			#000 65%, 
+			var(--loader-start-bg) 80%, 
+			var(--loader-start-bg) 100%
+		);
+		background-size: 500% 500%;
+		background-position: 100% 100%;
+		animation: spark-shine 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+	}
+	@keyframes spark-shine {
+		0% { background-position: 100% 100%; }
+		100% { background-position: 0% 0%; }
+	}
+	<?php endif; ?>
 </style>
 <script>window.xophzCompassSettings = <?php echo json_encode($settings); ?>;</script>
 
@@ -376,24 +433,49 @@ class Xophz_Compass_Event_Horizon_Public {
 	private function render_share_spark_interceptor( $spark_id ) {
 		$width = isset($_GET['width']) ? (int)$_GET['width'] : 800;
 		$height = isset($_GET['height']) ? (int)$_GET['height'] : 600;
+		$spark_icon = isset($_GET['icon']) ? sanitize_text_field($_GET['icon']) : 'fal fa-sparkles';
+		$plugin_rel_path = plugin_dir_url( __FILE__ );
 		
 		// Build the URL to launch
-		$launch_url = esc_url( add_query_arg( [
+		$launch_url = esc_url_raw( add_query_arg( [
 			'sparks' => $spark_id,
 			'fullscreen' => 'true',
 			'wormhole_toast' => 'true'
-		], remove_query_arg( ['share_spark', 'width', 'height'] ) ) );
+		], remove_query_arg( ['share_spark', 'width', 'height', 'icon'] ) ) );
 		
 		?>
 		<!DOCTYPE html>
 		<head>
+			<!-- Google tag (gtag.js) -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHY2WZFMDM"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag('config', 'G-YHY2WZFMDM');
+			</script>
+
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-			<title>Incoming Spark | YouMeOS</title>
+			<title>Incoming <?php echo esc_html(ucwords(str_replace('-', ' ', $spark_id))); ?> | YouMeOS</title>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 			<link rel="preconnect" href="https://fonts.googleapis.com">
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 			<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
+			
+			<?php if ( $this->is_dev_server() ) : ?>
+				<script type="module" src="http://localhost:9000/@vite/client"></script>
+				<script type="module" src="http://localhost:9000/apps/youmeos/styles/_vendor.scss"></script>
+			<?php else : 
+				$manifest_path = plugin_dir_path( __FILE__ ) . 'dist/.vite/manifest.json';
+				$manifest = file_exists($manifest_path) ? json_decode(file_get_contents($manifest_path), true) : null;
+				if (isset($manifest['apps/youmeos/index.html']['css'])) : 
+					foreach ($manifest['apps/youmeos/index.html']['css'] as $css_file) : ?>
+						<link rel="stylesheet" href="<?php echo rtrim( $plugin_rel_path, '/' ) . '/dist/' . $css_file; ?>">
+					<?php endforeach; 
+				endif;
+			endif; ?>
+
 			<style>
 				@font-face {
 					font-family: 'LCD14';
@@ -459,17 +541,71 @@ class Xophz_Compass_Event_Horizon_Public {
 					width: 100%; height: 100%;
 					z-index: 0;
 				}
+				.glass-panel {
+					position: absolute;
+					top: 50%; left: 50%;
+					transform: translate(-50%, -50%);
+					background: rgba(25, 25, 30, 0.6);
+					backdrop-filter: blur(20px);
+					-webkit-backdrop-filter: blur(20px);
+					border: 1px solid rgba(255,255,255,0.1);
+					border-radius: 16px;
+					padding: 40px;
+					text-align: center;
+					z-index: 10;
+				}
 				#nostalgia-text {
 					position: absolute;
 					top: 50%;
 					left: 50%;
 					transform: translate(-50%, -50%);
 					z-index: 5;
-					text-align: center;
-					pointer-events: none;
-					user-select: none;
-					transition: opacity 1s ease;
 					display: none;
+					align-items: center;
+					justify-content: center;
+					gap: 32px;
+					flex-direction: row;
+				}
+				#nostalgia-quote {
+					position: absolute;
+					top: calc(50% + 140px);
+					left: 50%;
+					transform: translateX(-50%);
+					z-index: 5;
+					display: none;
+					color: rgba(255, 255, 255, 0.4);
+					font-family: "Outfit", sans-serif;
+					font-style: italic;
+					font-size: 16px;
+					letter-spacing: 1px;
+					text-align: center;
+				}
+				.nostalgia-icon i {
+					font-size: 64px;
+					background: linear-gradient(135deg, #fceaba 0%, #d9be6f 50%, #88733a 100%);
+					-webkit-background-clip: text;
+					-webkit-text-fill-color: transparent;
+					color: transparent;
+				}
+				.nostalgia-icon {
+					filter: drop-shadow(0 0 15px rgba(217, 190, 111, 0.4));
+				}
+				.nostalgia-divider {
+					width: 1px;
+					height: 80px;
+					background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+				}
+				.notice {
+					font-size: 24px;
+					font-weight: 200;
+					opacity: 0.8;
+					color: #ffffff;
+					letter-spacing: 1px;
+					font-family: "Source Sans Pro", -apple-system, sans-serif;
+					text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+					line-height: 1.5;
+					max-width: 400px;
+					text-align: left;
 				}
 				.brand-lockup {
 					display: flex;
@@ -501,62 +637,41 @@ class Xophz_Compass_Event_Horizon_Public {
 					color: transparent;
 					filter: drop-shadow(0 0 15px rgba(213, 110, 255, 0.5)) drop-shadow(0 0 30px rgba(41, 98, 255, 0.4));
 				}
-				.full-banner-logo {
-					max-width: 800px;
-					width: 80vw;
-					height: auto;
-					filter: drop-shadow(0 0 30px rgba(61, 238, 152, 0.2));
-					margin-bottom: 40px;
-				}
-				.notice {
-					font-size: 22px;
-					font-weight: 300;
-					color: #ffffff;
-					letter-spacing: 1px;
-					font-family: "Source Sans Pro", -apple-system, sans-serif;
-					text-shadow: 0 4px 12px rgba(0,0,0,0.8);
-					line-height: 1.5;
-				}
-				#self-destruct-container {
-					position: absolute;
-					bottom: 32px;
-					right: 32px;
-					z-index: 5;
-					text-align: right;
-					display: none;
-				}
-				.destruct-label {
-					font-size: 14px;
-					opacity: 0.6;
-					margin-bottom: 8px;
-					letter-spacing: 2px;
-					text-transform: uppercase;
-				}
-				#close-countdown {
-					font-family: "LCD14", monospace;
-					font-size: 48px;
-					color: #62c9ff;
-					text-shadow: 0 0 15px rgba(98, 201, 255, 0.8);
-					letter-spacing: 6px;
-				}
 			</style>
 		</head>
 		<body>
 			<div id="bg-container"></div>
 			
 			<div id="nostalgia-text">
-				<div class="brand-lockup">
-					<img src="<?php echo plugins_url('../admin/images/youmeos-logo.png', __FILE__); ?>" alt="Y" class="brand-y-logo">
-					<div class="brand-title">ouMeOS</div>
+				<div class="nostalgia-icon">
+					<img src="<?php echo plugins_url( 'dist/omega-logox300.png', __FILE__ ); ?>" alt="Omega Logo" class="omega-spin" style="width: 160px; height: 160px;">
 				</div>
+				<div class="nostalgia-divider"></div>
 				<div class="notice">
-					We have just folded time & space to create a wormhole straight to <strong style="color: #62c9ff; text-transform: capitalize;"><?php echo esc_html(str_replace('-', ' ', $spark_id)); ?></strong>!
+					Space &amp; Time fold coarse...<br>
+					A Wormhole Opens Source...<br>
+					Through this rough G-force...<br>
+					<strong style="color: #d9be6f; text-transform: uppercase; font-weight: 400;">
+					<?php echo esc_html(str_replace('-', ' ', $spark_id)); ?></strong>
+					... stays the course ...
 				</div>
 			</div>
 
-			<div id="self-destruct-container">
-				<div class="destruct-label">This window will self destruct in:</div>
-				<div id="close-countdown"></div>
+			<div id="nostalgia-quote">
+				"It's a 'Wormhole' OS!" 2006 ~X
+			</div>
+
+			<div id="footer-logo" style="display: none; position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 5; flex-direction: column; align-items: center; text-align: center;">
+				<a href="https://www.youmeos.com" target="_blank" class="brand-lockup" style="margin-bottom: 0; text-decoration: none; display: flex; flex-direction: row; align-items: center; justify-content: center;">
+					<img src="<?php echo plugins_url('../admin/images/youmeos-logo.png', __FILE__); ?>" alt="Y" class="brand-y-logo" style="height: 60px;">
+					<div class="brand-title" style="font-size: 42px;">ouMeOS</div>
+				</a>
+				<div class="copyright" style="font-size: 12px; opacity: 0.8; margin-top: 8px; letter-spacing: 1px;">
+					&copy; <?php echo date('Y'); ?> <a href="https://www.hallofthegods.com" target="_blank" style="color: #d9be6f; text-decoration: none; font-weight: bold; transition: opacity 0.2s;">Hall of the Gods, Inc.</a>
+				</div>
+				<div class="version" style="font-size: 10px; opacity: 0.5; margin-top: 4px; font-family: 'Outfit', sans-serif; letter-spacing: 2px;">
+					v<?php echo defined('XOPHZ_COMPASS_EVENT_HORIZON_VERSION') ? XOPHZ_COMPASS_EVENT_HORIZON_VERSION : '1.0.0'; ?>
+				</div>
 			</div>
 			
 			<div class="glass-panel" id="ui-panel">
@@ -567,7 +682,17 @@ class Xophz_Compass_Event_Horizon_Public {
 			</div>
 
 			<script>
-				const url = <?php echo json_encode( html_entity_decode( $launch_url ) ); ?>;
+				// Build robust launch URL via JS to prevent PHP encoding bugs from corrupting the query string
+				const launchUrl = new URL(window.location.href);
+				launchUrl.searchParams.delete('share_spark');
+				launchUrl.searchParams.delete('width');
+				launchUrl.searchParams.delete('height');
+				launchUrl.searchParams.delete('icon');
+				launchUrl.searchParams.set('sparks', '<?php echo esc_js($spark_id); ?>');
+				launchUrl.searchParams.set('fullscreen', 'true');
+				launchUrl.searchParams.set('wormhole_toast', 'true');
+				
+				const url = launchUrl.toString();
 				const width = <?php echo $width; ?>;
 				const height = <?php echo $height; ?>;
 
@@ -597,7 +722,9 @@ class Xophz_Compass_Event_Horizon_Public {
 					const color = new THREE.Color();
 
 					for (let i = 0; i < particleCount; i++) {
-						const z = (Math.random() - 0.5) * 4000;
+						// Start all particles far down the tunnel so they emerge from the black fog
+						// and haven't passed the user yet.
+						const z = -1000 - (Math.random() * 4000);
 						const arm = Math.floor(Math.random() * numArms);
 						const angle = ((Math.PI * 2) / numArms) * arm + z * 0.002 + (Math.random() - 0.5) * 0.2;
 						
@@ -690,54 +817,47 @@ class Xophz_Compass_Event_Horizon_Public {
 				initWormhole();
 				// ------------------------------
 				
-				function startCountdown() {
+				function showInterceptorUI() {
 					const nostalgia = document.getElementById('nostalgia-text');
-					nostalgia.style.display = 'block';
+					nostalgia.style.display = 'flex';
 
-					const destructContainer = document.getElementById('self-destruct-container');
-					destructContainer.style.display = 'block';
+					const quote = document.getElementById('nostalgia-quote');
+					if (quote) quote.style.display = 'block';
 
-					const countdownEl = document.getElementById('close-countdown');
-					if (!countdownEl) return;
-					
-					let timeRemaining = 17;
-					
-					const formatTime = (secs) => {
-						const m = Math.floor(secs / 60).toString().padStart(2, '0');
-						const s = (secs % 60).toString().padStart(2, '0');
-						return `${m}:${s}`;
-					};
+					const footerLogo = document.getElementById('footer-logo');
+					if (footerLogo) footerLogo.style.display = 'flex';
+				}
 
-					countdownEl.innerText = formatTime(timeRemaining);
+				function getCenteredCoordinates(w, h) {
+					const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+					const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
 
-					const interval = setInterval(() => {
-						timeRemaining--;
-						if (timeRemaining <= 0) {
-							clearInterval(interval);
-							countdownEl.innerText = "00:00";
-							setTimeout(() => {
-								window.close();
-							}, 500);
-						} else {
-							countdownEl.innerText = formatTime(timeRemaining);
-						}
-					}, 1000);
+					const windowWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+					const windowHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+					const systemZoom = windowWidth / window.screen.availWidth;
+					const left = Math.round((windowWidth - w) / 2 / systemZoom + dualScreenLeft);
+					const top = Math.round((windowHeight - h) / 2 / systemZoom + dualScreenTop);
+
+					return { left, top };
 				}
 
 				function launchSpark() {
-					window.open(url, '_blank', `width=${width},height=${height}`);
+					const { left, top } = getCenteredCoordinates(width, height);
+					window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top}`);
 					
 					// Hide the UI to reveal the pure canvas
 					const panel = document.getElementById('ui-panel');
 					panel.style.display = 'none';
 					
-					startCountdown();
+					showInterceptorUI();
 				}
 
 				// Attempt auto-launch
 				window.onload = function() {
 					setTimeout(() => {
-						const popup = window.open(url, '_blank', `width=${width},height=${height}`);
+						const { left, top } = getCenteredCoordinates(width, height);
+						const popup = window.open(url, '_blank', `width=${width},height=${height},left=${left},top=${top}`);
 						
 						const panel = document.getElementById('ui-panel');
 						if (!popup || popup.closed || typeof popup.closed === 'undefined') {
@@ -746,7 +866,7 @@ class Xophz_Compass_Event_Horizon_Public {
 						} else {
 							// Successfully auto-launched, leave the card hidden so they just see the wormhole!
 							panel.style.display = 'none';
-							startCountdown();
+							showInterceptorUI();
 						}
 					}, 100);
 				};
@@ -897,6 +1017,64 @@ class Xophz_Compass_Event_Horizon_Public {
 			'callback' => array( $this, 'get_gaea_telemetry_simulation' ),
 			'permission_callback' => '__return_true',
 		) );
+
+		register_rest_route( 'xophz-compass/v1', '/spark-manifest', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'generate_spark_manifest' ),
+			'permission_callback' => '__return_true',
+		) );
+	}
+
+	public function generate_spark_manifest( $request ) {
+		$spark_id = sanitize_text_field( $request->get_param('spark') );
+		
+		if ( empty($spark_id) ) {
+			// Main OS Manifest
+			$spark_name = 'YouMeOS';
+			$start_url = home_url( '/os/' );
+		} else {
+			$spark_name = ucwords(str_replace('-', ' ', $spark_id));
+			$start_url = home_url( '/os/u/?sparks=' . $spark_id . '&fullscreen=true' );
+		}
+
+		$icon_path = plugin_dir_path( __FILE__ ) . 'images/spark-icons/spark-' . $spark_id . '.svg';
+		
+		if ( !empty($spark_id) && file_exists($icon_path) ) {
+			$icons = array(
+				array(
+					'src' => plugins_url('images/spark-icons/spark-' . $spark_id . '.svg', __FILE__),
+					'sizes' => 'any',
+					'type' => 'image/svg+xml'
+				)
+			);
+		} else {
+			$icons = array(
+				array(
+					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
+					'sizes' => '192x192',
+					'type' => 'image/png'
+				),
+				array(
+					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
+					'sizes' => '512x512',
+					'type' => 'image/png'
+				)
+			);
+		}
+
+		$manifest = array(
+			'name' => $spark_name,
+			'short_name' => $spark_name,
+			'start_url' => $start_url,
+			'display' => 'standalone',
+			'background_color' => '#000000',
+			'theme_color' => '#000000',
+			'icons' => $icons
+		);
+
+		$response = rest_ensure_response($manifest);
+		$response->header('Content-Type', 'application/manifest+json');
+		return $response;
 	}
 
 	public function get_gaea_telemetry_simulation( $request ) {

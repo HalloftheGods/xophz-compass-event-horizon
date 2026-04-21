@@ -1,0 +1,16 @@
+{
+  "name": "YouMeOS",
+  "short_name": "YouMeOS",
+  "description": "YouMeOS - A Compass Gateway",
+  "theme_color": "#0d1b2a",
+  "background_color": "#0d1b2a",
+  "display": "standalone",
+  "start_url": ".",
+  "icons": [
+    {
+      "src": "omega-logox300.png",
+      "sizes": "300x300",
+      "type": "image/png"
+    }
+  ]
+}
