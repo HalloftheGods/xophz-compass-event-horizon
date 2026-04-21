@@ -350,17 +350,21 @@ $spark_id = sanitize_text_field($raw_sparks);
 $is_lite = (isset($_GET['fullscreen']) && $_GET['fullscreen'] === 'true');
 $page_title = $og_title;
 
-if ($is_lite && !empty($raw_sparks)) {
+if (!empty($raw_sparks)) {
 	$decoded = json_decode($raw_sparks, true);
 	$s_name = '';
 	if (is_array($decoded) && isset($decoded[0][0])) {
 		$s_name = $decoded[0][0];
+	} elseif (is_array($decoded) && isset($decoded[0]) && is_string($decoded[0])) {
+		$s_name = $decoded[0];
 	} elseif (!is_array($decoded)) {
 		$s_name = $spark_id;
 	}
 	if (!empty($s_name)) {
-		$page_title = ucwords(str_replace('-', ' ', $s_name));
 		$spark_id = $s_name; // Use clean name for manifest
+		if ($is_lite) {
+			$page_title = ucwords(str_replace('-', ' ', $s_name));
+		}
 	}
 }
 
@@ -405,6 +409,8 @@ if (!empty($spark_id)) {
 	}
 	<?php endif; ?>
 </style>
+<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
 <script>window.xophzCompassSettings = <?php echo json_encode($settings); ?>;</script>
 
 <?php if ( $this->is_dev_server() ) : ?>
@@ -459,6 +465,8 @@ if (!empty($spark_id)) {
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 			<title>Incoming <?php echo esc_html(ucwords(str_replace('-', ' ', $spark_id))); ?> | YouMeOS</title>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
 			<link rel="preconnect" href="https://fonts.googleapis.com">
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 			<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
@@ -729,7 +737,7 @@ if (!empty($spark_id)) {
 						const angle = ((Math.PI * 2) / numArms) * arm + z * 0.002 + (Math.random() - 0.5) * 0.2;
 						
 						// Epic wide tunnel (was 90 + Math.random() * 4)
-						const radius = 220 + Math.random() * 40;
+						const radius = 450 + Math.random() * 60;
 
 						dataArray.push({ angle, radius, z, speedOffset: Math.random() });
 
@@ -1028,10 +1036,13 @@ if (!empty($spark_id)) {
 	public function generate_spark_manifest( $request ) {
 		$spark_id = sanitize_text_field( $request->get_param('spark') );
 		
-		if ( empty($spark_id) ) {
+		if ( empty($spark_id) || $spark_id === 'welcome-u' ) {
 			// Main OS Manifest
-			$spark_name = 'YouMeOS';
+			$site_name = get_bloginfo('name');
+			$spark_name = 'YouMeOS on ' . $site_name;
 			$start_url = home_url( '/os/' );
+			// Clear spark_id so the fallback icons are used below
+			$spark_id = '';
 		} else {
 			$spark_name = ucwords(str_replace('-', ' ', $spark_id));
 			$start_url = home_url( '/os/u/?sparks=' . $spark_id . '&fullscreen=true' );
@@ -1063,6 +1074,7 @@ if (!empty($spark_id)) {
 		}
 
 		$manifest = array(
+			'id' => empty($spark_id) ? home_url( '/os/' ) : home_url( '/os/u/?sparks=' . $spark_id ),
 			'name' => $spark_name,
 			'short_name' => $spark_name,
 			'start_url' => $start_url,
