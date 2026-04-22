@@ -55,6 +55,12 @@ class Xophz_Compass_Event_Horizon_Public {
 			exit;
 		}
 
+		// Handle Google OAuth Callback
+		if ( strpos( $request_uri, '/callback/google' ) !== false ) {
+			$this->render_google_callback_page();
+			exit;
+		}
+
 		if ( 
 			strpos( $request_uri, 'youmeos_legacy/' ) !== false || 
 			strpos( $request_uri, 'youmeos_data/' ) !== false ||
@@ -266,6 +272,193 @@ class Xophz_Compass_Event_Horizon_Public {
 						}, 2000);
 					} else {
 						// Not opened as a popup, maybe redirect?
+						setTimeout(() => {
+							window.location.href = '/';
+						}, 3000);
+					}
+				</script>
+			</div>
+		</body>
+		</html>
+		<?php
+	}
+
+	private function render_google_callback_page() {
+		$code = $_GET['code'] ?? '';
+		$error = $_GET['error'] ?? '';
+
+		$status = 'processing';
+		$message = 'Authenticating with Google...';
+		$payload = [];
+
+		if ( $error ) {
+			$status = 'error';
+			$message = 'Google Auth Error: ' . esc_html( $error );
+		} elseif ( ! $code ) {
+			$status = 'error';
+			$message = 'No authorization code provided.';
+		} else {
+			$client_id     = defined( 'GOOGLE_CLIENT_ID' ) ? GOOGLE_CLIENT_ID : ( $_ENV['GOOGLE_CLIENT_ID'] ?? get_option( 'google_client_id' ) );
+			$client_secret = defined( 'GOOGLE_CLIENT_SECRET' ) ? GOOGLE_CLIENT_SECRET : ( $_ENV['GOOGLE_CLIENT_SECRET'] ?? get_option( 'google_client_secret' ) );
+			$redirect_uri  = defined( 'GOOGLE_REDIRECT_URI' ) ? GOOGLE_REDIRECT_URI : ( $_ENV['GOOGLE_REDIRECT_URI'] ?? get_option( 'google_redirect_uri' ) );
+
+			if ( ! $client_id || ! $client_secret || ! $redirect_uri ) {
+				$status = 'error';
+				$message = 'Google API configuration is missing.';
+			} else {
+				$response = wp_remote_post( 'https://oauth2.googleapis.com/token', array(
+					'body' => array(
+						'client_id' => $client_id,
+						'client_secret' => $client_secret,
+						'grant_type' => 'authorization_code',
+						'code' => $code,
+						'redirect_uri' => $redirect_uri,
+					),
+				) );
+
+				if ( is_wp_error( $response ) ) {
+					$status = 'error';
+					$message = 'Failed to exchange Google code: ' . $response->get_error_message();
+				} else {
+					$body = json_decode( wp_remote_retrieve_body( $response ), true );
+					if ( isset( $body['error'] ) ) {
+						$status = 'error';
+						$message = 'Google API Error: ' . ( $body['error_description'] ?? $body['error'] );
+					} else {
+						$access_token = $body['access_token'];
+						$payload['token'] = $access_token;
+						$status = 'success';
+						$message = 'Google authentication successful!';
+
+						// Fetch user and auto-login
+						$user_response = wp_remote_get( 'https://www.googleapis.com/oauth2/v2/userinfo', array(
+							'headers' => array(
+								'Authorization' => 'Bearer ' . $access_token,
+							),
+						) );
+
+						if ( ! is_wp_error( $user_response ) ) {
+							$google_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
+							if ( isset( $google_user['email'] ) ) {
+								$user = get_user_by( 'email', $google_user['email'] );
+
+								if ( ! $user ) {
+									$email_parts = explode( '@', $google_user['email'] );
+									$username = $email_parts[0];
+									if ( username_exists( $username ) ) {
+										$username = $username . '_' . wp_generate_password( 4, false );
+									}
+									$password = wp_generate_password();
+									$user_id = wp_create_user( $username, $password, $google_user['email'] );
+									
+									if ( ! is_wp_error( $user_id ) ) {
+										$user = get_user_by( 'id', $user_id );
+										wp_update_user( array(
+											'ID' => $user_id,
+											'display_name' => $google_user['name'] ?? $username
+										) );
+									}
+								}
+
+								if ( $user && ! is_wp_error( $user ) ) {
+									wp_set_current_user( $user->ID );
+									wp_set_auth_cookie( $user->ID, true );
+									
+									$payload['wp_user'] = array(
+										'user_id' => $user->ID,
+										'user_email' => $user->user_email,
+										'user_nicename' => $user->user_nicename,
+										'user_display_name' => $user->display_name,
+										'user_roles' => $user->roles,
+										'nonce' => wp_create_nonce( 'wp_rest' ),
+										'token' => wp_create_nonce( 'wp_rest' )
+									);
+									$message = 'Login successful! Closing window...';
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		?>
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Google Authentication</title>
+			<style>
+				body {
+					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+					background-color: #121212;
+					color: #ffffff;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 100vh;
+					margin: 0;
+					text-align: center;
+				}
+				.container {
+					background: #1e1e1e;
+					padding: 2rem;
+					border-radius: 12px;
+					box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+					max-width: 400px;
+					width: 100%;
+				}
+				.status-icon {
+					font-size: 48px;
+					margin-bottom: 1rem;
+				}
+				.success { color: #43b581; }
+				.error { color: #f04747; }
+				.processing { color: #7289da; animation: pulse 1.5s infinite; }
+				
+				@keyframes pulse {
+					0% { opacity: 0.5; transform: scale(0.95); }
+					50% { opacity: 1; transform: scale(1); }
+					100% { opacity: 0.5; transform: scale(0.95); }
+				}
+			</style>
+		</head>
+		<body>
+			<div class="container">
+				<?php if ( $status === 'success' ): ?>
+					<div class="status-icon success">✓</div>
+				<?php elseif ( $status === 'error' ): ?>
+					<div class="status-icon error">✗</div>
+				<?php else: ?>
+					<div class="status-icon processing">↻</div>
+				<?php endif; ?>
+				
+				<h2>Google Authentication</h2>
+				<p><?php echo esc_html( $message ); ?></p>
+				
+				<script>
+					const payload = <?php echo json_encode( $payload ); ?>;
+					const status = '<?php echo esc_js( $status ); ?>';
+					
+					if (window.opener) {
+						if (status === 'success') {
+							window.opener.postMessage({
+								type: 'GOOGLE_AUTH_SUCCESS',
+								token: payload.token,
+								wp_user: payload.wp_user
+							}, '*');
+						} else if (status === 'error') {
+							window.opener.postMessage({
+								type: 'GOOGLE_AUTH_ERROR',
+								message: '<?php echo esc_js( $message ); ?>'
+							}, '*');
+						}
+						
+						setTimeout(() => {
+							window.close();
+						}, 2000);
+					} else {
 						setTimeout(() => {
 							window.location.href = '/';
 						}, 3000);
