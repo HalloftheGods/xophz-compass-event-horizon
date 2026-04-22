@@ -48,6 +48,13 @@ class Xophz_Compass_Event_Horizon_Public {
 
 		// Handle static asset requests for youmeos/legacy and youmeos/data
 		$request_uri = $_SERVER['REQUEST_URI'] ?? '';
+		
+		// Handle Discord OAuth Callback
+		if ( strpos( $request_uri, '/callback/discord' ) !== false ) {
+			$this->render_discord_callback_page();
+			exit;
+		}
+
 		if ( 
 			strpos( $request_uri, 'youmeos_legacy/' ) !== false || 
 			strpos( $request_uri, 'youmeos_data/' ) !== false ||
@@ -79,6 +86,195 @@ class Xophz_Compass_Event_Horizon_Public {
 			$this->render_youmeos_shell( $app_base );
 			exit;
 		}
+	}
+
+	private function render_discord_callback_page() {
+		$code = $_GET['code'] ?? '';
+		$error = $_GET['error'] ?? '';
+
+		$status = 'processing';
+		$message = 'Authenticating with Discord...';
+		$payload = [];
+
+		if ( $error ) {
+			$status = 'error';
+			$message = 'Discord Auth Error: ' . esc_html( $error );
+		} elseif ( ! $code ) {
+			$status = 'error';
+			$message = 'No authorization code provided.';
+		} else {
+			$client_id     = defined( 'DISCORD_CLIENT_ID' ) ? DISCORD_CLIENT_ID : ( $_ENV['DISCORD_CLIENT_ID'] ?? get_option( 'discord_client_id' ) );
+			$client_secret = defined( 'DISCORD_CLIENT_SECRET' ) ? DISCORD_CLIENT_SECRET : ( $_ENV['DISCORD_CLIENT_SECRET'] ?? get_option( 'discord_client_secret' ) );
+			$redirect_uri  = defined( 'DISCORD_REDIRECT_URI' ) ? DISCORD_REDIRECT_URI : ( $_ENV['DISCORD_REDIRECT_URI'] ?? get_option( 'discord_redirect_uri' ) );
+
+			if ( ! $client_id || ! $client_secret || ! $redirect_uri ) {
+				$status = 'error';
+				$message = 'Discord API configuration is missing.';
+			} else {
+				$response = wp_remote_post( 'https://discord.com/api/oauth2/token', array(
+					'body' => array(
+						'client_id' => $client_id,
+						'client_secret' => $client_secret,
+						'grant_type' => 'authorization_code',
+						'code' => $code,
+						'redirect_uri' => $redirect_uri,
+					),
+				) );
+
+				if ( is_wp_error( $response ) ) {
+					$status = 'error';
+					$message = 'Failed to exchange Discord code: ' . $response->get_error_message();
+				} else {
+					$body = json_decode( wp_remote_retrieve_body( $response ), true );
+					if ( isset( $body['error'] ) ) {
+						$status = 'error';
+						$message = 'Discord API Error: ' . ( $body['error_description'] ?? $body['error'] );
+					} else {
+						$access_token = $body['access_token'];
+						$payload['token'] = $access_token;
+						$status = 'success';
+						$message = 'Discord authentication successful!';
+
+						// Fetch user and auto-login
+						$user_response = wp_remote_get( 'https://discord.com/api/users/@me', array(
+							'headers' => array(
+								'Authorization' => 'Bearer ' . $access_token,
+							),
+						) );
+
+						if ( ! is_wp_error( $user_response ) ) {
+							$discord_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
+							if ( isset( $discord_user['email'] ) ) {
+								$user = get_user_by( 'email', $discord_user['email'] );
+
+								if ( ! $user ) {
+									$username = $discord_user['username'];
+									if ( username_exists( $username ) ) {
+										$username = $username . '_' . wp_generate_password( 4, false );
+									}
+									$password = wp_generate_password();
+									$user_id = wp_create_user( $username, $password, $discord_user['email'] );
+									
+									if ( ! is_wp_error( $user_id ) ) {
+										$user = get_user_by( 'id', $user_id );
+										wp_update_user( array(
+											'ID' => $user_id,
+											'display_name' => $discord_user['global_name'] ?? $discord_user['username']
+										) );
+									}
+								}
+
+								if ( $user && ! is_wp_error( $user ) ) {
+									wp_set_current_user( $user->ID );
+									wp_set_auth_cookie( $user->ID, true );
+									
+									$payload['wp_user'] = array(
+										'user_id' => $user->ID,
+										'user_email' => $user->user_email,
+										'user_nicename' => $user->user_nicename,
+										'user_display_name' => $user->display_name,
+										'user_roles' => $user->roles,
+										'nonce' => wp_create_nonce( 'wp_rest' ),
+										'token' => wp_create_nonce( 'wp_rest' )
+									);
+									$message = 'Login successful! Closing window...';
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		?>
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Discord Authentication</title>
+			<style>
+				body {
+					font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+					background-color: #121212;
+					color: #ffffff;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					height: 100vh;
+					margin: 0;
+					text-align: center;
+				}
+				.container {
+					background: #1e1e1e;
+					padding: 2rem;
+					border-radius: 12px;
+					box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+					max-width: 400px;
+					width: 100%;
+				}
+				.status-icon {
+					font-size: 48px;
+					margin-bottom: 1rem;
+				}
+				.success { color: #43b581; }
+				.error { color: #f04747; }
+				.processing { color: #7289da; animation: pulse 1.5s infinite; }
+				
+				@keyframes pulse {
+					0% { opacity: 0.5; transform: scale(0.95); }
+					50% { opacity: 1; transform: scale(1); }
+					100% { opacity: 0.5; transform: scale(0.95); }
+				}
+			</style>
+		</head>
+		<body>
+			<div class="container">
+				<?php if ( $status === 'success' ): ?>
+					<div class="status-icon success">✓</div>
+				<?php elseif ( $status === 'error' ): ?>
+					<div class="status-icon error">✗</div>
+				<?php else: ?>
+					<div class="status-icon processing">↻</div>
+				<?php endif; ?>
+				
+				<h2>Discord Authentication</h2>
+				<p><?php echo esc_html( $message ); ?></p>
+				
+				<script>
+					// Send message back to parent window
+					const payload = <?php echo json_encode( $payload ); ?>;
+					const status = '<?php echo esc_js( $status ); ?>';
+					
+					if (window.opener) {
+						if (status === 'success') {
+							window.opener.postMessage({
+								type: 'DISCORD_AUTH_SUCCESS',
+								token: payload.token,
+								wp_user: payload.wp_user
+							}, '*');
+						} else if (status === 'error') {
+							window.opener.postMessage({
+								type: 'DISCORD_AUTH_ERROR',
+								message: '<?php echo esc_js( $message ); ?>'
+							}, '*');
+						}
+						
+						// Close popup after a short delay
+						setTimeout(() => {
+							window.close();
+						}, 2000);
+					} else {
+						// Not opened as a popup, maybe redirect?
+						setTimeout(() => {
+							window.location.href = '/';
+						}, 3000);
+					}
+				</script>
+			</div>
+		</body>
+		</html>
+		<?php
 	}
 
 	private function serve_static_asset( $request_uri ) {
@@ -1036,15 +1232,28 @@ if (!empty($spark_id)) {
 	public function generate_spark_manifest( $request ) {
 		$spark_id = sanitize_text_field( $request->get_param('spark') );
 		
+		$og_desc = get_option( 'youmeos_og_description', '' );
+		if ( empty( $og_desc ) ) {
+			$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
+		}
+
 		if ( empty($spark_id) || $spark_id === 'welcome-u' ) {
 			// Main OS Manifest
 			$site_name = get_bloginfo('name');
-			$spark_name = 'YouMeOS on ' . $site_name;
+			if ( stripos( $site_name, 'YouMeOS' ) !== false && strlen( $site_name ) <= 10 ) {
+				$spark_name = 'YouMeOS';
+			} else {
+				$spark_name = 'YouMeOS on ' . $site_name;
+			}
+			$short_name = 'YouMeOS';
+			$description = $og_desc;
 			$start_url = home_url( '/os/' );
 			// Clear spark_id so the fallback icons are used below
 			$spark_id = '';
 		} else {
 			$spark_name = ucwords(str_replace('-', ' ', $spark_id));
+			$short_name = $spark_name;
+			$description = $spark_name . ' - ' . $og_desc;
 			$start_url = home_url( '/os/u/?sparks=' . $spark_id . '&fullscreen=true' );
 		}
 
@@ -1076,7 +1285,8 @@ if (!empty($spark_id)) {
 		$manifest = array(
 			'id' => empty($spark_id) ? home_url( '/os/' ) : home_url( '/os/u/?sparks=' . $spark_id ),
 			'name' => $spark_name,
-			'short_name' => $spark_name,
+			'short_name' => $short_name,
+			'description' => $description,
 			'start_url' => $start_url,
 			'display' => 'standalone',
 			'background_color' => '#000000',
