@@ -143,6 +143,11 @@ class Xophz_Compass_Event_Horizon {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-passport-signer.php';
 
 		/**
+		 * The class responsible for the Jukebox API.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-jukebox.php';
+
+		/**
 		 * The class responsible for the Godhead Taxonomy & Seeding.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-xophz-compass-event-horizon-godhead.php';
@@ -238,6 +243,11 @@ class Xophz_Compass_Event_Horizon {
 		// Register Passport Signer API
 		$passport_signer = new Xophz_Compass_Event_Horizon_Passport_Signer();
 		$this->loader->add_action( 'rest_api_init', $passport_signer, 'register_routes' );
+
+		// Register Jukebox API
+		$jukebox_api = new Xophz_Compass_Event_Horizon_Jukebox();
+		$this->loader->add_action( 'init', $jukebox_api, 'register_cpt' );
+		$this->loader->add_action( 'rest_api_init', $jukebox_api, 'register_routes' );
 
 		// Register AJAX handler for nonce refresh
 		$this->loader->add_action( 'wp_ajax_youmeos_refresh_nonce', $plugin_public, 'ajax_refresh_nonce' );
