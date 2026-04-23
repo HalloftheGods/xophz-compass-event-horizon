@@ -1448,7 +1448,12 @@ if (!empty($spark_id)) {
 			// Clear spark_id so the fallback icons are used below
 			$spark_id = '';
 		} else {
-			$spark_name = ucwords(str_replace('-', ' ', $spark_id));
+			$spark_name_override = sanitize_text_field( $request->get_param('name') );
+			if ( !empty($spark_name_override) ) {
+				$spark_name = $spark_name_override;
+			} else {
+				$spark_name = ucwords(str_replace('-', ' ', $spark_id));
+			}
 			$short_name = $spark_name;
 			$description = $spark_name . ' - ' . $og_desc;
 			$start_url = home_url( '/os/u/?sparks=' . $spark_id . '&fullscreen=true' );
