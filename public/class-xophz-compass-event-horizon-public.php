@@ -138,8 +138,6 @@ class Xophz_Compass_Event_Horizon_Public {
 					} else {
 						$access_token = $body['access_token'];
 						$payload['token'] = $access_token;
-						$status = 'success';
-						$message = 'Discord authentication successful!';
 
 						// Fetch user and auto-login
 						$user_response = wp_remote_get( 'https://discord.com/api/users/@me', array(
@@ -148,10 +146,21 @@ class Xophz_Compass_Event_Horizon_Public {
 							),
 						) );
 
-						if ( ! is_wp_error( $user_response ) ) {
+						if ( is_wp_error( $user_response ) ) {
+							$status = 'error';
+							$message = 'Failed to fetch Discord profile: ' . $user_response->get_error_message();
+						} else {
 							$discord_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
-							if ( isset( $discord_user['email'] ) ) {
-								$user = get_user_by( 'email', $discord_user['email'] );
+							if ( ! isset( $discord_user['email'] ) ) {
+								$status = 'error';
+								$message = 'No email associated with this Discord account.';
+							} else {
+								$user = null;
+								if ( is_user_logged_in() ) {
+									$user = wp_get_current_user();
+								} else {
+									$user = get_user_by( 'email', $discord_user['email'] );
+								}
 
 								if ( ! $user ) {
 									$username = $discord_user['username'];
@@ -161,7 +170,10 @@ class Xophz_Compass_Event_Horizon_Public {
 									$password = wp_generate_password();
 									$user_id = wp_create_user( $username, $password, $discord_user['email'] );
 									
-									if ( ! is_wp_error( $user_id ) ) {
+									if ( is_wp_error( $user_id ) ) {
+										$status = 'error';
+										$message = 'Failed to create user account: ' . $user_id->get_error_message();
+									} else {
 										$user = get_user_by( 'id', $user_id );
 										wp_update_user( array(
 											'ID' => $user_id,
@@ -183,7 +195,11 @@ class Xophz_Compass_Event_Horizon_Public {
 										'nonce' => wp_create_nonce( 'wp_rest' ),
 										'token' => wp_create_nonce( 'wp_rest' )
 									);
+									$status = 'success';
 									$message = 'Login successful! Closing window...';
+								} elseif ( $status !== 'error' ) {
+									$status = 'error';
+									$message = 'Unexpected authentication failure.';
 								}
 							}
 						}
@@ -327,8 +343,6 @@ class Xophz_Compass_Event_Horizon_Public {
 					} else {
 						$access_token = $body['access_token'];
 						$payload['token'] = $access_token;
-						$status = 'success';
-						$message = 'Google authentication successful!';
 
 						// Fetch user and auto-login
 						$user_response = wp_remote_get( 'https://www.googleapis.com/oauth2/v2/userinfo', array(
@@ -337,10 +351,21 @@ class Xophz_Compass_Event_Horizon_Public {
 							),
 						) );
 
-						if ( ! is_wp_error( $user_response ) ) {
+						if ( is_wp_error( $user_response ) ) {
+							$status = 'error';
+							$message = 'Failed to fetch Google profile: ' . $user_response->get_error_message();
+						} else {
 							$google_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
-							if ( isset( $google_user['email'] ) ) {
-								$user = get_user_by( 'email', $google_user['email'] );
+							if ( ! isset( $google_user['email'] ) ) {
+								$status = 'error';
+								$message = 'No email associated with this Google account.';
+							} else {
+								$user = null;
+								if ( is_user_logged_in() ) {
+									$user = wp_get_current_user();
+								} else {
+									$user = get_user_by( 'email', $google_user['email'] );
+								}
 
 								if ( ! $user ) {
 									$email_parts = explode( '@', $google_user['email'] );
@@ -351,7 +376,10 @@ class Xophz_Compass_Event_Horizon_Public {
 									$password = wp_generate_password();
 									$user_id = wp_create_user( $username, $password, $google_user['email'] );
 									
-									if ( ! is_wp_error( $user_id ) ) {
+									if ( is_wp_error( $user_id ) ) {
+										$status = 'error';
+										$message = 'Failed to create user account: ' . $user_id->get_error_message();
+									} else {
 										$user = get_user_by( 'id', $user_id );
 										wp_update_user( array(
 											'ID' => $user_id,
@@ -373,7 +401,11 @@ class Xophz_Compass_Event_Horizon_Public {
 										'nonce' => wp_create_nonce( 'wp_rest' ),
 										'token' => wp_create_nonce( 'wp_rest' )
 									);
+									$status = 'success';
 									$message = 'Login successful! Closing window...';
+								} elseif ( $status !== 'error' ) {
+									$status = 'error';
+									$message = 'Unexpected authentication failure.';
 								}
 							}
 						}
