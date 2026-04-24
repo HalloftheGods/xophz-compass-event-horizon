@@ -1,1 +1,0 @@
-const e=s=>{if(!s)return"";if(s==="xophz-compass")return"compass";const r=s.replace("xophz-compass-","");return r==="golden-keywords"?"golden-keys":r==="quests"?"questbook":r==="post-digger"?"newsroom":r};export{e as g};
