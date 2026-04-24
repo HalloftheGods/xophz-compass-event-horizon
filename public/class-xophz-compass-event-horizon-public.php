@@ -17,11 +17,15 @@ class Xophz_Compass_Event_Horizon_Public {
 	public function register_endpoints() {
 		add_rewrite_rule( '^youmeos(/.*)?$', 'index.php?youmeos=1', 'top' );
 		add_rewrite_rule( '^os(/.*)?$', 'index.php?os=1', 'top' );
+		add_rewrite_rule( '^u(/.*)?$', 'index.php?u=1', 'top' );
+		add_rewrite_rule( '^youniverse(/.*)?$', 'index.php?youniverse=1', 'top' );
 	}
 
 	public function register_query_vars( $vars ) {
 		$vars[] = 'youmeos';
 		$vars[] = 'os';
+		$vars[] = 'u';
+		$vars[] = 'youniverse';
 		return $vars;
 	}
 
@@ -74,7 +78,7 @@ class Xophz_Compass_Event_Horizon_Public {
 		$blocks = get_posts(['post_type' => 'wp_navigation', 'posts_per_page' => -1]);
 		file_put_contents('/tmp/wp_menus_dump.json', json_encode(['traditional' => $menus, 'blocks' => $blocks]));
         
-		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] );
+		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] ) || isset( $wp_query->query_vars['u'] ) || isset( $wp_query->query_vars['youniverse'] );
 		$isConfiguredPageMatch = $this->is_configured_page();
 
 		// Intercept 404s when in homepage mode so we can route SPA sub-paths.
@@ -82,6 +86,9 @@ class Xophz_Compass_Event_Horizon_Public {
 		$isHomepage404Fallback = ( $loadMode === 'homepage' && is_404() );
 
 		if ( $isRouteMatch || $isConfiguredPageMatch || $isHomepage404Fallback ) {
+			status_header( 200 );
+			$wp_query->is_404 = false;
+
 			$share_spark = isset($_GET['share_spark']) ? sanitize_text_field($_GET['share_spark']) : '';
 			if (!empty($share_spark)) {
 				$this->render_share_spark_interceptor($share_spark);
@@ -666,7 +673,10 @@ class Xophz_Compass_Event_Horizon_Public {
 
 	private function resolve_app_base( $wp_query, $isRouteMatch ) {
 		if ( $isRouteMatch ) {
-			return isset( $wp_query->query_vars['youmeos'] ) ? 'youmeos' : 'os';
+			if ( isset( $wp_query->query_vars['youmeos'] ) ) return 'youmeos';
+			if ( isset( $wp_query->query_vars['u'] ) ) return 'u';
+			if ( isset( $wp_query->query_vars['youniverse'] ) ) return 'youniverse';
+			return 'os';
 		}
 
 		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
