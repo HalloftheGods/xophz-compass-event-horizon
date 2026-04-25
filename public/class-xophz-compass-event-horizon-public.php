@@ -592,6 +592,11 @@ class Xophz_Compass_Event_Horizon_Public {
 	}
 
 	public function inject_pi_trigger() {
+		$is_enabled = get_option( 'youmeos_enable_pi_trigger', true );
+		if ( ! $is_enabled ) {
+			return;
+		}
+
 		global $wp_query;
 		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] );
 		

@@ -7,6 +7,7 @@ class Xophz_Compass_Event_Horizon_Admin {
 
 	const OPTION_LOAD_MODE = 'youmeos_load_mode';
 	const OPTION_LOAD_PAGE = 'youmeos_load_page_id';
+	const OPTION_ENABLE_PI_TRIGGER = 'youmeos_enable_pi_trigger';
 	const OPTION_OG_TITLE  = 'youmeos_og_title';
 	const OPTION_OG_DESC   = 'youmeos_og_description';
 	const OPTION_OG_IMAGE  = 'youmeos_og_image';
@@ -162,6 +163,12 @@ class Xophz_Compass_Event_Horizon_Admin {
 			'sanitize_callback' => 'absint',
 		] );
 
+		register_setting( 'youmeos_settings', self::OPTION_ENABLE_PI_TRIGGER, [
+			'type' => 'boolean',
+			'default' => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+		] );
+
 		add_settings_section(
 			'youmeos_portal_section',
 			'Portal Configuration',
@@ -181,6 +188,14 @@ class Xophz_Compass_Event_Horizon_Admin {
 			'youmeos_load_page_field',
 			'Target Page',
 			array( $this, 'render_load_page_field' ),
+			'youmeos-settings',
+			'youmeos_portal_section'
+		);
+
+		add_settings_field(
+			'youmeos_enable_pi_trigger_field',
+			'Enable Pi Trigger',
+			array( $this, 'render_enable_pi_trigger_field' ),
 			'youmeos-settings',
 			'youmeos_portal_section'
 		);
@@ -296,6 +311,16 @@ class Xophz_Compass_Event_Horizon_Admin {
 			togglePageDropdown();
 		})();
 		</script>
+		<?php
+	}
+
+	public function render_enable_pi_trigger_field() {
+		$isEnabled = get_option( self::OPTION_ENABLE_PI_TRIGGER, true );
+		?>
+		<label>
+			<input type="checkbox" name="<?php echo self::OPTION_ENABLE_PI_TRIGGER; ?>" value="1" <?php checked( $isEnabled, true ); ?>>
+			Show the 'π' frontend trigger link to YouMeOS in the bottom left corner.
+		</label>
 		<?php
 	}
 
