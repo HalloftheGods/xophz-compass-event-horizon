@@ -152,6 +152,11 @@ class Xophz_Compass_Event_Horizon {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-xophz-compass-event-horizon-godhead.php';
 
+		/**
+		 * The class responsible for System Stats.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-system-stats.php';
+
 		$this->loader = new Xophz_Compass_Event_Horizon_Loader();
 
 	}
@@ -248,6 +253,10 @@ class Xophz_Compass_Event_Horizon {
 		$jukebox_api = new Xophz_Compass_Event_Horizon_Jukebox();
 		$this->loader->add_action( 'init', $jukebox_api, 'register_cpt' );
 		$this->loader->add_action( 'rest_api_init', $jukebox_api, 'register_routes' );
+
+		// Register System Stats API
+		$system_stats_api = new Xophz_Compass_Event_Horizon_System_Stats();
+		$this->loader->add_action( 'rest_api_init', $system_stats_api, 'register_routes' );
 
 		// Register AJAX handler for nonce refresh
 		$this->loader->add_action( 'wp_ajax_youmeos_refresh_nonce', $plugin_public, 'ajax_refresh_nonce' );
