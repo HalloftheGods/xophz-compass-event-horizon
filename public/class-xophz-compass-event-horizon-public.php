@@ -1340,6 +1340,20 @@ if (!empty($spark_id)) {
 	}
 
 	public function register_api_routes() {
+		// Bypass nonce check for authentication endpoints to prevent 403 Forbidden
+		// when an expired cookie is present but the nonce is missing or invalid.
+		add_filter( 'rest_authentication_errors', function( $error ) {
+			if ( is_wp_error( $error ) && $error->get_error_code() === 'rest_cookie_invalid_nonce' ) {
+				$request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+				if ( strpos( $request_uri, '/xophz-compass/v1/login' ) !== false || 
+				     strpos( $request_uri, '/xophz-compass/v1/register' ) !== false ||
+				     strpos( $request_uri, '/xophz-compass/v1/lostpassword' ) !== false ) {
+					return null;
+				}
+			}
+			return $error;
+		}, 101 );
+
 		register_rest_route( 'xophz-compass/v1', '/register', array(
 			'methods' => 'POST',
 			'callback' => array( $this, 'handle_user_registration' ),
@@ -1823,6 +1837,9 @@ if (!empty($spark_id)) {
 		// Ensure global user state is updated before generating the REST nonce
 		wp_set_current_user( $user->ID );
 
+		$global_variant = get_user_meta( $user->ID, 'youmeos_global_variant', true );
+		$global_blur = get_user_meta( $user->ID, 'youmeos_global_blur', true );
+
 		return rest_ensure_response( array(
 			'message' => 'Login successful',
 			'user_id' => $user->ID,
@@ -1831,6 +1848,8 @@ if (!empty($spark_id)) {
 			'user_display_name' => $user->display_name,
 			'user_roles' => $user->roles,
 			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'global_variant' => $global_variant,
+			'global_blur' => $global_blur,
 		) );
 	}
 
@@ -2063,6 +2082,8 @@ if (!empty($spark_id)) {
 		}
 		
 		$portrait_url = get_user_meta( $user_id, 'youmeos_portrait_url', true );
+		$global_variant = get_user_meta( $user_id, 'youmeos_global_variant', true );
+		$global_blur = get_user_meta( $user_id, 'youmeos_global_blur', true );
 
 		return rest_ensure_response( array(
 			'user_login' => $user->user_login,
@@ -2075,6 +2096,8 @@ if (!empty($spark_id)) {
 			'user_description' => $user->description,
 			'avatar_url' => $avatar_url,
 			'portrait_url' => $portrait_url,
+			'global_variant' => $global_variant,
+			'global_blur' => $global_blur,
 		) );
 	}
 
@@ -2095,6 +2118,14 @@ if (!empty($spark_id)) {
 		
 		if ( is_wp_error( $result ) ) {
 			return $result;
+		}
+
+		if ( isset( $parameters['global_variant'] ) ) {
+			update_user_meta( $user_id, 'youmeos_global_variant', sanitize_text_field( $parameters['global_variant'] ) );
+		}
+		
+		if ( isset( $parameters['global_blur'] ) ) {
+			update_user_meta( $user_id, 'youmeos_global_blur', sanitize_text_field( $parameters['global_blur'] ) );
 		}
 
 		if ( isset( $parameters['avatar_base64'] ) && ! empty( $parameters['avatar_base64'] ) ) {
