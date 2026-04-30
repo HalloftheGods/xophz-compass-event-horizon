@@ -726,6 +726,8 @@ class Xophz_Compass_Event_Horizon_Public {
 			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
 			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ) . '/deprecated',
 			'youmeosDataUrl' => rtrim( $plugin_rel_path, '/' ) . '/youmeos_data',
+			'siteName' => get_bloginfo('name'),
+			'siteUrl' => get_bloginfo('url'),
 			'compassVersion' => $compassVersion,
 			'eventHorizonVersion' => $this->version,
 			'googleClientId' => defined( 'GOOGLE_CLIENT_ID' ) ? GOOGLE_CLIENT_ID : ( $_ENV['GOOGLE_CLIENT_ID'] ?? get_option( 'google_client_id' ) ),
@@ -787,7 +789,7 @@ class Xophz_Compass_Event_Horizon_Public {
 <?php 
 $raw_sparks = isset($_GET['sparks']) ? wp_unslash($_GET['sparks']) : '';
 $spark_id = sanitize_text_field($raw_sparks);
-$is_lite = (isset($_GET['fullscreen']) && $_GET['fullscreen'] === 'true');
+$is_lite = (isset($_GET['fullspark']) && $_GET['fullspark'] === 'true');
 $page_title = $og_title;
 
 if (!empty($raw_sparks)) {
@@ -803,7 +805,7 @@ if (!empty($raw_sparks)) {
 	if (!empty($s_name)) {
 		$spark_id = $s_name; // Use clean name for manifest
 		if ($is_lite) {
-			$page_title = ucwords(str_replace('-', ' ', $s_name));
+			$page_title = 'w⁴ ' . ucwords(str_replace('-', ' ', $s_name)) . ' :: ' . get_bloginfo('name');
 		}
 	}
 }
@@ -885,7 +887,7 @@ if (!empty($spark_id)) {
 		// Build the URL to launch
 		$launch_url = esc_url_raw( add_query_arg( [
 			'sparks' => $spark_id,
-			'fullscreen' => 'true',
+			'fullspark' => 'true',
 			'wormhole_toast' => 'true'
 		], remove_query_arg( ['share_spark', 'width', 'height', 'icon'] ) ) );
 		
@@ -1137,7 +1139,7 @@ if (!empty($spark_id)) {
 				launchUrl.searchParams.delete('height');
 				launchUrl.searchParams.delete('icon');
 				launchUrl.searchParams.set('sparks', '<?php echo esc_js($spark_id); ?>');
-				launchUrl.searchParams.set('fullscreen', 'true');
+				launchUrl.searchParams.set('fullspark', 'true');
 				launchUrl.searchParams.set('wormhole_toast', 'true');
 				
 				const url = launchUrl.toString();
@@ -1517,7 +1519,7 @@ if (!empty($spark_id)) {
 			}
 			$short_name = $spark_name;
 			$description = $spark_name . ' - ' . $og_desc;
-			$start_url = home_url( '/os/u/?sparks=' . $spark_id . '&fullscreen=true' );
+			$start_url = home_url( '/os/u/?sparks=' . $spark_id . '&fullspark=true' );
 		}
 
 		$icon_path = plugin_dir_path( __FILE__ ) . 'images/spark-icons/spark-' . $spark_id . '.svg';
