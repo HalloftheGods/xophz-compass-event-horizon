@@ -8,6 +8,7 @@ class Xophz_Compass_Event_Horizon_Admin {
 	const OPTION_LOAD_MODE = 'youmeos_load_mode';
 	const OPTION_LOAD_PAGE = 'youmeos_load_page_id';
 	const OPTION_ENABLE_PI_TRIGGER = 'youmeos_enable_pi_trigger';
+	const OPTION_SHOW_ADMIN_BAR    = 'youmeos_show_admin_bar';
 	const OPTION_OG_TITLE  = 'youmeos_og_title';
 	const OPTION_OG_DESC   = 'youmeos_og_description';
 	const OPTION_OG_IMAGE  = 'youmeos_og_image';
@@ -48,6 +49,9 @@ class Xophz_Compass_Event_Horizon_Admin {
 	 * @param WP_Admin_Bar $wp_admin_bar The admin bar instance.
 	 */
 	public function add_admin_bar_button( $wp_admin_bar ) {
+		$isDisabled = ! get_option( self::OPTION_SHOW_ADMIN_BAR, true );
+		if ( $isDisabled ) return;
+
 		$icon_url = plugin_dir_url( __FILE__ ) . 'images/youmeos-logo.png';
 
 		$icon_html = '<img src="' . esc_url( $icon_url ) . '" '
@@ -165,7 +169,13 @@ class Xophz_Compass_Event_Horizon_Admin {
 		] );
 
 		register_setting( 'youmeos_settings', self::OPTION_ENABLE_PI_TRIGGER, [
-			'type' => 'string', // Actually boolean, but using string
+			'type' => 'string',
+			'default' => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+		] );
+
+		register_setting( 'youmeos_settings', self::OPTION_SHOW_ADMIN_BAR, [
+			'type' => 'string',
 			'default' => true,
 			'sanitize_callback' => 'rest_sanitize_boolean',
 		] );
@@ -203,6 +213,14 @@ class Xophz_Compass_Event_Horizon_Admin {
 			'youmeos_enable_pi_trigger_field',
 			'Enable Pi Trigger',
 			array( $this, 'render_enable_pi_trigger_field' ),
+			'youmeos-settings',
+			'youmeos_portal_section'
+		);
+
+		add_settings_field(
+			'youmeos_show_admin_bar_field',
+			'Admin Bar Menu',
+			array( $this, 'render_show_admin_bar_field' ),
 			'youmeos-settings',
 			'youmeos_portal_section'
 		);
@@ -296,6 +314,16 @@ class Xophz_Compass_Event_Horizon_Admin {
 		<label>
 			<input type="checkbox" name="<?php echo self::OPTION_ENABLE_PI_TRIGGER; ?>" value="1" <?php checked( $isEnabled, true ); ?>>
 			Show the 'π' frontend trigger link to YouMeOS in the bottom left corner.
+		</label>
+		<?php
+	}
+
+	public function render_show_admin_bar_field() {
+		$isEnabled = get_option( self::OPTION_SHOW_ADMIN_BAR, true );
+		?>
+		<label>
+			<input type="checkbox" name="<?php echo self::OPTION_SHOW_ADMIN_BAR; ?>" value="1" <?php checked( $isEnabled, true ); ?>>
+			Show the YouMeOS menu in the WordPress admin bar.
 		</label>
 		<?php
 	}
