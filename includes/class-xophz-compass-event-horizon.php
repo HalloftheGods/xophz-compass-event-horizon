@@ -193,6 +193,7 @@ class Xophz_Compass_Event_Horizon {
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings' );
 		add_action( 'update_option_youmeos_load_mode', array( $plugin_admin, 'flush_rewrites_on_save' ), 10, 2 );
 		add_action( 'update_option_youmeos_load_page_id', array( $plugin_admin, 'flush_rewrites_on_save' ), 10, 2 );
+		add_action( 'update_option_youmeos_custom_slug', array( $plugin_admin, 'flush_rewrites_on_save' ), 10, 2 );
 
 		// YouMeOS admin bar button — priority 11 places it after the WP logo (priority 10).
 		$this->loader->add_action( 'admin_bar_menu', $plugin_admin, 'add_admin_bar_button', 11 );

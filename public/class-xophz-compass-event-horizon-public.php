@@ -19,6 +19,12 @@ class Xophz_Compass_Event_Horizon_Public {
 		add_rewrite_rule( '^os(/.*)?$', 'index.php?os=1', 'top' );
 		add_rewrite_rule( '^u(/.*)?$', 'index.php?u=1', 'top' );
 		add_rewrite_rule( '^youniverse(/.*)?$', 'index.php?youniverse=1', 'top' );
+
+		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+		$custom_slug = get_option( 'youmeos_custom_slug', '' );
+		if ( $loadMode === 'custom_slug' && ! empty( $custom_slug ) ) {
+			add_rewrite_rule( '^' . preg_quote( $custom_slug, '/' ) . '(/.*)?$', 'index.php?youmeos=1', 'top' );
+		}
 	}
 
 	public function register_query_vars( $vars ) {
@@ -577,7 +583,9 @@ class Xophz_Compass_Event_Horizon_Public {
 
 	private function get_youmeos_base_url( $path = '' ) {
 		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
-		$base_url = home_url( '/youmeos/' );
+		$custom_slug = get_option( 'youmeos_custom_slug', '' );
+		$default_path = ( $loadMode === 'custom_slug' && ! empty( $custom_slug ) ) ? '/' . $custom_slug . '/' : '/youmeos/';
+		$base_url = home_url( $default_path );
 
 		if ( $loadMode === 'homepage' ) {
 			$base_url = home_url( '/' );
@@ -678,6 +686,14 @@ class Xophz_Compass_Event_Horizon_Public {
 
 	private function resolve_app_base( $wp_query, $isRouteMatch ) {
 		if ( $isRouteMatch ) {
+			$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+			$custom_slug = get_option( 'youmeos_custom_slug', '' );
+			$requestPath = trim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ?: '', '/' );
+			
+			if ( $loadMode === 'custom_slug' && ! empty( $custom_slug ) && strpos( $requestPath, $custom_slug ) === 0 ) {
+				return $custom_slug;
+			}
+
 			if ( isset( $wp_query->query_vars['youmeos'] ) ) return 'youmeos';
 			if ( isset( $wp_query->query_vars['u'] ) ) return 'u';
 			if ( isset( $wp_query->query_vars['youniverse'] ) ) return 'youniverse';
@@ -736,21 +752,13 @@ class Xophz_Compass_Event_Horizon_Public {
 			'discordRedirectUri' => defined( 'DISCORD_REDIRECT_URI' ) ? DISCORD_REDIRECT_URI : ( $_ENV['DISCORD_REDIRECT_URI'] ?? get_option( 'discord_redirect_uri' ) ),
 		];
 
-		$og_title = get_option( 'youmeos_og_title', '' );
+		$og_title = get_bloginfo( 'name' );
 		if ( empty( $og_title ) ) {
-			$og_title = get_bloginfo( 'name' );
-			if ( empty( $og_title ) ) $og_title = 'YouMeOS';
+			$og_title = 'YouMeOS';
 		}
 
-		$og_desc = get_option( 'youmeos_og_description', '' );
-		if ( empty( $og_desc ) ) {
-			$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
-		}
-
-		$og_image = get_option( 'youmeos_og_image', '' );
-		if ( empty( $og_image ) ) {
-			$og_image = plugins_url( 'images/takemymoney.jpg', __FILE__ );
-		}
+		$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
+		$og_image = plugins_url( 'images/takemymoney.jpg', __FILE__ );
 
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
 
@@ -1492,10 +1500,7 @@ if (!empty($spark_id)) {
 	public function generate_spark_manifest( $request ) {
 		$spark_id = sanitize_text_field( $request->get_param('spark') );
 		
-		$og_desc = get_option( 'youmeos_og_description', '' );
-		if ( empty( $og_desc ) ) {
-			$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
-		}
+		$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
 
 		if ( empty($spark_id) || $spark_id === 'welcome-u' ) {
 			// Main OS Manifest

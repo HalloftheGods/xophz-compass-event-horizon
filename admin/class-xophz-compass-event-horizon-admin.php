@@ -141,11 +141,12 @@ class Xophz_Compass_Event_Horizon_Admin {
 	public function addToMenu() {
 		Xophz_Compass::add_submenu( $this->plugin_name );
 
-		add_options_page(
+		add_submenu_page(
+			'w4-protocol',
 			'YouMeOS Settings',
 			'YouMeOS',
 			'manage_options',
-			'youmeos-settings',
+			'w4-youmeos',
 			array( $this, 'render_settings_page' )
 		);
 	}
@@ -164,9 +165,15 @@ class Xophz_Compass_Event_Horizon_Admin {
 		] );
 
 		register_setting( 'youmeos_settings', self::OPTION_ENABLE_PI_TRIGGER, [
-			'type' => 'boolean',
+			'type' => 'string', // Actually boolean, but using string
 			'default' => true,
 			'sanitize_callback' => 'rest_sanitize_boolean',
+		] );
+
+		register_setting( 'youmeos_settings', 'youmeos_custom_slug', [
+			'type' => 'string',
+			'default' => '',
+			'sanitize_callback' => 'sanitize_title',
 		] );
 
 		add_settings_section(
@@ -200,62 +207,18 @@ class Xophz_Compass_Event_Horizon_Admin {
 			'youmeos_portal_section'
 		);
 
-		// Open Graph Settings
-		register_setting( 'youmeos_settings', self::OPTION_OG_TITLE, [
-			'type' => 'string',
-			'sanitize_callback' => 'sanitize_text_field',
-		] );
-
-		register_setting( 'youmeos_settings', self::OPTION_OG_DESC, [
-			'type' => 'string',
-			'sanitize_callback' => 'sanitize_textarea_field',
-		] );
-
-		register_setting( 'youmeos_settings', self::OPTION_OG_IMAGE, [
-			'type' => 'string',
-			'sanitize_callback' => 'esc_url_raw',
-		] );
-
-		add_settings_section(
-			'youmeos_seo_section',
-			'Open Graph & Social Sharing',
-			array( $this, 'render_seo_section_description' ),
-			'youmeos-settings'
-		);
-
-		add_settings_field(
-			'youmeos_og_title_field',
-			'Social Title',
-			array( $this, 'render_og_title_field' ),
-			'youmeos-settings',
-			'youmeos_seo_section'
-		);
-
-		add_settings_field(
-			'youmeos_og_desc_field',
-			'Social Description',
-			array( $this, 'render_og_desc_field' ),
-			'youmeos-settings',
-			'youmeos_seo_section'
-		);
-
-		add_settings_field(
-			'youmeos_og_image_field',
-			'Social Image URL',
-			array( $this, 'render_og_image_field' ),
-			'youmeos-settings',
-			'youmeos_seo_section'
-		);
 	}
 
 	public function sanitize_load_mode( $value ) {
-		$validModes = [ 'routes_only', 'homepage', 'specific_page' ];
+		$validModes = [ 'routes_only', 'homepage', 'specific_page', 'custom_slug' ];
 		$isValid = in_array( $value, $validModes, true );
 		return $isValid ? $value : 'routes_only';
 	}
 
 	public function flush_rewrites_on_save( $old_value, $new_value ) {
-		flush_rewrite_rules();
+		if ( $old_value !== $new_value ) {
+			delete_option( 'rewrite_rules' );
+		}
 	}
 
 	public function render_section_description() {
@@ -264,12 +227,18 @@ class Xophz_Compass_Event_Horizon_Admin {
 
 	public function render_load_mode_field() {
 		$currentMode = get_option( self::OPTION_LOAD_MODE, 'routes_only' );
+		$customSlug = get_option( 'youmeos_custom_slug', '' );
 		?>
 		<fieldset>
 			<label>
 				<input type="radio" name="<?php echo self::OPTION_LOAD_MODE; ?>" value="routes_only" <?php checked( $currentMode, 'routes_only' ); ?>>
 				<strong>Routes Only</strong> — <code>/youmeos/</code> and <code>/os/</code> only
 			</label><br>
+			<label style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+				<input type="radio" name="<?php echo self::OPTION_LOAD_MODE; ?>" value="custom_slug" <?php checked( $currentMode, 'custom_slug' ); ?>>
+				<strong>Custom Slug</strong> — 
+				<code>/</code> <input type="text" id="youmeos_custom_slug_input" name="youmeos_custom_slug" value="<?php echo esc_attr( $customSlug ); ?>" class="regular-text" placeholder="e.g. portal" style="width: 150px;" /> <code>/</code>
+			</label>
 			<label>
 				<input type="radio" name="<?php echo self::OPTION_LOAD_MODE; ?>" value="homepage" <?php checked( $currentMode, 'homepage' ); ?>>
 				<strong>Homepage</strong> — Replace the site's front page with YouMeOS
@@ -300,15 +269,22 @@ class Xophz_Compass_Event_Horizon_Admin {
 		(function() {
 			const radios = document.querySelectorAll('input[name="<?php echo self::OPTION_LOAD_MODE; ?>"]');
 			const pageRow = document.getElementById('<?php echo self::OPTION_LOAD_PAGE; ?>').closest('tr');
+			const slugInput = document.getElementById('youmeos_custom_slug_input');
 
-			function togglePageDropdown() {
+			function toggleDropdowns() {
 				const selected = document.querySelector('input[name="<?php echo self::OPTION_LOAD_MODE; ?>"]:checked');
 				const isSpecificPage = selected && selected.value === 'specific_page';
-				pageRow.style.display = isSpecificPage ? '' : 'none';
+				const isCustomSlug = selected && selected.value === 'custom_slug';
+				
+				if (pageRow) pageRow.style.display = isSpecificPage ? '' : 'none';
+				if (slugInput) {
+					slugInput.disabled = !isCustomSlug;
+					if (isCustomSlug) slugInput.focus();
+				}
 			}
 
-			radios.forEach(function(radio) { radio.addEventListener('change', togglePageDropdown); });
-			togglePageDropdown();
+			radios.forEach(function(radio) { radio.addEventListener('change', toggleDropdowns); });
+			toggleDropdowns();
 		})();
 		</script>
 		<?php
@@ -324,33 +300,8 @@ class Xophz_Compass_Event_Horizon_Admin {
 		<?php
 	}
 
-	public function render_seo_section_description() {
-		echo '<p>Configure the Open Graph and Twitter Card metadata to ensure the portal looks great when shared on social platforms.</p>';
-	}
 
-	public function render_og_title_field() {
-		$val = get_option( self::OPTION_OG_TITLE, '' );
-		?>
-		<input type="text" name="<?php echo self::OPTION_OG_TITLE; ?>" value="<?php echo esc_attr( $val ); ?>" class="regular-text" placeholder="e.g. YouMeOS" />
-		<p class="description">Falls back to the site title if left empty.</p>
-		<?php
-	}
 
-	public function render_og_desc_field() {
-		$val = get_option( self::OPTION_OG_DESC, '' );
-		?>
-		<textarea name="<?php echo self::OPTION_OG_DESC; ?>" rows="3" class="large-text" placeholder="e.g. YouMeOS - A Compass Gateway"><?php echo esc_textarea( $val ); ?></textarea>
-		<p class="description">Falls back to the site tagline if left empty.</p>
-		<?php
-	}
-
-	public function render_og_image_field() {
-		$val = get_option( self::OPTION_OG_IMAGE, '' );
-		?>
-		<input type="url" name="<?php echo self::OPTION_OG_IMAGE; ?>" value="<?php echo esc_attr( $val ); ?>" class="regular-text" placeholder="https://youmeos.com/takemymoney.jpg" />
-		<p class="description">The default image shown when the site is shared.</p>
-		<?php
-	}
 
 	public function render_settings_page() {
 		?>
