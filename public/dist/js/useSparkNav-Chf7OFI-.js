@@ -1,1 +1,0 @@
-import{j as s}from"./youmeos-dG4BY8wd.js";import{e as m}from"./vendor-Bpc7D26J.js";const i=r=>{const t=s(),n=m(()=>t.windows[r]?.urme||[]);return{currentUrme:n,navigate:(...e)=>{const o=Array.isArray(e[0])?e[0]:e;t.setSparkUrme(r,o)},pushUrme:e=>{const o=[...n.value];o.push(e),t.setSparkUrme(r,o)},popUrme:()=>{const e=[...n.value];e.pop(),t.setSparkUrme(r,e)}}};export{i as u};
