@@ -1,0 +1,4 @@
+# Exclude dev-only or redundant folders from the plugin zip
+public/youmeos_legacy/ export-ignore
+public/youmeos_data/ export-ignore
+public/deprecated/audio/bgmusic.ogg export-ignore
