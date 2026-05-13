@@ -615,7 +615,7 @@ class Xophz_Compass_Event_Horizon_Public {
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
 		$base_url = rtrim( $this->get_youmeos_base_url(), '/' );
 		$separator = ( parse_url( $base_url, PHP_URL_QUERY ) == null ) ? '?' : '&';
-		$target_url = $base_url . $separator . 'sparks=logos&logos_target=' . urlencode( $current_url );
+		$target_url = $base_url . $separator . 'sparks=u-logos&skip_restore=true&fullscreen=true&logos_target=' . urlencode( $current_url );
 		?>
 		<style>
 			#youmeos-pi-trigger {
@@ -665,8 +665,37 @@ class Xophz_Compass_Event_Horizon_Public {
 				max-width: 80px;
 				opacity: 1;
 			}
+			#youmeos-pi-trigger::before {
+				content: attr(data-tooltip);
+				position: absolute;
+				left: 100%;
+				top: 50%;
+				transform: translateY(-50%) translateX(15px);
+				margin-left: 8px;
+				opacity: 0;
+				pointer-events: none;
+				background: rgba(10, 15, 25, 0.85);
+				backdrop-filter: blur(12px);
+				-webkit-backdrop-filter: blur(12px);
+				color: #e2f2ff;
+				padding: 8px 14px;
+				border-radius: 8px;
+				font-size: 13px;
+				font-family: var(--mh-font-body, system-ui, sans-serif);
+				font-weight: 500;
+				letter-spacing: 0.5px;
+				white-space: nowrap;
+				border: 1px solid rgba(98, 201, 255, 0.25);
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 12px rgba(98, 201, 255, 0.15);
+				transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+			}
+
+			#youmeos-pi-trigger:hover::before {
+				opacity: 1;
+				transform: translateY(-50%) translateX(0);
+			}
 		</style>
-		<a id="youmeos-pi-trigger" href="<?php echo esc_url( $target_url ); ?>" title="Load YouMeOS">
+		<a id="youmeos-pi-trigger" href="<?php echo esc_url( $target_url ); ?>" data-tooltip="Discover a 4D browsing experience..." target="_blank">
 			<span class="pi-symbol">π</span>
 			<span class="pi-text">meos</span>
 		</a>
