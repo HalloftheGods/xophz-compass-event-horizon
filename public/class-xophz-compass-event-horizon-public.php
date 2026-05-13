@@ -164,15 +164,33 @@ class Xophz_Compass_Event_Horizon_Public {
 							$message = 'Failed to fetch Discord profile: ' . $user_response->get_error_message();
 						} else {
 							$discord_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
-							if ( ! isset( $discord_user['email'] ) ) {
+							
+							if ( ! isset( $discord_user['id'] ) ) {
+								$status = 'error';
+								$message = 'No Discord ID associated with this account.';
+							} elseif ( ! isset( $discord_user['email'] ) ) {
 								$status = 'error';
 								$message = 'No email associated with this Discord account.';
 							} else {
 								$user = null;
+								$discord_id = $discord_user['id'];
+								
 								if ( is_user_logged_in() ) {
 									$user = wp_get_current_user();
 								} else {
-									$user = get_user_by( 'email', $discord_user['email'] );
+									// 1. Try to find by strong link (Discord ID)
+									$users = get_users( array(
+										'meta_key' => 'discord_oauth_id',
+										'meta_value' => $discord_id,
+										'number' => 1
+									) );
+									
+									if ( ! empty( $users ) ) {
+										$user = $users[0];
+									} else {
+										// 2. Fall back to email matching
+										$user = get_user_by( 'email', $discord_user['email'] );
+									}
 								}
 
 								if ( ! $user ) {
@@ -196,6 +214,9 @@ class Xophz_Compass_Event_Horizon_Public {
 								}
 
 								if ( $user && ! is_wp_error( $user ) ) {
+									// 3. Always ensure the Discord ID is saved/updated for strong linking
+									update_user_meta( $user->ID, 'discord_oauth_id', $discord_id );
+									
 									wp_set_current_user( $user->ID );
 									wp_set_auth_cookie( $user->ID, true );
 									
@@ -369,15 +390,33 @@ class Xophz_Compass_Event_Horizon_Public {
 							$message = 'Failed to fetch Google profile: ' . $user_response->get_error_message();
 						} else {
 							$google_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
-							if ( ! isset( $google_user['email'] ) ) {
+							
+							if ( ! isset( $google_user['id'] ) ) {
+								$status = 'error';
+								$message = 'No Google ID associated with this account.';
+							} elseif ( ! isset( $google_user['email'] ) ) {
 								$status = 'error';
 								$message = 'No email associated with this Google account.';
 							} else {
 								$user = null;
+								$google_id = $google_user['id'];
+								
 								if ( is_user_logged_in() ) {
 									$user = wp_get_current_user();
 								} else {
-									$user = get_user_by( 'email', $google_user['email'] );
+									// 1. Try to find by strong link (Google ID)
+									$users = get_users( array(
+										'meta_key' => 'google_oauth_id',
+										'meta_value' => $google_id,
+										'number' => 1
+									) );
+									
+									if ( ! empty( $users ) ) {
+										$user = $users[0];
+									} else {
+										// 2. Fall back to email matching
+										$user = get_user_by( 'email', $google_user['email'] );
+									}
 								}
 
 								if ( ! $user ) {
@@ -402,6 +441,9 @@ class Xophz_Compass_Event_Horizon_Public {
 								}
 
 								if ( $user && ! is_wp_error( $user ) ) {
+									// 3. Always ensure the Google ID is saved/updated for strong linking
+									update_user_meta( $user->ID, 'google_oauth_id', $google_id );
+									
 									wp_set_current_user( $user->ID );
 									wp_set_auth_cookie( $user->ID, true );
 									
