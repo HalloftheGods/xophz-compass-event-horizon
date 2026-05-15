@@ -1627,7 +1627,7 @@ if (!empty($spark_id)) {
 			}
 			$short_name = 'YouMeOS';
 			$description = $og_desc;
-			$start_url = home_url( '/os/' );
+			$start_url = '/os/';
 			// Clear spark_id so the fallback icons are used below
 			$spark_id = '';
 		} else {
@@ -1639,7 +1639,7 @@ if (!empty($spark_id)) {
 			}
 			$short_name = $spark_name;
 			$description = $spark_name . ' - ' . $og_desc;
-			$start_url = home_url( '/os/u/?sparks=' . $spark_id . '&fullspark=true' );
+			$start_url = '/os/u/?sparks=' . $spark_id . '&fullspark=true';
 		}
 
 		$icon_path = plugin_dir_path( __FILE__ ) . 'images/spark-icons/spark-' . $spark_id . '.svg';
@@ -1668,7 +1668,7 @@ if (!empty($spark_id)) {
 		}
 
 		$manifest = array(
-			'id' => empty($spark_id) ? home_url( '/os/' ) : home_url( '/os/u/?sparks=' . $spark_id ),
+			'id' => empty($spark_id) ? '/os/' : '/os/u/?sparks=' . $spark_id,
 			'name' => $spark_name,
 			'short_name' => $short_name,
 			'description' => $description,
