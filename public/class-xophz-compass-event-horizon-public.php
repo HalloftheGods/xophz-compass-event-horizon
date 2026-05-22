@@ -829,6 +829,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ) . '/deprecated',
 			'youmeosDataUrl' => rtrim( $plugin_rel_path, '/' ) . '/data',
 			'siteName' => get_bloginfo('name'),
+			'siteDescription' => get_bloginfo('description'),
 			'siteUrl' => get_bloginfo('url'),
 			'compassVersion' => $compassVersion,
 			'eventHorizonVersion' => $this->version,
