@@ -55,7 +55,7 @@ class Xophz_Compass_Event_Horizon_Godhead {
       'show_tagcloud'              => true,
       'show_in_rest'               => true,
     );
-    register_taxonomy( 'godhead_trait', array( 'xp_action' ), $args );
+    register_taxonomy( 'godhead_trait', array( 'xp_log' ), $args );
 
     // 2. Seed the DB if not already seeded
     if ( ! get_option( 'xophz_godhead_seeded_v2' ) ) {
