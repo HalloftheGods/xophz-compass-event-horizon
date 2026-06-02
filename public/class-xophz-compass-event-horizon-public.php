@@ -1140,14 +1140,14 @@ if (!empty($spark_id)) {
 					background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
 				}
 				.notice {
-					font-size: 18px;
+					font-size: 24px;
 					font-weight: 200;
 					opacity: 0.8;
 					color: #ffffff;
 					letter-spacing: 1px;
 					font-family: "Source Sans Pro", -apple-system, sans-serif;
 					text-shadow: 0 4px 12px rgba(0,0,0,0.8);
-					line-height: 1.6;
+					line-height: 1.5;
 					max-width: 400px;
 					text-align: left;
 				}
