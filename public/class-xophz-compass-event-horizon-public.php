@@ -1140,14 +1140,14 @@ if (!empty($spark_id)) {
 					background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
 				}
 				.notice {
-					font-size: 24px;
+					font-size: 18px;
 					font-weight: 200;
 					opacity: 0.8;
 					color: #ffffff;
 					letter-spacing: 1px;
 					font-family: "Source Sans Pro", -apple-system, sans-serif;
 					text-shadow: 0 4px 12px rgba(0,0,0,0.8);
-					line-height: 1.5;
+					line-height: 1.6;
 					max-width: 400px;
 					text-align: left;
 				}
@@ -1186,6 +1186,10 @@ if (!empty($spark_id)) {
 		<body>
 			<div id="bg-container"></div>
 			
+			<div id="countdown-text" style="position: absolute; top: calc(50% - 130px); left: 50%; transform: translateX(-50%); z-index: 5; text-align: center; color: white; font-family: 'Source Sans Pro', sans-serif; font-size: 18px; font-weight: 200; opacity: 0.9; letter-spacing: 1px; display: none; width: 100%;">
+				Opening wormhole to <span style="color: #d9be6f; font-weight: 400; text-transform: uppercase;"><?php echo esc_html(str_replace('-', ' ', $spark_id)); ?></span> in <strong id="countdown-timer" style="font-weight: 400; color: #d9be6f;">5</strong>... <a href="#" id="open-now-btn" onclick="launchSpark(); return false;" style="color: #62c9ff; text-decoration: underline; margin-left: 10px; font-size: 16px; font-weight: 400; vertical-align: middle; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">(open now)</a>
+			</div>
+
 			<div id="nostalgia-text">
 				<div class="nostalgia-icon">
 					<img src="<?php echo plugins_url( 'dist/omega-logox300.png', __FILE__ ); ?>" alt="Omega Logo" class="omega-spin" style="width: 160px; height: 160px;">
@@ -1199,10 +1203,6 @@ if (!empty($spark_id)) {
 					<?php echo esc_html(str_replace('-', ' ', $spark_id)); ?></strong>
 					... stays the course ...
 				</div>
-			</div>
-
-			<div id="countdown-text" style="position: absolute; top: calc(50% + 90px); left: 50%; transform: translateX(-50%); z-index: 5; text-align: center; color: white; font-family: 'Source Sans Pro', sans-serif; font-size: 32px; font-weight: 200; opacity: 0.9; letter-spacing: 2px; display: none; width: 100%;">
-				Opening wormhole to <span style="color: #d9be6f; font-weight: 400; text-transform: uppercase;"><?php echo esc_html(str_replace('-', ' ', $spark_id)); ?></span> in <strong id="countdown-timer" style="font-weight: 400; color: #d9be6f;">5</strong>... <a href="#" id="open-now-btn" onclick="launchSpark(); return false;" style="color: #62c9ff; text-decoration: underline; margin-left: 15px; font-size: 20px; font-weight: 400; vertical-align: middle; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">(open now)</a>
 			</div>
 
 			<div id="nostalgia-quote">
@@ -1422,9 +1422,9 @@ if (!empty($spark_id)) {
 					} else {
 						// Successfully auto-launched
 						if (countdownText) {
-							countdownText.innerHTML = `You may now close this wormhole.<br/><br/><span style="opacity: 0.6; font-size: 20px; font-weight: 200;">
+							countdownText.innerHTML = `<span style="opacity: 0.7; font-size: 16px; font-weight: 200; letter-spacing: 1px;">
 							YouMeOS thanks you for Traversing the ⁴th dimension. Safe Traversals!
-							</span>`;
+							</span><br/><br/>You may now close this wormhole.`;
 						}
 					}
 				}
