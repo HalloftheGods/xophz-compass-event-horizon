@@ -1466,19 +1466,17 @@ if (!empty($spark_id)) {
 	}
 
 	public function register_api_routes() {
-		// Bypass nonce check for authentication endpoints to prevent 403 Forbidden
-		// when an expired cookie is present but the nonce is missing or invalid.
+		// Bypass nonce check and security plugins for authentication endpoints 
+		// to prevent 403 Forbidden on login/register/lostpassword.
 		add_filter( 'rest_authentication_errors', function( $error ) {
-			if ( is_wp_error( $error ) && $error->get_error_code() === 'rest_cookie_invalid_nonce' ) {
-				$request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-				if ( strpos( $request_uri, '/xophz-compass/v1/login' ) !== false || 
-				     strpos( $request_uri, '/xophz-compass/v1/register' ) !== false ||
-				     strpos( $request_uri, '/xophz-compass/v1/lostpassword' ) !== false ) {
-					return null;
-				}
+			$request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+			if ( strpos( $request_uri, '/xophz-compass/v1/login' ) !== false || 
+			     strpos( $request_uri, '/xophz-compass/v1/register' ) !== false ||
+			     strpos( $request_uri, '/xophz-compass/v1/lostpassword' ) !== false ) {
+				return true;
 			}
 			return $error;
-		}, 101 );
+		}, 999 );
 
 		register_rest_route( 'xophz-compass/v1', '/register', array(
 			'methods' => 'POST',
@@ -1954,7 +1952,7 @@ if (!empty($spark_id)) {
 		$user = wp_signon( $creds, false );
 
 		if ( is_wp_error( $user ) ) {
-			return new WP_Error( 'invalid_credentials', 'Invalid username or password.', array( 'status' => 403 ) );
+			return new WP_Error( 'invalid_credentials', $user->get_error_message(), array( 'status' => 403 ) );
 		}
 
 		// Ensure global user state is updated before generating the REST nonce
