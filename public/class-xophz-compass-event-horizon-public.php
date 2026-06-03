@@ -914,6 +914,7 @@ if (!empty($spark_id)) {
 <link rel="manifest" href="<?php echo esc_url( $manifest_url ); ?>">
 
 <title><?php echo esc_html( $page_title ); ?></title>
+<?php wp_site_icon(); ?>
 <style>
     body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
     #youmeos-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -1000,6 +1001,7 @@ if (!empty($spark_id)) {
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 			<title>Incoming <?php echo esc_html(ucwords(str_replace('-', ' ', $spark_id))); ?> | YouMeOS</title>
+			<?php wp_site_icon(); ?>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
 			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
