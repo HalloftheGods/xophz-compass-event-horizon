@@ -1467,13 +1467,13 @@ if (!empty($spark_id)) {
 
 	public function register_api_routes() {
 		// Bypass nonce check and security plugins for authentication endpoints 
-		// to prevent 403 Forbidden on login/register/lostpassword.
+		// to prevent 403 Forbidden on login/register/lostpassword when stale cookies are present.
 		add_filter( 'rest_authentication_errors', function( $error ) {
 			$request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 			if ( strpos( $request_uri, '/xophz-compass/v1/login' ) !== false || 
 			     strpos( $request_uri, '/xophz-compass/v1/register' ) !== false ||
 			     strpos( $request_uri, '/xophz-compass/v1/lostpassword' ) !== false ) {
-				return true;
+				return null; // Explicitly treat as logged out and clear any nonce errors
 			}
 			return $error;
 		}, 999 );
