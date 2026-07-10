@@ -1945,20 +1945,24 @@ if (!empty($spark_id)) {
 	}
 
 	public function handle_user_login( $request ) {
-		$creds = array(
-			'user_login'    => $request->get_param( 'username' ),
-			'user_password' => $request->get_param( 'password' ),
-			'remember'      => true
-		);
+		$username = $request->get_param( 'username' );
+		$password = $request->get_param( 'password' );
 
-		$user = wp_signon( $creds, false );
+		// Authenticate directly bypassing 'authenticate' filters (avoids CAPTCHA & App Passwords conflicts)
+		$user = wp_authenticate_username_password( null, $username, $password );
+		if ( is_wp_error( $user ) ) {
+			$user = wp_authenticate_email_password( null, $username, $password );
+		}
 
 		if ( is_wp_error( $user ) ) {
+			do_action( 'wp_login_failed', $username, clone $user );
 			return new WP_Error( 'invalid_credentials', $user->get_error_message(), array( 'status' => 403 ) );
 		}
 
 		// Ensure global user state is updated before generating the REST nonce
 		wp_set_current_user( $user->ID );
+		wp_set_auth_cookie( $user->ID, true, is_ssl() );
+		do_action( 'wp_login', $user->user_login, $user );
 
 		$global_variant = get_user_meta( $user->ID, 'youmeos_global_variant', true );
 		$global_blur = get_user_meta( $user->ID, 'youmeos_global_blur', true );
@@ -2004,11 +2008,22 @@ if (!empty($spark_id)) {
 			) );
 		}
 
-		$result = retrieve_password( $user_login );
+		$key = get_password_reset_key( $user_data );
 
-		if ( is_wp_error( $result ) ) {
-			return $result;
+		if ( is_wp_error( $key ) ) {
+			return new WP_Error( 'reset_failed', 'Could not generate reset key.', array( 'status' => 500 ) );
 		}
+
+		$message = __( 'Someone has requested a password reset for the following account:' ) . "\r\n\r\n";
+		$message .= sprintf( __( 'Site Name: %s' ), wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) ) . "\r\n\r\n";
+		$message .= sprintf( __( 'Username: %s' ), $user_data->user_login ) . "\r\n\r\n";
+		$message .= __( 'If this was a mistake, just ignore this email and nothing will happen.' ) . "\r\n\r\n";
+		$message .= __( 'To reset your password, visit the following address:' ) . "\r\n\r\n";
+		$message .= network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_data->user_login ), 'login' ) . "\r\n";
+
+		$title = sprintf( __( '[%s] Password Reset' ), wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) );
+
+		wp_mail( $user_data->user_email, $title, $message );
 
 		return rest_ensure_response( array(
 			'success' => true,
