@@ -56,8 +56,13 @@ class Xophz_Compass_Event_Horizon_Public {
 	public function template_redirect() {
 		global $wp_query;
 
-		// Handle static asset requests for youmeos/legacy and youmeos/data
+		// Do not intercept WordPress admin or login routes.
 		$request_uri = $_SERVER['REQUEST_URI'] ?? '';
+		if ( strpos( $request_uri, '/wp-admin' ) === 0 || strpos( $request_uri, '/wp-login.php' ) === 0 ) {
+			return;
+		}
+
+		// Handle static asset requests for youmeos/legacy and youmeos/data
 		
 		// Handle Clean Spark Share URLs (e.g., /spark/solitaire or /spark/solitaire/800/600)
 		if ( preg_match( '#^/spark/([a-zA-Z0-9_-]+)(?:/(\d+)/(\d+))?#', $request_uri, $matches ) ) {
