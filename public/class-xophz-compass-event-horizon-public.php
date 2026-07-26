@@ -2150,23 +2150,38 @@ if (!empty($spark_id)) {
 			}
 		}
 		
-		$compiled = sprintf(
-			"I am a %s, %s, and %s being. I create an environment of %s, %s, and %s. Where others feel %s, %s, and %s.",
-			$mission['trait1'], $mission['trait2'], $mission['trait3'],
-			$mission['env1'], $mission['env2'], $mission['env3'],
-			$mission['feel1'], $mission['feel2'], $mission['feel3']
-		);
-		
-		// Optional: avoid inserting weird punctuation if all fields are empty
-		if ( trim($compiled) === "I am a , , and  being. I create an environment of , , and . Where others feel , , and ." ) {
-			$compiled = '';
+		$format_list = function( $items ) {
+			$filtered = array_values( array_filter( array_map( 'trim', $items ) ) );
+			$count = count( $filtered );
+			if ( $count === 0 ) return '';
+			if ( $count === 1 ) return $filtered[0];
+			if ( $count === 2 ) return $filtered[0] . ' and ' . $filtered[1];
+			return implode( ', ', array_slice( $filtered, 0, -1 ) ) . ', and ' . $filtered[$count - 1];
+		};
+
+		$traits_str = $format_list( array( $mission['trait1'], $mission['trait2'], $mission['trait3'] ) );
+		$env_str    = $format_list( array( $mission['env1'], $mission['env2'], $mission['env3'] ) );
+		$feel_str   = $format_list( array( $mission['feel1'], $mission['feel2'], $mission['feel3'] ) );
+
+		$parts = array();
+		if ( ! empty( $traits_str ) ) {
+			$parts[] = "I am a {$traits_str} being.";
 		}
+		if ( ! empty( $env_str ) ) {
+			$parts[] = "I create an environment of {$env_str}.";
+		}
+		if ( ! empty( $feel_str ) ) {
+			$parts[] = "Where others experience {$feel_str}.";
+		}
+
+		$compiled = implode( ' ', $parts );
 
 		wp_update_user( array( 'ID' => $user_id, 'description' => trim( $compiled ) ) );
 		
 		return rest_ensure_response( array(
 			'message' => 'Mission statement committed successfully.',
-			'mission' => $mission
+			'mission' => $mission,
+			'bio'     => trim( $compiled )
 		) );
 	}
 
@@ -2256,6 +2271,7 @@ if (!empty($spark_id)) {
 		if ( isset( $parameters['display_name'] ) ) $args['display_name'] = sanitize_text_field( $parameters['display_name'] );
 		if ( isset( $parameters['user_email'] ) ) $args['user_email'] = sanitize_email( $parameters['user_email'] );
 		if ( isset( $parameters['user_url'] ) ) $args['user_url'] = esc_url_raw( $parameters['user_url'] );
+		if ( isset( $parameters['user_description'] ) ) $args['description'] = sanitize_textarea_field( $parameters['user_description'] );
 		
 		$result = wp_update_user( $args );
 		

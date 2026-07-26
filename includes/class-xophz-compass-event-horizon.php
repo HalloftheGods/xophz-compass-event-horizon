@@ -133,6 +133,11 @@ class Xophz_Compass_Event_Horizon {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-tasks.php';
 
 		/**
+		 * The class responsible for the Helios Reflections CPT and REST API.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-reflections.php';
+
+		/**
 		 * The class responsible for the Reactions API.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-reactions.php';
@@ -247,6 +252,11 @@ class Xophz_Compass_Event_Horizon {
 		// Register Tasks (Bubblegum) CPT and API
 		$this->loader->add_action( 'init', $tasks_api, 'register_cpt' );
 		$this->loader->add_action( 'rest_api_init', $tasks_api, 'register_routes' );
+
+		// Register Helios Reflections CPT and API
+		$reflections_api = new Xophz_Compass_Event_Horizon_Reflections();
+		$this->loader->add_action( 'init', $reflections_api, 'register_cpt' );
+		$this->loader->add_action( 'rest_api_init', $reflections_api, 'register_routes' );
 
 		// Register Reactions API
 		$this->loader->add_action( 'rest_api_init', $reactions_api, 'register_routes' );
