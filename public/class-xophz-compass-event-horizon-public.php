@@ -956,9 +956,11 @@ if (!empty($spark_id)) {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
 <script>window.xophzCompassSettings = <?php echo json_encode($settings); ?>;</script>
 
-<?php if ( $this->is_dev_server() ) : ?>
-    <script type="module" src="http://localhost:9000/@vite/client"></script>
-    <script type="module" src="http://localhost:9000/apps/youmeos/mount-youmeos.ts"></script>
+<?php if ( $this->is_dev_server() ) : 
+    $dev_url = $this->get_dev_server_url();
+?>
+    <script type="module" src="<?php echo esc_url( $dev_url ); ?>/@vite/client"></script>
+    <script type="module" src="<?php echo esc_url( $dev_url ); ?>/apps/youmeos/mount-youmeos.ts"></script>
 <?php else : 
     $manifest_path = plugin_dir_path( __FILE__ ) . 'dist/.vite/manifest.json';
     $manifest = file_exists($manifest_path) ? json_decode(file_get_contents($manifest_path), true) : null;
@@ -1014,9 +1016,11 @@ if (!empty($spark_id)) {
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 			<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
 			
-			<?php if ( $this->is_dev_server() ) : ?>
-				<script type="module" src="http://localhost:9000/@vite/client"></script>
-				<script type="module" src="http://localhost:9000/apps/youmeos/styles/_vendor.scss"></script>
+			<?php if ( $this->is_dev_server() ) : 
+				$dev_url = $this->get_dev_server_url();
+			?>
+				<script type="module" src="<?php echo esc_url( $dev_url ); ?>/@vite/client"></script>
+				<script type="module" src="<?php echo esc_url( $dev_url ); ?>/apps/youmeos/styles/_vendor.scss"></script>
 			<?php else : 
 				$manifest_path = plugin_dir_path( __FILE__ ) . 'dist/.vite/manifest.json';
 				$manifest = file_exists($manifest_path) ? json_decode(file_get_contents($manifest_path), true) : null;
@@ -1456,8 +1460,33 @@ if (!empty($spark_id)) {
 		<?php
 	}
 
+	private function check_dev_server() {
+		$vite_port = defined( 'VITE_DEV_SERVER_PORT' ) ? VITE_DEV_SERVER_PORT : '8081';
+		$context   = stream_context_create( array(
+			'http' => array( 'timeout' => 0.5 ),
+		) );
+		$internal_host = 'compass';
+		$response      = @file_get_contents( "http://{$internal_host}:{$vite_port}/", false, $context );
+		if ( empty( $response ) ) {
+			$response = @file_get_contents( "http://127.0.0.1:{$vite_port}/", false, $context );
+		}
+		return ! empty( $response );
+	}
+
 	private function is_dev_server() {
-		return ( defined( 'WP_ENV' ) && WP_ENV === 'development' ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
+		$is_dev_env = ( defined( 'WP_ENV' ) && WP_ENV === 'development' ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
+		return $is_dev_env && $this->check_dev_server();
+	}
+
+	private function get_dev_server_url() {
+		if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+			$host_parts = explode( ':', $_SERVER['HTTP_HOST'] );
+			$wp_host    = $host_parts[0];
+		} else {
+			$wp_host = wp_parse_url( home_url(), PHP_URL_HOST );
+		}
+		$vite_port = defined( 'VITE_DEV_SERVER_PORT' ) ? VITE_DEV_SERVER_PORT : '8081';
+		return 'http://' . $wp_host . ':' . $vite_port;
 	}
 
 	public function render_shortcode( $atts ) {
