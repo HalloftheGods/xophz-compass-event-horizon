@@ -1529,7 +1529,7 @@ if (!empty($spark_id)) {
 		register_rest_route( 'xophz-compass/v1', '/logout', array(
 			'methods' => 'POST',
 			'callback' => array( $this, 'handle_user_logout' ),
-			'permission_callback' => 'is_user_logged_in',
+			'permission_callback' => '__return_true',
 		) );
 
 		register_rest_route( 'xophz-compass/v1', '/lostpassword', array(
@@ -1598,6 +1598,19 @@ if (!empty($spark_id)) {
 			array(
 				'methods' => 'POST',
 				'callback' => array( $this, 'update_rhythm_matrix' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		) );
+
+		register_rest_route( 'xophz-compass/v1', '/delta-evolutions', array(
+			array(
+				'methods' => 'GET',
+				'callback' => array( $this, 'get_delta_evolutions' ),
+				'permission_callback' => 'is_user_logged_in',
+			),
+			array(
+				'methods' => 'POST',
+				'callback' => array( $this, 'update_delta_evolutions' ),
 				'permission_callback' => 'is_user_logged_in',
 			)
 		) );
@@ -2016,6 +2029,7 @@ if (!empty($spark_id)) {
 
 	public function handle_user_logout( $request ) {
 		wp_logout();
+		wp_clear_auth_cookie();
 		return rest_ensure_response( array(
 			'success' => true,
 			'message' => 'Logged out successfully'
@@ -2271,6 +2285,7 @@ if (!empty($spark_id)) {
 		$portrait_url = get_user_meta( $user_id, 'youmeos_portrait_url', true );
 		$global_variant = get_user_meta( $user_id, 'youmeos_global_variant', true );
 		$global_blur = get_user_meta( $user_id, 'youmeos_global_blur', true );
+		$birthday = get_user_meta( $user_id, 'birthday', true );
 
 		return rest_ensure_response( array(
 			'user_login' => $user->user_login,
@@ -2285,6 +2300,41 @@ if (!empty($spark_id)) {
 			'portrait_url' => $portrait_url,
 			'global_variant' => $global_variant,
 			'global_blur' => $global_blur,
+			'birthday' => $birthday,
+		) );
+	}
+
+	public function get_delta_evolutions( $request ) {
+		$user_id = get_current_user_id();
+		$growth = get_user_meta( $user_id, 'youmeos_delta_evolutions', true );
+		
+		if ( empty( $growth ) || ! is_array( $growth ) ) {
+			return rest_ensure_response( array(
+				'credentials' => array(),
+				'skills'      => array(),
+				'resources'   => array(),
+				'references'  => array(),
+			) );
+		}
+		
+		return rest_ensure_response( $growth );
+	}
+
+	public function update_delta_evolutions( $request ) {
+		$user_id = get_current_user_id();
+		$parameters = $request->get_json_params();
+		
+		$growth = array(
+			'credentials' => isset($parameters['credentials']) && is_array($parameters['credentials']) ? $parameters['credentials'] : array(),
+			'skills'      => isset($parameters['skills']) && is_array($parameters['skills']) ? $parameters['skills'] : array(),
+			'resources'   => isset($parameters['resources']) && is_array($parameters['resources']) ? $parameters['resources'] : array(),
+			'references'  => isset($parameters['references']) && is_array($parameters['references']) ? $parameters['references'] : array(),
+		);
+		
+		update_user_meta( $user_id, 'youmeos_delta_evolutions', $growth );
+		return rest_ensure_response( array(
+			'message' => 'Delta Evolutions updated successfully.',
+			'growth'  => $growth
 		) );
 	}
 
@@ -2294,11 +2344,14 @@ if (!empty($spark_id)) {
 		
 		$args = array( 'ID' => $user_id );
 		
+		$current_user = get_userdata( $user_id );
 		if ( isset( $parameters['first_name'] ) ) $args['first_name'] = sanitize_text_field( $parameters['first_name'] );
 		if ( isset( $parameters['last_name'] ) ) $args['last_name'] = sanitize_text_field( $parameters['last_name'] );
 		if ( isset( $parameters['nickname'] ) ) $args['nickname'] = sanitize_text_field( $parameters['nickname'] );
 		if ( isset( $parameters['display_name'] ) ) $args['display_name'] = sanitize_text_field( $parameters['display_name'] );
-		if ( isset( $parameters['user_email'] ) ) $args['user_email'] = sanitize_email( $parameters['user_email'] );
+		if ( isset( $parameters['user_email'] ) && ! empty( $parameters['user_email'] ) && $parameters['user_email'] !== $current_user->user_email ) {
+			$args['user_email'] = sanitize_email( $parameters['user_email'] );
+		}
 		if ( isset( $parameters['user_url'] ) ) $args['user_url'] = esc_url_raw( $parameters['user_url'] );
 		if ( isset( $parameters['user_description'] ) ) $args['description'] = sanitize_textarea_field( $parameters['user_description'] );
 		
@@ -2306,6 +2359,10 @@ if (!empty($spark_id)) {
 		
 		if ( is_wp_error( $result ) ) {
 			return $result;
+		}
+
+		if ( isset( $parameters['birthday'] ) ) {
+			update_user_meta( $user_id, 'birthday', sanitize_text_field( $parameters['birthday'] ) );
 		}
 
 		if ( isset( $parameters['global_variant'] ) ) {
