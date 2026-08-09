@@ -1502,6 +1502,13 @@ if (!empty($spark_id)) {
 	}
 
 	public function register_api_routes() {
+		// Populate $_COOKIE[ LOGGED_IN_COOKIE ] when setting auth cookie so wp_create_nonce() in REST login responses uses the active session token
+		add_action( 'set_logged_in_cookie', function( $logged_in_cookie ) {
+			if ( defined( 'LOGGED_IN_COOKIE' ) ) {
+				$_COOKIE[ LOGGED_IN_COOKIE ] = $logged_in_cookie;
+			}
+		}, 10, 1 );
+
 		// Bypass nonce check and security plugins for authentication endpoints 
 		// to prevent 403 Forbidden on login/register/lostpassword when stale cookies are present.
 		add_filter( 'rest_authentication_errors', function( $error ) {
