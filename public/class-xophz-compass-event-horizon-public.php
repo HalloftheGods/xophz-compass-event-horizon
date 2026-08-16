@@ -75,7 +75,7 @@ class Xophz_Compass_Event_Horizon_Public {
 				$_GET['height'] = $matches[3];
 			}
 			
-			$this->render_share_spark_interceptor( $matches[1] );
+			$this->render_youmeos_shell( 'spark' );
 			exit;
 		}
 		
@@ -898,13 +898,19 @@ class Xophz_Compass_Event_Horizon_Public {
 </script>
 
 <?php 
-$raw_sparks = isset($_GET['sparks']) ? wp_unslash($_GET['sparks']) : '';
-$spark_id = sanitize_text_field($raw_sparks);
-$is_lite = (isset($_GET['fullspark']) && $_GET['fullspark'] === 'true');
-$page_title = $og_title;
+$req_uri = $_SERVER['REQUEST_URI'] ?? '';
+$path_spark_id = '';
+if ( preg_match( '#/(?:os/u/|u/)?spark/([a-zA-Z0-9_-]+)#', $req_uri, $matches ) ) {
+	$path_spark_id = sanitize_text_field( $matches[1] );
+}
 
-if (!empty($raw_sparks)) {
-	$decoded = json_decode($raw_sparks, true);
+$raw_sparks = isset($_GET['sparks']) ? wp_unslash($_GET['sparks']) : '';
+$spark_id = !empty($path_spark_id) ? $path_spark_id : sanitize_text_field($raw_sparks);
+$is_lite = (isset($_GET['fullspark']) && $_GET['fullspark'] === 'true') || !empty($path_spark_id);
+$raw_name = isset($_GET['name']) ? sanitize_text_field(wp_unslash($_GET['name'])) : '';
+
+if (!empty($spark_id)) {
+	$decoded = json_decode($spark_id, true);
 	$s_name = '';
 	if (is_array($decoded) && isset($decoded[0][0])) {
 		$s_name = $decoded[0][0];
@@ -916,21 +922,51 @@ if (!empty($raw_sparks)) {
 	if (!empty($s_name)) {
 		$spark_id = $s_name; // Use clean name for manifest
 		if ($is_lite) {
-			$page_title = 'w⁴ ' . ucwords(str_replace('-', ' ', $s_name)) . ' :: ' . get_bloginfo('name');
+			if (!empty($raw_name)) {
+				$human_title = $raw_name;
+			} else {
+				$clean_title = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $s_name );
+				$clean_title = preg_replace( '/-[0-9a-z]{5,14}$/i', '', $clean_title );
+				$clean_title = preg_replace( '/-app$/i', '', $clean_title );
+				$human_title = ucwords( str_replace( '-', ' ', $clean_title ) );
+			}
+			$page_title = 'w⁴ ' . $human_title . ' :: ' . get_bloginfo('name');
 		}
 	}
 }
 
-// For the manifest URL, we pass the spark_id if present, else empty for the main OS
+// For the manifest URL, we pass the spark_id and name if present
 $manifest_url = rest_url( 'xophz-compass/v1/spark-manifest' );
 if (!empty($spark_id)) {
-	$manifest_url .= '?spark=' . $spark_id;
+	$manifest_url .= '?spark=' . urlencode($spark_id);
+	if (!empty($raw_name)) {
+		$manifest_url .= '&name=' . urlencode($raw_name);
+	}
+}
+
+// Check for custom spark icon
+$spark_icon_url = '';
+if ( !empty($spark_id) ) {
+	$icon_rel_path = 'images/spark-icons/spark-' . $spark_id . '.svg';
+	if ( file_exists( plugin_dir_path( __FILE__ ) . $icon_rel_path ) ) {
+		$spark_icon_url = plugins_url( $icon_rel_path, __FILE__ );
+	}
 }
 ?>
+<script>
+window.__pwaInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  window.__pwaInstallPrompt = e;
+});
+</script>
 <link rel="manifest" href="<?php echo esc_url( $manifest_url ); ?>">
 
 <title><?php echo esc_html( $page_title ); ?></title>
-<?php if ( ! empty( $whitelabel['icon_url'] ) ) : ?>
+<?php if ( ! empty( $spark_icon_url ) ) : ?>
+<link rel="icon" type="image/svg+xml" href="<?php echo esc_url( $spark_icon_url ); ?>">
+<link rel="apple-touch-icon" href="<?php echo esc_url( $spark_icon_url ); ?>">
+<?php elseif ( ! empty( $whitelabel['icon_url'] ) ) : ?>
 <link rel="icon" href="<?php echo esc_url( $whitelabel['icon_url'] ); ?>">
 <link rel="apple-touch-icon" href="<?php echo esc_url( $whitelabel['icon_url'] ); ?>">
 <?php else : ?>
@@ -1005,9 +1041,8 @@ if (!empty($spark_id)) {
 		
 		// Build the URL to launch into the actual OS shell, not the interceptor
 		$launch_url = esc_url_raw( add_query_arg( [
-			'sparks' => $spark_id,
 			'fullspark' => 'true',
-		], home_url('/os/u') ) );
+		], home_url( '/os/u/spark/' . $spark_id ) ) );
 		
 		?>
 		<!DOCTYPE html>
@@ -1684,8 +1719,18 @@ if (!empty($spark_id)) {
 	}
 
 	public function generate_spark_manifest( $request ) {
-		$spark_id = sanitize_text_field( $request->get_param('spark') );
+		$raw_spark = $request->get_param('spark');
+		$spark_id = sanitize_text_field( $raw_spark );
 		
+		if ( !empty($spark_id) ) {
+			$decoded = json_decode( $spark_id, true );
+			if ( is_array($decoded) && isset($decoded[0][0]) ) {
+				$spark_id = sanitize_text_field( $decoded[0][0] );
+			} elseif ( is_array($decoded) && isset($decoded[0]) && is_string($decoded[0]) ) {
+				$spark_id = sanitize_text_field( $decoded[0] );
+			}
+		}
+
 		$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
 
 		if ( empty($spark_id) || $spark_id === 'welcome-u' ) {
@@ -1699,20 +1744,33 @@ if (!empty($spark_id)) {
 			$short_name = 'YouMeOS';
 			$description = $og_desc;
 			$start_url = '/os/';
+			$scope = '/os/';
+			$id = '/os/';
 			// Clear spark_id so the fallback icons are used below
 			$spark_id = '';
 		} else {
 			$spark_name_override = sanitize_text_field( $request->get_param('name') );
+			
+			// Clean up spark_id by stripping internal prefixes, hashes, and redundant suffixes
+			$clean_title = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $spark_id );
+			$clean_title = preg_replace( '/-[0-9a-z]{5,14}$/i', '', $clean_title );
+			$clean_title = preg_replace( '/-app$/i', '', $clean_title );
+			$derived_title = ucwords( str_replace( '-', ' ', $clean_title ) );
+
 			if ( !empty($spark_name_override) ) {
-				$spark_name = $spark_name_override;
+				$base_name = preg_replace( '/^w⁴\s*/u', '', $spark_name_override );
+				$spark_name = 'w⁴ ' . $base_name;
+				$short_name = $base_name;
 			} else {
-				$spark_name = ucwords(str_replace('-', ' ', $spark_id));
+				$spark_name = 'w⁴ ' . $derived_title;
+				$short_name = $derived_title;
 			}
-			$short_name = $spark_name;
+
 			$description = $spark_name . ' - ' . $og_desc;
-			// Use unique start_url and scope so each PWA is distinct
-			$start_url = '/os/u/spark/' . $spark_id . '/?sparks=' . $spark_id . '&fullspark=true&pwa=true';
-			$scope = '/os/u/spark/' . $spark_id . '/';
+			// Dedicated isolated start_url and scope for the individual Spark PWA
+			$start_url = '/spark/' . $spark_id . '/?fullspark=true';
+			$scope = '/spark/' . $spark_id . '/';
+			$id = '/spark/' . $spark_id;
 		}
 
 		$icon_path = plugin_dir_path( __FILE__ ) . 'images/spark-icons/spark-' . $spark_id . '.svg';
@@ -1722,11 +1780,9 @@ if (!empty($spark_id)) {
 				array(
 					'src' => plugins_url('images/spark-icons/spark-' . $spark_id . '.svg', __FILE__),
 					'sizes' => 'any',
-					'type' => 'image/svg+xml'
-				)
-			);
-		} else {
-			$icons = array(
+					'type' => 'image/svg+xml',
+					'purpose' => 'any maskable'
+				),
 				array(
 					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
 					'sizes' => '192x192',
@@ -1738,10 +1794,25 @@ if (!empty($spark_id)) {
 					'type' => 'image/png'
 				)
 			);
+		} else {
+			$icons = array(
+				array(
+					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
+					'sizes' => '192x192',
+					'type' => 'image/png',
+					'purpose' => 'any maskable'
+				),
+				array(
+					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
+					'sizes' => '512x512',
+					'type' => 'image/png',
+					'purpose' => 'any maskable'
+				)
+			);
 		}
 
 		$manifest = array(
-			'id' => empty($spark_id) ? '/os/' : $scope,
+			'id' => empty($spark_id) ? '/os/' : $id,
 			'name' => $spark_name,
 			'short_name' => $short_name,
 			'description' => $description,
