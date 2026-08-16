@@ -814,6 +814,12 @@ class Xophz_Compass_Event_Horizon_Public {
 
 		$compassVersion = defined('XOPHZ_COMPASS_VERSION') ? XOPHZ_COMPASS_VERSION : '0.0.0';
 
+		$whitelabel = get_option( 'youmeos_whitelabel_settings', [] );
+		$visuals = get_option( 'youmeos_visuals_settings', [] );
+		$sparks_config = get_option( 'youmeos_sparks_settings', [] );
+		$routing = get_option( 'youmeos_routing_settings', [] );
+		$audio = get_option( 'youmeos_audio_settings', [] );
+
 		$settings = [
 			'currentUser' => [
 				'ID' => $current_user->ID,
@@ -833,8 +839,8 @@ class Xophz_Compass_Event_Horizon_Public {
 			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
 			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ) . '/deprecated',
 			'youmeosDataUrl' => rtrim( $plugin_rel_path, '/' ) . '/data',
-			'siteName' => get_bloginfo('name'),
-			'siteDescription' => get_bloginfo('description'),
+			'siteName' => !empty($whitelabel['os_title']) ? $whitelabel['os_title'] : get_bloginfo('name'),
+			'siteDescription' => !empty($whitelabel['os_tagline']) ? $whitelabel['os_tagline'] : get_bloginfo('description'),
 			'siteUrl' => get_bloginfo('url'),
 			'compassVersion' => $compassVersion,
 			'eventHorizonVersion' => $this->version,
@@ -842,15 +848,20 @@ class Xophz_Compass_Event_Horizon_Public {
 			'googleRedirectUri' => defined( 'GOOGLE_REDIRECT_URI' ) ? GOOGLE_REDIRECT_URI : ( $_ENV['GOOGLE_REDIRECT_URI'] ?? get_option( 'google_redirect_uri' ) ),
 			'discordClientId' => defined( 'DISCORD_CLIENT_ID' ) ? DISCORD_CLIENT_ID : ( $_ENV['DISCORD_CLIENT_ID'] ?? get_option( 'discord_client_id' ) ),
 			'discordRedirectUri' => defined( 'DISCORD_REDIRECT_URI' ) ? DISCORD_REDIRECT_URI : ( $_ENV['DISCORD_REDIRECT_URI'] ?? get_option( 'discord_redirect_uri' ) ),
+			'whitelabel' => $whitelabel,
+			'visuals' => $visuals,
+			'sparks' => $sparks_config,
+			'routing' => $routing,
+			'audio' => $audio,
 		];
 
-		$og_title = get_bloginfo( 'name' );
+		$og_title = !empty($whitelabel['os_title']) ? $whitelabel['os_title'] : (!empty($routing['og_title']) ? $routing['og_title'] : get_bloginfo( 'name' ));
 		if ( empty( $og_title ) ) {
 			$og_title = 'YouMeOS';
 		}
 
-		$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
-		$og_image = plugins_url( 'images/takemymoney.jpg', __FILE__ );
+		$og_desc = !empty($whitelabel['os_tagline']) ? $whitelabel['os_tagline'] : (!empty($routing['og_description']) ? $routing['og_description'] : 'The Omega Source. Travel the YouMeverse without moving.');
+		$og_image = !empty($routing['og_image']) ? $routing['og_image'] : (!empty($whitelabel['splash_image_url']) ? $whitelabel['splash_image_url'] : plugins_url( 'images/takemymoney.jpg', __FILE__ ));
 
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
 
@@ -919,7 +930,12 @@ if (!empty($spark_id)) {
 <link rel="manifest" href="<?php echo esc_url( $manifest_url ); ?>">
 
 <title><?php echo esc_html( $page_title ); ?></title>
+<?php if ( ! empty( $whitelabel['icon_url'] ) ) : ?>
+<link rel="icon" href="<?php echo esc_url( $whitelabel['icon_url'] ); ?>">
+<link rel="apple-touch-icon" href="<?php echo esc_url( $whitelabel['icon_url'] ); ?>">
+<?php else : ?>
 <?php wp_site_icon(); ?>
+<?php endif; ?>
 <style>
     body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
     #youmeos-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -1694,7 +1710,9 @@ if (!empty($spark_id)) {
 			}
 			$short_name = $spark_name;
 			$description = $spark_name . ' - ' . $og_desc;
-			$start_url = '/os/u/?sparks=' . $spark_id . '&fullspark=true';
+			// Use unique start_url and scope so each PWA is distinct
+			$start_url = '/os/u/spark/' . $spark_id . '/?sparks=' . $spark_id . '&fullspark=true&pwa=true';
+			$scope = '/os/u/spark/' . $spark_id . '/';
 		}
 
 		$icon_path = plugin_dir_path( __FILE__ ) . 'images/spark-icons/spark-' . $spark_id . '.svg';
@@ -1723,11 +1741,12 @@ if (!empty($spark_id)) {
 		}
 
 		$manifest = array(
-			'id' => empty($spark_id) ? '/os/' : '/os/u/?sparks=' . $spark_id,
+			'id' => empty($spark_id) ? '/os/' : $scope,
 			'name' => $spark_name,
 			'short_name' => $short_name,
 			'description' => $description,
 			'start_url' => $start_url,
+			'scope' => empty($spark_id) ? '/os/' : $scope,
 			'display' => 'standalone',
 			'background_color' => '#000000',
 			'theme_color' => '#000000',
@@ -1982,11 +2001,14 @@ if (!empty($spark_id)) {
 					wp_set_current_user( $user->ID );
 					wp_set_auth_cookie( $user->ID, true );
 					
+					$display_name = ! empty( $user->display_name ) ? $user->display_name : ( ! empty( $user->user_login ) ? $user->user_login : ( ! empty( $user->user_nicename ) ? $user->user_nicename : 'Explorer' ) );
+					$user_nicename = ! empty( $user->user_nicename ) ? $user->user_nicename : ( ! empty( $user->user_login ) ? $user->user_login : $display_name );
+
 					$body['wp_user'] = array(
 						'user_id' => $user->ID,
 						'user_email' => $user->user_email,
-						'user_nicename' => $user->user_nicename,
-						'user_display_name' => $user->display_name,
+						'user_nicename' => $user_nicename,
+						'user_display_name' => $display_name,
 						'user_roles' => $user->roles,
 						'nonce' => wp_create_nonce( 'wp_rest' ),
 						'token' => wp_create_nonce( 'wp_rest' )
@@ -2021,12 +2043,15 @@ if (!empty($spark_id)) {
 		$global_variant = get_user_meta( $user->ID, 'youmeos_global_variant', true );
 		$global_blur = get_user_meta( $user->ID, 'youmeos_global_blur', true );
 
+		$display_name = ! empty( $user->display_name ) ? $user->display_name : ( ! empty( $user->user_login ) ? $user->user_login : ( ! empty( $user->user_nicename ) ? $user->user_nicename : 'Explorer' ) );
+		$user_nicename = ! empty( $user->user_nicename ) ? $user->user_nicename : ( ! empty( $user->user_login ) ? $user->user_login : $display_name );
+
 		return rest_ensure_response( array(
 			'message' => 'Login successful',
 			'user_id' => $user->ID,
 			'user_email' => $user->user_email,
-			'user_nicename' => $user->user_nicename,
-			'user_display_name' => $user->display_name,
+			'user_nicename' => $user_nicename,
+			'user_display_name' => $display_name,
 			'user_roles' => $user->roles,
 			'nonce' => wp_create_nonce( 'wp_rest' ),
 			'global_variant' => $global_variant,
@@ -2123,12 +2148,15 @@ if (!empty($spark_id)) {
 		
 		if ( ! is_wp_error( $user ) ) {
 			wp_set_current_user( $user->ID );
+			$display_name = ! empty( $user->display_name ) ? $user->display_name : ( ! empty( $user->user_login ) ? $user->user_login : ( ! empty( $user->user_nicename ) ? $user->user_nicename : $username ) );
+			$user_nicename = ! empty( $user->user_nicename ) ? $user->user_nicename : ( ! empty( $user->user_login ) ? $user->user_login : $display_name );
+
 			return rest_ensure_response( array(
 				'message' => 'User registered and logged in successfully.',
 				'user_id' => $user->ID,
 				'user_email' => $user->user_email,
-				'user_nicename' => $user->user_nicename,
-				'user_display_name' => $user->display_name,
+				'user_nicename' => $user_nicename,
+				'user_display_name' => $display_name,
 				'user_roles' => $user->roles,
 				'nonce' => wp_create_nonce( 'wp_rest' ),
 				'token' => wp_create_nonce( 'wp_rest' ) // Some flows might check token

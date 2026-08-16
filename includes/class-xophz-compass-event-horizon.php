@@ -167,6 +167,11 @@ class Xophz_Compass_Event_Horizon {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-patreon.php';
 
+		/**
+		 * The class responsible for Settings & White-Label REST API.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/api/class-xophz-compass-event-horizon-settings.php';
+
 		$this->loader = new Xophz_Compass_Event_Horizon_Loader();
 
 	}
@@ -277,6 +282,10 @@ class Xophz_Compass_Event_Horizon {
 		// Register Patreon API
 		$patreon_api = new Xophz_Compass_Event_Horizon_Patreon();
 		$this->loader->add_action( 'rest_api_init', $patreon_api, 'register_routes' );
+
+		// Register Settings & White-Label API
+		$settings_api = new Xophz_Compass_Event_Horizon_Settings();
+		$this->loader->add_action( 'rest_api_init', $settings_api, 'register_routes' );
 
 		// Register AJAX handler for nonce refresh
 		$this->loader->add_action( 'wp_ajax_youmeos_refresh_nonce', $plugin_public, 'ajax_refresh_nonce' );
