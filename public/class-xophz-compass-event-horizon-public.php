@@ -53,6 +53,11 @@ class Xophz_Compass_Event_Horizon_Public {
 		return true;
 	}
 
+	public function filter_robots_txt( $output, $public ) {
+		$sitemap_url = esc_url( home_url( '/sitemap.xml' ) );
+		return "User-agent: *\nAllow: /\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n\nSitemap: {$sitemap_url}\n";
+	}
+
 	public function template_redirect() {
 		global $wp_query;
 
@@ -60,6 +65,38 @@ class Xophz_Compass_Event_Horizon_Public {
 		$request_uri = $_SERVER['REQUEST_URI'] ?? '';
 		if ( strpos( $request_uri, '/wp-admin' ) === 0 || strpos( $request_uri, '/wp-login.php' ) === 0 ) {
 			return;
+		}
+
+		$path_only = parse_url( $request_uri, PHP_URL_PATH ) ?: '';
+
+		// Handle robots.txt
+		if ( preg_match( '#^/robots\.txt$#i', $path_only ) ) {
+			status_header( 200 );
+			header( 'Content-Type: text/plain; charset=utf-8' );
+			echo "User-agent: *\n";
+			echo "Allow: /\n";
+			echo "Disallow: /wp-admin/\n";
+			echo "Allow: /wp-admin/admin-ajax.php\n\n";
+			echo "Sitemap: " . esc_url( home_url( '/sitemap.xml' ) ) . "\n";
+			exit;
+		}
+
+		// Handle sitemap.xml
+		if ( preg_match( '#^/sitemap\.xml$#i', $path_only ) ) {
+			status_header( 200 );
+			header( 'Content-Type: application/xml; charset=utf-8' );
+			$home = esc_url( home_url( '/' ) );
+			$today = date( 'Y-m-d' );
+			echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			echo "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
+			echo "  <url>\n    <loc>" . $home . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/youmeos' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/os' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/u' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/youniverse' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/flow' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>\n";
+			echo "</urlset>\n";
+			exit;
 		}
 
 		// Handle static asset requests for youmeos/legacy and youmeos/data
@@ -872,13 +909,21 @@ class Xophz_Compass_Event_Horizon_Public {
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <meta name="google" content="notranslate">
 <meta name="description" content="<?php echo esc_attr( $og_desc ); ?>">
+<meta name="keywords" content="YouMeOS, youmeos, youme os, YouMe, Compass Gateway, Youniverse, Web OS, Spatial Web, Cloud Operating System, Decentralized Web, Xophz">
+<meta name="author" content="Xophz / COMPASS">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+<link rel="canonical" href="<?php echo esc_url( $current_url ); ?>">
 
 <!-- Open Graph / Facebook -->
+<meta property="og:site_name" content="YouMeOS">
 <meta property="og:type" content="website">
 <meta property="og:url" content="<?php echo esc_url( $current_url ); ?>">
 <meta property="og:title" content="<?php echo esc_attr( $og_title ); ?>">
 <meta property="og:description" content="<?php echo esc_attr( $og_desc ); ?>">
 <meta property="og:image" content="<?php echo esc_url( $og_image ); ?>">
+<meta property="og:image:alt" content="YouMeOS Gateway Interface">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
@@ -886,6 +931,44 @@ class Xophz_Compass_Event_Horizon_Public {
 <meta name="twitter:title" content="<?php echo esc_attr( $og_title ); ?>">
 <meta name="twitter:description" content="<?php echo esc_attr( $og_desc ); ?>">
 <meta name="twitter:image" content="<?php echo esc_url( $og_image ); ?>">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "@id": "<?php echo esc_url( home_url( '/#app' ) ); ?>",
+      "name": "<?php echo esc_js( $og_title ); ?>",
+      "alternateName": ["YouMe OS", "youmeos", "YouMe"],
+      "url": "<?php echo esc_url( home_url( '/' ) ); ?>",
+      "description": "<?php echo esc_js( $og_desc ); ?>",
+      "applicationCategory": "BrowserApplication, OperatingSystem",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires WebGL/WebGPU and modern JavaScript support",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "screenshot": "<?php echo esc_url( $og_image ); ?>"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "<?php echo esc_url( home_url( '/#website' ) ); ?>",
+      "url": "<?php echo esc_url( home_url( '/' ) ); ?>",
+      "name": "<?php echo esc_js( $og_title ); ?>",
+      "description": "<?php echo esc_js( $og_desc ); ?>",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Xophz / COMPASS",
+        "url": "<?php echo esc_url( home_url( '/' ) ); ?>"
+      }
+    }
+  ]
+}
+</script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YHY2WZFMDM"></script>
@@ -908,6 +991,7 @@ $raw_sparks = isset($_GET['sparks']) ? wp_unslash($_GET['sparks']) : '';
 $spark_id = !empty($path_spark_id) ? $path_spark_id : sanitize_text_field($raw_sparks);
 $is_lite = (isset($_GET['fullspark']) && $_GET['fullspark'] === 'true') || !empty($path_spark_id);
 $raw_name = isset($_GET['name']) ? sanitize_text_field(wp_unslash($_GET['name'])) : '';
+$raw_icon = isset($_GET['icon']) ? sanitize_text_field(wp_unslash($_GET['icon'])) : '';
 
 if (!empty($spark_id)) {
 	$decoded = json_decode($spark_id, true);
@@ -935,23 +1019,20 @@ if (!empty($spark_id)) {
 	}
 }
 
-// For the manifest URL, we pass the spark_id and name if present
+// For the manifest URL, we pass the spark_id, name, and icon if present
 $manifest_url = rest_url( 'xophz-compass/v1/spark-manifest' );
 if (!empty($spark_id)) {
 	$manifest_url .= '?spark=' . urlencode($spark_id);
 	if (!empty($raw_name)) {
 		$manifest_url .= '&name=' . urlencode($raw_name);
 	}
+	if (!empty($raw_icon)) {
+		$manifest_url .= '&icon=' . urlencode($raw_icon);
+	}
 }
 
 // Check for custom spark icon
-$spark_icon_url = '';
-if ( !empty($spark_id) ) {
-	$icon_rel_path = 'images/spark-icons/spark-' . $spark_id . '.svg';
-	if ( file_exists( plugin_dir_path( __FILE__ ) . $icon_rel_path ) ) {
-		$spark_icon_url = plugins_url( $icon_rel_path, __FILE__ );
-	}
-}
+$spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon ) : '';
 ?>
 <script>
 window.__pwaInstallPrompt = null;
@@ -1773,37 +1854,43 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			$id = '/spark/' . $spark_id;
 		}
 
-		$icon_path = plugin_dir_path( __FILE__ ) . 'images/spark-icons/spark-' . $spark_id . '.svg';
+		$raw_icon = $request->get_param('icon');
+		$spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon ) : '';
 		
-		if ( !empty($spark_id) && file_exists($icon_path) ) {
+		if ( !empty($spark_id) && !empty($spark_icon_url) ) {
+			$is_svg = ( stripos( $spark_icon_url, '.svg' ) !== false );
+			$mime_type = $is_svg ? 'image/svg+xml' : 'image/png';
 			$icons = array(
 				array(
-					'src' => plugins_url('images/spark-icons/spark-' . $spark_id . '.svg', __FILE__),
+					'src' => $spark_icon_url,
 					'sizes' => 'any',
-					'type' => 'image/svg+xml',
-					'purpose' => 'any maskable'
+					'type' => $mime_type,
+					'purpose' => 'any'
 				),
 				array(
-					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
+					'src' => $spark_icon_url,
 					'sizes' => '192x192',
-					'type' => 'image/png'
+					'type' => $mime_type,
+					'purpose' => 'any'
 				),
 				array(
-					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
+					'src' => $spark_icon_url,
 					'sizes' => '512x512',
-					'type' => 'image/png'
+					'type' => $mime_type,
+					'purpose' => 'maskable any'
 				)
 			);
 		} else {
+			$logo_url = plugins_url( '../admin/images/youmeos-logo.png', __FILE__ );
 			$icons = array(
 				array(
-					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
+					'src' => $logo_url,
 					'sizes' => '192x192',
 					'type' => 'image/png',
 					'purpose' => 'any maskable'
 				),
 				array(
-					'src' => plugins_url('../admin/images/youmeos-logo.png', __FILE__),
+					'src' => $logo_url,
 					'sizes' => '512x512',
 					'type' => 'image/png',
 					'purpose' => 'any maskable'
@@ -1827,6 +1914,95 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		$response = rest_ensure_response($manifest);
 		$response->header('Content-Type', 'application/manifest+json');
 		return $response;
+	}
+
+	/**
+	 * Resolves the URL for a given spark's SVG icon.
+	 * Checks candidate locations: direct spark-id, normalized ID, FontAwesome class, ecosystem plugins, etc.
+	 *
+	 * @param string $spark_id
+	 * @param string $raw_icon Optional icon class or URL (e.g., "fal fa-infinity", "fad fa-cube", "/path/icon.svg")
+	 * @return string Full URL to icon, or empty string if not found.
+	 */
+	public function resolve_spark_icon_url( $spark_id, $raw_icon = '' ) {
+		$plugin_dir = plugin_dir_path( __FILE__ );
+		$icons_dir = $plugin_dir . 'images/spark-icons/';
+		$icons_url = plugins_url( 'images/spark-icons/', __FILE__ );
+
+		// 1. Direct or external/absolute URL passed in $raw_icon
+		if ( ! empty( $raw_icon ) ) {
+			if ( preg_match( '#^(?:https?:)?//#i', $raw_icon ) || strpos( $raw_icon, '/wp-content/' ) !== false ) {
+				return $raw_icon;
+			}
+		}
+
+		$candidates = array();
+
+		// 2. Candidates from spark_id
+		if ( ! empty( $spark_id ) ) {
+			$clean_id = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $spark_id );
+			$clean_id = preg_replace( '/-[0-9a-z]{5,14}$/i', '', $clean_id );
+			$clean_id = preg_replace( '/-app$/i', '', $clean_id );
+			$unprefixed_id = preg_replace( '/^u-/', '', $clean_id );
+
+			$candidates[] = 'spark-' . $spark_id . '.svg';
+			$candidates[] = 'spark-' . $clean_id . '.svg';
+			$candidates[] = 'spark-' . $unprefixed_id . '.svg';
+			$candidates[] = 'spark-u-' . $unprefixed_id . '.svg';
+			$candidates[] = $spark_id . '.svg';
+			$candidates[] = $clean_id . '.svg';
+		}
+
+		// 3. Candidates from $raw_icon (e.g., "fal fa-infinity", "fad fa-bomb", "fal-infinity")
+		if ( ! empty( $raw_icon ) ) {
+			if ( preg_match( '/^(fas|far|fal|fat|fad|fab)\s+fa-([a-z0-9\-]+)/i', $raw_icon, $matches ) ) {
+				$prefix = strtolower( $matches[1] );
+				$name = strtolower( $matches[2] );
+				$candidates[] = $prefix . '-' . $name . '.svg';
+				$candidates[] = 'spark-' . $name . '.svg';
+				$candidates[] = 'fal-' . $name . '.svg';
+				$candidates[] = 'fad-' . $name . '.svg';
+			} elseif ( preg_match( '/^(fas|far|fal|fat|fad|fab)-([a-z0-9\-]+)(?:\.svg)?$/i', $raw_icon, $matches ) ) {
+				$prefix = strtolower( $matches[1] );
+				$name = strtolower( $matches[2] );
+				$candidates[] = $prefix . '-' . $name . '.svg';
+				$candidates[] = 'spark-' . $name . '.svg';
+			}
+		}
+
+		// Check spark-icons folder for any candidate match
+		foreach ( array_unique( $candidates ) as $cand ) {
+			if ( ! empty( $cand ) && file_exists( $icons_dir . $cand ) ) {
+				return $icons_url . $cand;
+			}
+		}
+
+		// 4. Ecosystem plugin icon check (e.g., wp-content/plugins/xophz-compass-{slug}/icon.svg)
+		if ( ! empty( $spark_id ) ) {
+			$unprefixed = preg_replace( '/^u-/', '', $spark_id );
+			$wp_plugins_dir = defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : dirname( dirname( dirname( __FILE__ ) ) );
+			$wp_plugins_url = plugins_url();
+
+			$plugin_slugs = array(
+				'xophz-compass-' . $unprefixed,
+				'xophz-' . $unprefixed,
+				$unprefixed,
+				'xophz-compass-' . $spark_id,
+			);
+
+			foreach ( $plugin_slugs as $slug ) {
+				$svg_path = $wp_plugins_dir . '/' . $slug . '/icon.svg';
+				if ( file_exists( $svg_path ) ) {
+					return $wp_plugins_url . '/' . $slug . '/icon.svg';
+				}
+				$png_path = $wp_plugins_dir . '/' . $slug . '/icon.png';
+				if ( file_exists( $png_path ) ) {
+					return $wp_plugins_url . '/' . $slug . '/icon.png';
+				}
+			}
+		}
+
+		return '';
 	}
 
 	public function get_gaea_telemetry_simulation( $request ) {

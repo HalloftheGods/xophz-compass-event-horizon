@@ -250,6 +250,7 @@ class Xophz_Compass_Event_Horizon {
     $this->loader->add_filter( 'register_taxonomy_args', $plugin_public, 'expose_menus_to_rest', 10, 2 );
     $this->loader->add_filter( 'register_post_type_args', $plugin_public, 'expose_menu_items_to_rest', 10, 2 );
     $this->loader->add_filter( 'rest_menu_read_access', $plugin_public, 'allow_rest_menu_read_access', 10, 2 );
+    $this->loader->add_filter( 'robots_txt', $plugin_public, 'filter_robots_txt', 99, 2 );
 
 		// Register Spark Registry Routes
 		$this->loader->add_action( 'rest_api_init', $spark_registry, 'register_routes' );
