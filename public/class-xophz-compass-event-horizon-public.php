@@ -128,6 +128,17 @@ class Xophz_Compass_Event_Horizon_Public {
 			exit;
 		}
 
+		// Handle Stripe Checkout Callback / Wormhole Return / Mock Checkout
+		if ( 
+			strpos( $request_uri, '/callback/stripe' ) !== false || 
+			strpos( $request_uri, '/checkout/success' ) !== false || 
+			strpos( $request_uri, '/checkout/cancel' ) !== false ||
+			isset( $_GET['mock_checkout'] )
+		) {
+			$this->render_stripe_callback_page();
+			exit;
+		}
+
 		if ( 
 			strpos( $request_uri, 'youmeos_legacy/' ) !== false || 
 			strpos( $request_uri, 'youmeos/legacy/' ) !== false ||
@@ -614,6 +625,350 @@ class Xophz_Compass_Event_Horizon_Public {
 		<?php
 	}
 
+	private function render_stripe_callback_page() {
+		// 1. Check if this is a Mock Checkout Simulation
+		if ( isset( $_GET['mock_checkout'] ) ) {
+			$price        = isset( $_GET['price'] ) ? intval( $_GET['price'] ) : 0;
+			$license      = isset( $_GET['license'] ) ? sanitize_text_field( urldecode( $_GET['license'] ) ) : 'Tesseract White Glove Service';
+			$product_name = isset( $_GET['product_name'] ) ? sanitize_text_field( urldecode( $_GET['product_name'] ) ) : $license;
+			$success_url  = isset( $_GET['success_url'] ) ? esc_url_raw( urldecode( $_GET['success_url'] ) ) : home_url( '/callback/stripe?status=success' );
+			$cancel_url   = isset( $_GET['cancel_url'] ) ? esc_url_raw( urldecode( $_GET['cancel_url'] ) ) : home_url( '/callback/stripe?status=cancel' );
+			?>
+			<!DOCTYPE html>
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>Stripe Checkout Simulator (Test Mode) | YouMeOS</title>
+				<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+				<style>
+					body {
+						margin: 0; padding: 0; background: #0c0e14; color: #fff;
+						font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+						display: flex; align-items: center; justify-content: center; min-height: 100vh;
+						background-image: radial-gradient(circle at 50% 10%, rgba(98, 201, 255, 0.15), transparent 60%);
+					}
+					.checkout-card {
+						background: rgba(20, 24, 35, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+						border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; padding: 32px;
+						max-width: 480px; width: 90%; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(98, 201, 255, 0.15);
+					}
+					.badge-test {
+						background: rgba(255, 215, 0, 0.15); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.3);
+						font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase;
+						letter-spacing: 1px; display: inline-block; margin-bottom: 12px;
+					}
+					.price-tag {
+						font-size: 32px; font-weight: 700; color: #62c9ff; margin: 12px 0 20px;
+					}
+					.details-box {
+						background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
+						border-radius: 10px; padding: 16px; margin-bottom: 24px; font-size: 14px; line-height: 1.6;
+					}
+					.btn-group {
+						display: flex; justify-content: space-between; align-items: center; gap: 12px;
+					}
+					.btn {
+						padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;
+						transition: all 0.2s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+					}
+					.btn-primary {
+						background: linear-gradient(135deg, #62c9ff, #2962ff); color: #000; border: none; flex-grow: 1;
+						box-shadow: 0 4px 15px rgba(98, 201, 255, 0.4);
+					}
+					.btn-primary:hover {
+						opacity: 0.92; transform: translateY(-1px);
+					}
+					.btn-secondary {
+						background: transparent; color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.2);
+					}
+					.btn-secondary:hover {
+						background: rgba(255, 255, 255, 0.05); color: #fff;
+					}
+				</style>
+			</head>
+			<body>
+				<div class="checkout-card">
+					<span class="badge-test">Test Mode Simulator</span>
+					<h2 style="margin: 0 0 6px; font-size: 20px; font-weight: 600;"><?php echo esc_html( $product_name ); ?></h2>
+					<div class="price-tag">$<?php echo esc_html( number_format( $price ) ); ?> <span style="font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.6);">USD</span></div>
+					
+					<div class="details-box">
+						<div style="opacity: 0.7; margin-bottom: 4px;">License / Scope:</div>
+						<div style="font-weight: 500; margin-bottom: 12px;"><?php echo esc_html( $license ); ?></div>
+
+						<div style="margin-bottom: 10px;">
+							<label style="font-size: 12px; opacity: 0.8; display: block; margin-bottom: 4px;">Phone Number (Concierge Onboarding):</label>
+							<input type="tel" id="mock-phone" placeholder="+1 (555) 000-0000" style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 8px; color: #fff; font-family: inherit; font-size: 13px;" value="+1 (555) 019-2834" />
+						</div>
+
+						<div>
+							<label style="font-size: 12px; opacity: 0.8; display: block; margin-bottom: 4px;">Current Website or Target Domain:</label>
+							<input type="text" id="mock-domain" placeholder="https://example.com" style="width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 8px; color: #fff; font-family: inherit; font-size: 13px;" value="https://mybrand.com" />
+						</div>
+					</div>
+
+					<div class="btn-group">
+						<a href="<?php echo esc_url( $cancel_url ); ?>" class="btn btn-secondary">Cancel</a>
+						<a href="<?php echo esc_url( $success_url ); ?>" class="btn btn-primary">Simulate Payment</a>
+					</div>
+				</div>
+			</body>
+			</html>
+			<?php
+			return;
+		}
+
+		// 2. Standard Stripe Callback / Wormhole Return
+		$status       = isset( $_GET['status'] ) ? sanitize_text_field( $_GET['status'] ) : ( strpos( $_SERVER['REQUEST_URI'] ?? '', 'cancel' ) !== false ? 'cancel' : 'success' );
+		$tier_id      = isset( $_GET['tier'] ) ? sanitize_text_field( $_GET['tier'] ) : 'tesseract';
+		$session_id   = isset( $_GET['session_id'] ) ? sanitize_text_field( $_GET['session_id'] ) : '';
+		$fallback_url = esc_url_raw( add_query_arg( array( 'sparks' => json_encode( array( array( 'tesseract', $tier_id ) ) ) ), home_url( '/os' ) ) );
+		?>
+		<!DOCTYPE html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+			<title><?php echo $status === 'success' ? 'Checkout Successful' : 'Checkout Cancelled'; ?> | YouMeOS</title>
+			<?php wp_site_icon(); ?>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+			<link rel="preconnect" href="https://fonts.googleapis.com">
+			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+			<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200;300;400;600&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+			<style>
+				body, html {
+					margin: 0; padding: 0; width: 100%; height: 100%;
+					background: #000; color: #fff;
+					font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+					display: flex; align-items: center; justify-content: center;
+					overflow: hidden;
+				}
+				#bg-container {
+					position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+				}
+				.wormhole-overlay {
+					position: relative; z-index: 5; text-align: center; max-width: 520px; padding: 32px;
+					background: rgba(12, 14, 20, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+					border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px;
+					box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(98, 201, 255, 0.2);
+				}
+				.status-badge {
+					display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
+					letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px;
+				}
+				.badge-success {
+					background: rgba(67, 181, 129, 0.15); color: #43b581; border: 1px solid rgba(67, 181, 129, 0.4);
+					box-shadow: 0 0 12px rgba(67, 181, 129, 0.3);
+				}
+				.badge-cancel {
+					background: rgba(240, 71, 71, 0.15); color: #f04747; border: 1px solid rgba(240, 71, 71, 0.4);
+				}
+				.wormhole-title {
+					font-size: 24px; font-weight: 700; margin: 0 0 10px; color: #fff;
+				}
+				.wormhole-desc {
+					font-family: 'Source Sans Pro', sans-serif; font-size: 16px; font-weight: 300;
+					color: rgba(255, 255, 255, 0.85); line-height: 1.5; margin-bottom: 20px;
+				}
+				.wormhole-quote {
+					font-size: 12px; opacity: 0.6; font-style: italic; letter-spacing: 1px; margin-top: 16px;
+				}
+				.btn-return {
+					display: inline-flex; align-items: center; justify-content: center; padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 600;
+					background: rgba(98, 201, 255, 0.15); color: #62c9ff; border: 1px solid rgba(98, 201, 255, 0.3);
+					text-decoration: none; transition: all 0.2s ease; cursor: pointer;
+				}
+				.btn-return:hover {
+					background: rgba(98, 201, 255, 0.3); color: #fff; transform: translateY(-1px);
+				}
+			</style>
+		</head>
+		<body>
+			<div id="bg-container"></div>
+			
+			<div class="wormhole-overlay">
+				<div style="margin-bottom: 16px;">
+					<img src="<?php echo esc_url( plugins_url( 'dist/omega-logox300.png', __FILE__ ) ); ?>" alt="Omega Logo" style="width: 72px; height: 72px; display: block; margin: 0 auto;">
+				</div>
+				
+				<?php if ( $status === 'success' ) : ?>
+					<div class="status-badge badge-success">&#10003; Transaction Confirmed</div>
+					<h1 class="wormhole-title">White Glove Concierge Initialized</h1>
+					<div class="wormhole-desc">
+						Space &amp; Time fold coarse... A Wormhole Opens Source.<br>
+						We have received your deployment order and our engineering team will be in contact with you directly via phone and email to coordinate onboarding.
+					</div>
+				<?php else : ?>
+					<div class="status-badge badge-cancel">&#10007; Checkout Cancelled</div>
+					<h1 class="wormhole-title">Checkout Cancelled</h1>
+					<div class="wormhole-desc">
+						Transaction was cancelled. You can return to YouMeOS anytime.
+					</div>
+				<?php endif; ?>
+
+				<div style="display: flex; justify-content: center; margin-top: 20px;">
+					<button onclick="closeOrReturn();" class="btn-return" id="return-btn">Return to YouMeOS</button>
+				</div>
+				
+				<div class="wormhole-quote">
+					"It's a 'Wormhole' OS!" 2006 ~X
+				</div>
+			</div>
+
+			<script>
+				// Exact X-Wormhole-Canvas Engine from src/components/primitives/x-wormhole-canvas.vue
+				function initWormhole() {
+					const container = document.getElementById('bg-container');
+					if (!window.THREE || !container) return;
+
+					const scene = new THREE.Scene();
+					scene.fog = new THREE.FogExp2(0x000000, 0.0015);
+
+					const camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 4000);
+					camera.position.z = 0;
+
+					const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+					renderer.setSize(window.innerWidth, window.innerHeight);
+					renderer.setPixelRatio(window.devicePixelRatio);
+					container.appendChild(renderer.domElement);
+
+					const particleCount = 15000;
+					const particles = new THREE.BufferGeometry();
+					const posArray = new Float32Array(particleCount * 3);
+					const colorsArray = new Float32Array(particleCount * 3);
+					const dataArray = [];
+					const numArms = 18;
+					const color = new THREE.Color();
+
+					for (let i = 0; i < particleCount; i++) {
+						const z = -500 - Math.random() * 4500;
+						const arm = Math.floor(Math.random() * numArms);
+						const angle = ((Math.PI * 2) / numArms) * arm + z * 0.005 + (Math.random() - 0.5) * 0.4;
+
+						let radius;
+						if (Math.random() > 0.2) {
+							radius = 70 + Math.random() * 15;
+						} else {
+							radius = 85 + Math.random() * 80;
+						}
+
+						dataArray.push({ angle, radius, z, speedOffset: Math.random() });
+
+						const hue = Math.random();
+						color.setHSL(hue, 0.9, 0.6);
+
+						colorsArray[i * 3] = color.r;
+						colorsArray[i * 3 + 1] = color.g;
+						colorsArray[i * 3 + 2] = color.b;
+					}
+
+					particles.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+					particles.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+
+					const canvasObj = document.createElement('canvas');
+					canvasObj.width = 32;
+					canvasObj.height = 32;
+					const context = canvasObj.getContext('2d');
+					if (context) {
+						const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
+						gradient.addColorStop(0, 'rgba(255,255,255,1)');
+						gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+						gradient.addColorStop(0.5, 'rgba(255,255,255,0.2)');
+						gradient.addColorStop(1, 'rgba(0,0,0,0)');
+						context.fillStyle = gradient;
+						context.fillRect(0, 0, 32, 32);
+					}
+					const texture = new THREE.CanvasTexture(canvasObj);
+
+					const particleMaterial = new THREE.PointsMaterial({
+						size: 3.0,
+						vertexColors: true,
+						transparent: true,
+						opacity: 0.9,
+						map: texture,
+						blending: THREE.AdditiveBlending,
+						depthWrite: false
+					});
+
+					const particleMesh = new THREE.Points(particles, particleMaterial);
+					scene.add(particleMesh);
+
+					window.addEventListener('resize', () => {
+						camera.aspect = window.innerWidth / window.innerHeight;
+						camera.updateProjectionMatrix();
+						renderer.setSize(window.innerWidth, window.innerHeight);
+					});
+
+					const getPath = (z, time) => {
+						const x = Math.sin(z * 0.002 + time * 0.4) * 350 + Math.sin(z * 0.0008 - time * 0.2) * 450;
+						const y = Math.cos(z * 0.0025 + time * 0.3) * 350 + Math.cos(z * 0.0006 + time * 0.25) * 450;
+						return { x, y };
+					};
+
+					let timeState = 0;
+					const speed = 1.5;
+
+					function animate() {
+						requestAnimationFrame(animate);
+						timeState += 0.002;
+						const positions = particleMesh.geometry.attributes.position.array;
+
+						for (let i = 0; i < particleCount; i++) {
+							const p = dataArray[i];
+							p.z += speed + p.speedOffset * 0.5;
+							if (p.z > 100) {
+								p.z -= 4500;
+							}
+							p.angle -= 0.001;
+
+							const path = getPath(p.z, timeState);
+							positions[i * 3] = Math.cos(p.angle) * p.radius + path.x;
+							positions[i * 3 + 1] = Math.sin(p.angle) * p.radius + path.y;
+							positions[i * 3 + 2] = p.z;
+						}
+
+						particleMesh.geometry.attributes.position.needsUpdate = true;
+						renderer.render(scene, camera);
+					}
+					animate();
+				}
+				initWormhole();
+
+				// PostMessage handshake to opener tab
+				const status = '<?php echo esc_js( $status ); ?>';
+				const tierId = '<?php echo esc_js( $tier_id ); ?>';
+				const sessionId = '<?php echo esc_js( $session_id ); ?>';
+				const fallbackUrl = '<?php echo esc_url( $fallback_url ); ?>';
+
+				if (window.opener) {
+					if (status === 'success') {
+						window.opener.postMessage({
+							type: 'STRIPE_CHECKOUT_SUCCESS',
+							tier_id: tierId,
+							session_id: sessionId
+						}, '*');
+					} else {
+						window.opener.postMessage({
+							type: 'STRIPE_CHECKOUT_CANCEL',
+							tier_id: tierId
+						}, '*');
+					}
+				}
+
+				function closeOrReturn() {
+					if (window.opener) {
+						window.close();
+					} else {
+						window.location.href = fallbackUrl;
+					}
+				}
+			</script>
+		</body>
+		</html>
+		<?php
+	}
+
 	private function serve_static_asset( $request_uri ) {
 		$plugin_public_path = plugin_dir_path( __FILE__ ); // This is in public/ folder already
 		
@@ -992,6 +1347,7 @@ $spark_id = !empty($path_spark_id) ? $path_spark_id : sanitize_text_field($raw_s
 $is_lite = (isset($_GET['fullspark']) && $_GET['fullspark'] === 'true') || !empty($path_spark_id);
 $raw_name = isset($_GET['name']) ? sanitize_text_field(wp_unslash($_GET['name'])) : '';
 $raw_icon = isset($_GET['icon']) ? sanitize_text_field(wp_unslash($_GET['icon'])) : '';
+$raw_color = isset($_GET['color']) ? sanitize_text_field(wp_unslash($_GET['color'])) : '';
 
 if (!empty($spark_id)) {
 	$decoded = json_decode($spark_id, true);
@@ -1019,7 +1375,7 @@ if (!empty($spark_id)) {
 	}
 }
 
-// For the manifest URL, we pass the spark_id, name, and icon if present
+// For the manifest URL, we pass the spark_id, name, icon, and color if present
 $manifest_url = rest_url( 'xophz-compass/v1/spark-manifest' );
 if (!empty($spark_id)) {
 	$manifest_url .= '?spark=' . urlencode($spark_id);
@@ -1029,10 +1385,13 @@ if (!empty($spark_id)) {
 	if (!empty($raw_icon)) {
 		$manifest_url .= '&icon=' . urlencode($raw_icon);
 	}
+	if (!empty($raw_color)) {
+		$manifest_url .= '&color=' . urlencode($raw_color);
+	}
 }
 
 // Check for custom spark icon
-$spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon ) : '';
+$spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon, $raw_color ) : '';
 ?>
 <script>
 window.__pwaInstallPrompt = null;
@@ -1797,6 +2156,226 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			'callback' => array( $this, 'generate_spark_manifest' ),
 			'permission_callback' => '__return_true',
 		) );
+
+		register_rest_route( 'xophz-compass/v1', '/spark-icon', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'render_spark_icon' ),
+			'permission_callback' => '__return_true',
+		) );
+	}
+
+	/**
+	 * Map of known spark IDs to their official brand colors in YouMeOS.
+	 *
+	 * @param string $spark_id
+	 * @param string $raw_color
+	 * @return string Hex color code
+	 */
+	public function get_spark_brand_color( $spark_id, $raw_color = '' ) {
+		if ( ! empty( $raw_color ) ) {
+			$raw_color = trim( $raw_color );
+			if ( $raw_color === 'transparent' || $raw_color === 'rgba(0,0,0,0)' ) {
+				return '#62c9ff';
+			}
+			if ( preg_match( '/^[0-9a-fA-F]{3,8}$/', $raw_color ) ) {
+				return '#' . $raw_color;
+			}
+			if ( preg_match( '/^#[0-9a-fA-F]{3,8}$/', $raw_color ) ) {
+				return $raw_color;
+			}
+		}
+
+		$clean_id = strtolower( trim( (string) $spark_id ) );
+		$clean_id = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $clean_id );
+		$clean_id = preg_replace( '/-[0-9a-z]{5,14}$/i', '', $clean_id );
+		$clean_id = preg_replace( '/-app$/i', '', $clean_id );
+		$clean_id = preg_replace( '/^u-/', '', $clean_id );
+
+		$colors = array(
+			'suggestion-box'       => '#ffcc00',
+			'trophy-case'          => '#ffd700',
+			'bugnet'               => '#1e9682',
+			'chronos'              => '#ff4081',
+			'bubblegum'            => '#FF1493',
+			'snake'                => '#00ff66',
+			'sys-monitor'          => '#69f0ae',
+			'jukebox'              => '#b388ff',
+			'tesseract'            => '#00f2fe',
+			'vip-club'             => '#00f2fe',
+			'yellow-links'         => '#FFCC00',
+			'cookie-jar'           => '#ff9800',
+			'xophz-lemonade-stand' => '#ffff00',
+			'local-produce'        => '#4caf50',
+			'trenchess'            => '#ffc107',
+			'cafeteria'            => '#ffc107',
+			'debug-console'        => '#ff5555',
+			'app-launcher'         => '#ff5252',
+			'holosweeper'          => '#FF5252',
+			'solitaire'            => '#ff0000',
+			'calculator'           => '#2196F3',
+			'lunch-room'           => '#2196F3',
+			'gaea'                 => '#4CAF50',
+			'logos'                => '#3dee98',
+			'helios'               => '#D9BE6F',
+			'noosphere'            => '#b300ff',
+			'spark-plugs'          => '#ff9800',
+			'nucleos'              => '#ff007a',
+			'neon-notes'           => '#FB8C00',
+			'xophz-magic-formula'  => '#a78bfa',
+			'wizards-tower'        => '#a78bfa',
+			'midnight-nerd'        => '#8d105e',
+			'social-preview'       => '#42b883',
+			'oscar'                => '#10b981',
+			'wp-admin'             => '#21759b',
+			'notepad'              => '#9E9E9E',
+			'enchiridion'          => '#9E9E9E',
+			'terminal'             => '#62c9ff',
+			'my-compass-suite'     => '#62c9ff',
+			'omega-source'         => '#62c9ff',
+			'nexus'                => '#62c9ff',
+			'my-planner'           => '#62c9ff',
+			'author-note'          => '#62c9ff',
+			'media-drive'          => '#62c9ff',
+			'welcome-u'            => '#ffffff',
+			'tourguide'            => '#ffffff',
+			'blackjack'            => '#ffffff',
+			'blackbox'             => '#ffffff',
+			'telescope'            => '#ffffff',
+			'swag-shop'            => '#ff9800',
+			'paint'                => '#ffcc00',
+		);
+
+		return isset( $colors[ $clean_id ] ) ? $colors[ $clean_id ] : '#62c9ff';
+	}
+
+	/**
+	 * Locates the local icon file on disk for a given spark.
+	 *
+	 * @param string $spark_id
+	 * @param string $raw_icon
+	 * @return string Full filepath or empty string
+	 */
+	public function locate_spark_icon_file( $spark_id, $raw_icon = '' ) {
+		$plugin_dir = plugin_dir_path( __FILE__ );
+		$icons_dir = $plugin_dir . 'images/spark-icons/';
+
+		$candidates = array();
+
+		// 1. Candidates from spark_id
+		if ( ! empty( $spark_id ) ) {
+			$clean_id = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $spark_id );
+			$clean_id = preg_replace( '/-[0-9a-z]{5,14}$/i', '', $clean_id );
+			$clean_id = preg_replace( '/-app$/i', '', $clean_id );
+			$unprefixed_id = preg_replace( '/^u-/', '', $clean_id );
+
+			$candidates[] = 'spark-' . $spark_id . '.svg';
+			$candidates[] = 'spark-' . $clean_id . '.svg';
+			$candidates[] = 'spark-' . $unprefixed_id . '.svg';
+			$candidates[] = 'spark-u-' . $unprefixed_id . '.svg';
+			$candidates[] = $spark_id . '.svg';
+			$candidates[] = $clean_id . '.svg';
+		}
+
+		// 2. Candidates from $raw_icon
+		if ( ! empty( $raw_icon ) ) {
+			if ( preg_match( '/^(fas|far|fal|fat|fad|fab)\s+fa-([a-z0-9\-]+)/i', $raw_icon, $matches ) ) {
+				$prefix = strtolower( $matches[1] );
+				$name = strtolower( $matches[2] );
+				$candidates[] = $prefix . '-' . $name . '.svg';
+				$candidates[] = 'spark-' . $name . '.svg';
+				$candidates[] = 'fal-' . $name . '.svg';
+				$candidates[] = 'fad-' . $name . '.svg';
+			} elseif ( preg_match( '/^(fas|far|fal|fat|fad|fab)-([a-z0-9\-]+)(?:\.svg)?$/i', $raw_icon, $matches ) ) {
+				$prefix = strtolower( $matches[1] );
+				$name = strtolower( $matches[2] );
+				$candidates[] = $prefix . '-' . $name . '.svg';
+				$candidates[] = 'spark-' . $name . '.svg';
+			}
+		}
+
+		foreach ( array_unique( $candidates ) as $cand ) {
+			if ( ! empty( $cand ) && file_exists( $icons_dir . $cand ) ) {
+				return $icons_dir . $cand;
+			}
+		}
+
+		// 3. Ecosystem plugin icon check
+		if ( ! empty( $spark_id ) ) {
+			$unprefixed = preg_replace( '/^u-/', '', $spark_id );
+			$wp_plugins_dir = defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : dirname( dirname( dirname( __FILE__ ) ) );
+
+			$plugin_slugs = array(
+				'xophz-compass-' . $unprefixed,
+				'xophz-' . $unprefixed,
+				$unprefixed,
+				'xophz-compass-' . $spark_id,
+			);
+
+			foreach ( $plugin_slugs as $slug ) {
+				$svg_path = $wp_plugins_dir . '/' . $slug . '/icon.svg';
+				if ( file_exists( $svg_path ) ) {
+					return $svg_path;
+				}
+				$png_path = $wp_plugins_dir . '/' . $slug . '/icon.png';
+				if ( file_exists( $png_path ) ) {
+					return $png_path;
+				}
+			}
+		}
+
+		// 4. Default fallback logo
+		$logo_path = dirname( $plugin_dir ) . '/admin/images/youmeos-logo.png';
+		if ( file_exists( $logo_path ) ) {
+			return $logo_path;
+		}
+
+		return '';
+	}
+
+	/**
+	 * Serves dynamic spark icon with the exact brand color applied.
+	 */
+	public function render_spark_icon( $request ) {
+		$raw_spark = $request->get_param( 'spark' );
+		$spark_id = sanitize_text_field( $raw_spark );
+		$raw_icon = sanitize_text_field( $request->get_param( 'icon' ) );
+		$raw_color = sanitize_text_field( $request->get_param( 'color' ) );
+
+		$brand_color = $this->get_spark_brand_color( $spark_id, $raw_color );
+		$file_path = $this->locate_spark_icon_file( $spark_id, $raw_icon );
+
+		if ( ! empty( $file_path ) && file_exists( $file_path ) ) {
+			$ext = strtolower( pathinfo( $file_path, PATHINFO_EXTENSION ) );
+			if ( $ext === 'svg' ) {
+				$svg_content = file_get_contents( $file_path );
+				// Replace hex colors or insert fill
+				if ( strpos( $svg_content, 'fill=' ) === false ) {
+					$svg_content = preg_replace( '/<svg([^>]+)>/i', '<svg$1 fill="' . esc_attr( $brand_color ) . '">', $svg_content, 1 );
+				} else {
+					$svg_content = preg_replace( '/fill="(?:\#[0-9a-fA-F]{3,8}|currentColor)"/i', 'fill="' . esc_attr( $brand_color ) . '"', $svg_content );
+				}
+				header( 'Content-Type: image/svg+xml; charset=utf-8' );
+				header( 'Cache-Control: public, max-age=86400' );
+				header( 'Access-Control-Allow-Origin: *' );
+				echo $svg_content;
+				exit;
+			} elseif ( in_array( $ext, array( 'png', 'jpg', 'jpeg', 'webp' ), true ) ) {
+				$mime = 'image/' . ( $ext === 'jpg' ? 'jpeg' : $ext );
+				header( 'Content-Type: ' . $mime );
+				header( 'Cache-Control: public, max-age=86400' );
+				header( 'Access-Control-Allow-Origin: *' );
+				readfile( $file_path );
+				exit;
+			}
+		}
+
+		// Fallback minimal SVG
+		$svg_content = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="128" fill="' . esc_attr( $brand_color ) . '"/><path fill="#000000" d="M256 128l128 256H128z"/></svg>';
+		header( 'Content-Type: image/svg+xml; charset=utf-8' );
+		header( 'Cache-Control: public, max-age=86400' );
+		header( 'Access-Control-Allow-Origin: *' );
+		echo $svg_content;
+		exit;
 	}
 
 	public function generate_spark_manifest( $request ) {
@@ -1829,8 +2408,11 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			$id = '/os/';
 			// Clear spark_id so the fallback icons are used below
 			$spark_id = '';
+			$brand_color = '#62c9ff';
 		} else {
 			$spark_name_override = sanitize_text_field( $request->get_param('name') );
+			$raw_color = sanitize_text_field( $request->get_param('color') );
+			$brand_color = $this->get_spark_brand_color( $spark_id, $raw_color );
 			
 			// Clean up spark_id by stripping internal prefixes, hashes, and redundant suffixes
 			$clean_title = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $spark_id );
@@ -1855,10 +2437,11 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		}
 
 		$raw_icon = $request->get_param('icon');
-		$spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon ) : '';
+		$raw_color = sanitize_text_field( $request->get_param('color') );
+		$spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon, $raw_color ) : '';
 		
 		if ( !empty($spark_id) && !empty($spark_icon_url) ) {
-			$is_svg = ( stripos( $spark_icon_url, '.svg' ) !== false );
+			$is_svg = ( stripos( $spark_icon_url, '.svg' ) !== false || stripos( $spark_icon_url, 'spark-icon' ) !== false );
 			$mime_type = $is_svg ? 'image/svg+xml' : 'image/png';
 			$icons = array(
 				array(
@@ -1907,7 +2490,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			'scope' => empty($spark_id) ? '/os/' : $scope,
 			'display' => 'standalone',
 			'background_color' => '#000000',
-			'theme_color' => '#000000',
+			'theme_color' => ( !empty($brand_color) && $brand_color !== 'transparent' ) ? $brand_color : '#000000',
 			'icons' => $icons
 		);
 
@@ -1918,17 +2501,14 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 	/**
 	 * Resolves the URL for a given spark's SVG icon.
-	 * Checks candidate locations: direct spark-id, normalized ID, FontAwesome class, ecosystem plugins, etc.
+	 * Returns the dynamic spark-icon endpoint with the brand color applied.
 	 *
 	 * @param string $spark_id
 	 * @param string $raw_icon Optional icon class or URL (e.g., "fal fa-infinity", "fad fa-cube", "/path/icon.svg")
+	 * @param string $raw_color Optional hex color override
 	 * @return string Full URL to icon, or empty string if not found.
 	 */
-	public function resolve_spark_icon_url( $spark_id, $raw_icon = '' ) {
-		$plugin_dir = plugin_dir_path( __FILE__ );
-		$icons_dir = $plugin_dir . 'images/spark-icons/';
-		$icons_url = plugins_url( 'images/spark-icons/', __FILE__ );
-
+	public function resolve_spark_icon_url( $spark_id, $raw_icon = '', $raw_color = '' ) {
 		// 1. Direct or external/absolute URL passed in $raw_icon
 		if ( ! empty( $raw_icon ) ) {
 			if ( preg_match( '#^(?:https?:)?//#i', $raw_icon ) || strpos( $raw_icon, '/wp-content/' ) !== false ) {
@@ -1936,73 +2516,19 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			}
 		}
 
-		$candidates = array();
-
-		// 2. Candidates from spark_id
-		if ( ! empty( $spark_id ) ) {
-			$clean_id = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $spark_id );
-			$clean_id = preg_replace( '/-[0-9a-z]{5,14}$/i', '', $clean_id );
-			$clean_id = preg_replace( '/-app$/i', '', $clean_id );
-			$unprefixed_id = preg_replace( '/^u-/', '', $clean_id );
-
-			$candidates[] = 'spark-' . $spark_id . '.svg';
-			$candidates[] = 'spark-' . $clean_id . '.svg';
-			$candidates[] = 'spark-' . $unprefixed_id . '.svg';
-			$candidates[] = 'spark-u-' . $unprefixed_id . '.svg';
-			$candidates[] = $spark_id . '.svg';
-			$candidates[] = $clean_id . '.svg';
-		}
-
-		// 3. Candidates from $raw_icon (e.g., "fal fa-infinity", "fad fa-bomb", "fal-infinity")
+		$brand_color = $this->get_spark_brand_color( $spark_id, $raw_color );
+		$icon_url = rest_url( 'xophz-compass/v1/spark-icon' );
+		$params = array(
+			'spark' => $spark_id,
+		);
 		if ( ! empty( $raw_icon ) ) {
-			if ( preg_match( '/^(fas|far|fal|fat|fad|fab)\s+fa-([a-z0-9\-]+)/i', $raw_icon, $matches ) ) {
-				$prefix = strtolower( $matches[1] );
-				$name = strtolower( $matches[2] );
-				$candidates[] = $prefix . '-' . $name . '.svg';
-				$candidates[] = 'spark-' . $name . '.svg';
-				$candidates[] = 'fal-' . $name . '.svg';
-				$candidates[] = 'fad-' . $name . '.svg';
-			} elseif ( preg_match( '/^(fas|far|fal|fat|fad|fab)-([a-z0-9\-]+)(?:\.svg)?$/i', $raw_icon, $matches ) ) {
-				$prefix = strtolower( $matches[1] );
-				$name = strtolower( $matches[2] );
-				$candidates[] = $prefix . '-' . $name . '.svg';
-				$candidates[] = 'spark-' . $name . '.svg';
-			}
+			$params['icon'] = $raw_icon;
+		}
+		if ( ! empty( $brand_color ) ) {
+			$params['color'] = $brand_color;
 		}
 
-		// Check spark-icons folder for any candidate match
-		foreach ( array_unique( $candidates ) as $cand ) {
-			if ( ! empty( $cand ) && file_exists( $icons_dir . $cand ) ) {
-				return $icons_url . $cand;
-			}
-		}
-
-		// 4. Ecosystem plugin icon check (e.g., wp-content/plugins/xophz-compass-{slug}/icon.svg)
-		if ( ! empty( $spark_id ) ) {
-			$unprefixed = preg_replace( '/^u-/', '', $spark_id );
-			$wp_plugins_dir = defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : dirname( dirname( dirname( __FILE__ ) ) );
-			$wp_plugins_url = plugins_url();
-
-			$plugin_slugs = array(
-				'xophz-compass-' . $unprefixed,
-				'xophz-' . $unprefixed,
-				$unprefixed,
-				'xophz-compass-' . $spark_id,
-			);
-
-			foreach ( $plugin_slugs as $slug ) {
-				$svg_path = $wp_plugins_dir . '/' . $slug . '/icon.svg';
-				if ( file_exists( $svg_path ) ) {
-					return $wp_plugins_url . '/' . $slug . '/icon.svg';
-				}
-				$png_path = $wp_plugins_dir . '/' . $slug . '/icon.png';
-				if ( file_exists( $png_path ) ) {
-					return $wp_plugins_url . '/' . $slug . '/icon.png';
-				}
-			}
-		}
-
-		return '';
+		return add_query_arg( $params, $icon_url );
 	}
 
 	public function get_gaea_telemetry_simulation( $request ) {
