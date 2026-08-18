@@ -1253,7 +1253,7 @@ class Xophz_Compass_Event_Horizon_Public {
 		}
 
 		$og_desc = !empty($whitelabel['os_tagline']) ? $whitelabel['os_tagline'] : (!empty($routing['og_description']) ? $routing['og_description'] : 'The Omega Source. Travel the YouMeverse without moving.');
-		$og_image = !empty($routing['og_image']) ? $routing['og_image'] : (!empty($whitelabel['splash_image_url']) ? $whitelabel['splash_image_url'] : plugins_url( 'images/takemymoney.jpg', __FILE__ ));
+		$og_image = !empty($routing['og_image']) ? $routing['og_image'] : (!empty($whitelabel['splash_image_url']) ? $whitelabel['splash_image_url'] : plugins_url( 'images/gods-eye-view.jpg', __FILE__ ));
 
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
 
