@@ -1252,7 +1252,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			$og_title = 'YouMeOS';
 		}
 
-		$og_desc = !empty($whitelabel['os_tagline']) ? $whitelabel['os_tagline'] : (!empty($routing['og_description']) ? $routing['og_description'] : 'The Omega Source. Travel the YouMeverse without moving.');
+		$og_desc = !empty($whitelabel['os_tagline']) ? $whitelabel['os_tagline'] : (!empty($routing['og_description']) ? $routing['og_description'] : 'The Omega Source. Navigate the spatial web, decentralized infrastructure, and your entire digital life from a single God-eye view.');
 		$og_image = !empty($routing['og_image']) ? $routing['og_image'] : (!empty($whitelabel['splash_image_url']) ? $whitelabel['splash_image_url'] : plugins_url( 'images/gods-eye-view.jpg', __FILE__ ));
 
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
@@ -2391,7 +2391,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			}
 		}
 
-		$og_desc = 'The Omega Source. Travel the YouMeverse without moving.';
+		$og_desc = 'The Omega Source. Navigate the spatial web, decentralized infrastructure, and your entire digital life from a single God-eye view.';
 
 		if ( empty($spark_id) || $spark_id === 'welcome-u' ) {
 			// Main OS Manifest

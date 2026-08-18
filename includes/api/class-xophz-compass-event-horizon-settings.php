@@ -71,7 +71,7 @@ class Xophz_Compass_Event_Horizon_Settings {
 		return array(
 			'whitelabel'   => array(
 				'os_title'            => $site_name ? $site_name : 'YouMeOS',
-				'os_tagline'          => $site_desc ? $site_desc : 'The Omega Source. Travel the YouMeverse without moving.',
+				'os_tagline'          => $site_desc ? $site_desc : 'The Omega Source. Navigate the spatial web, decentralized infrastructure, and your entire digital life from a single God-eye view.',
 				'logo_url'            => '',
 				'icon_url'            => '',
 				'splash_image_url'    => '',
@@ -104,7 +104,7 @@ class Xophz_Compass_Event_Horizon_Settings {
 				'pi_trigger_position'    => 'bottom-right',
 				'show_admin_bar_button'  => (bool) get_option( 'youmeos_show_admin_bar', 1 ),
 				'og_title'               => $site_name ? $site_name : 'YouMeOS',
-				'og_description'         => $site_desc ? $site_desc : 'The Omega Source. Travel the YouMeverse without moving.',
+				'og_description'         => $site_desc ? $site_desc : 'The Omega Source. Navigate the spatial web, decentralized infrastructure, and your entire digital life from a single God-eye view.',
 				'og_image'               => '',
 			),
 			'audio'        => array(
