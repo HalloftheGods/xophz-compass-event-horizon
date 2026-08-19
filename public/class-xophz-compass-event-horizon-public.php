@@ -1388,6 +1388,10 @@ if (!empty($spark_id)) {
 	if (!empty($raw_color)) {
 		$manifest_url .= '&color=' . urlencode($raw_color);
 	}
+} else {
+	if (isset($app_base) && $app_base !== '') {
+		$manifest_url .= '?base=' . urlencode($app_base);
+	}
 }
 
 // Check for custom spark icon
@@ -1445,8 +1449,15 @@ window.addEventListener('beforeinstallprompt', function(e) {
 	<?php endif; ?>
 </style>
 <script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css"/>
-<script>window.xophzCompassSettings = <?php echo json_encode($settings); ?>;</script>
+<script>
+  if (typeof self !== 'undefined' && !self.GPUShaderStage) {
+    self.GPUShaderStage = { VERTEX: 1, FRAGMENT: 2, COMPUTE: 4 };
+  }
+  if (typeof window !== 'undefined' && !window.GPUShaderStage) {
+    window.GPUShaderStage = { VERTEX: 1, FRAGMENT: 2, COMPUTE: 4 };
+  }
+  window.xophzCompassSettings = <?php echo json_encode($settings); ?>;
+</script>
 
 <?php if ( $this->is_dev_server() ) : 
     $dev_url = $this->get_dev_server_url();
@@ -2403,9 +2414,34 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			}
 			$short_name = 'YouMeOS';
 			$description = $og_desc;
-			$start_url = '/os/';
-			$scope = '/os/';
-			$id = '/os/';
+
+			$param_base = sanitize_text_field( $request->get_param('base') );
+			if ( !empty($param_base) ) {
+				$clean_base = trim($param_base, '/');
+				if ( $clean_base !== '' ) {
+					$start_url = '/' . $clean_base . '/';
+					$scope = '/' . $clean_base . '/';
+					$id = '/' . $clean_base . '/';
+				} else {
+					$start_url = '/';
+					$scope = '/';
+					$id = '/';
+				}
+			} else {
+				$base_url = $this->get_youmeos_base_url();
+				$parsed_path = parse_url( $base_url, PHP_URL_PATH ) ?: '/';
+				$clean_path = trim( $parsed_path, '/' );
+				if ( $clean_path !== '' ) {
+					$start_url = '/' . $clean_path . '/';
+					$scope = '/' . $clean_path . '/';
+					$id = '/' . $clean_path . '/';
+				} else {
+					$start_url = '/';
+					$scope = '/';
+					$id = '/';
+				}
+			}
+
 			// Clear spark_id so the fallback icons are used below
 			$spark_id = '';
 			$brand_color = '#62c9ff';
@@ -2482,13 +2518,14 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		}
 
 		$manifest = array(
-			'id' => empty($spark_id) ? '/os/' : $id,
+			'id' => $id,
 			'name' => $spark_name,
 			'short_name' => $short_name,
 			'description' => $description,
 			'start_url' => $start_url,
-			'scope' => empty($spark_id) ? '/os/' : $scope,
+			'scope' => $scope,
 			'display' => 'standalone',
+			'display_override' => array( 'window-controls-overlay', 'standalone' ),
 			'background_color' => '#000000',
 			'theme_color' => ( !empty($brand_color) && $brand_color !== 'transparent' ) ? $brand_color : '#000000',
 			'icons' => $icons
@@ -2805,7 +2842,12 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 		if ( is_wp_error( $user ) ) {
 			do_action( 'wp_login_failed', $username, clone $user );
-			return new WP_Error( 'invalid_credentials', $user->get_error_message(), array( 'status' => 403 ) );
+			$raw_message = $user->get_error_message();
+			$clean_message = trim( wp_strip_all_tags( $raw_message ) );
+			if ( preg_match( '/^Error\s+[A-Z]/i', $clean_message ) ) {
+				$clean_message = preg_replace( '/^Error\s+/i', 'Error: ', $clean_message );
+			}
+			return new WP_Error( 'invalid_credentials', $clean_message, array( 'status' => 403 ) );
 		}
 
 		// Ensure global user state is updated before generating the REST nonce
@@ -2908,7 +2950,9 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		$user_id = wp_create_user( $username, $password, $email );
 
 		if ( is_wp_error( $user_id ) ) {
-			return $user_id;
+			$raw_message = $user_id->get_error_message();
+			$clean_message = trim( wp_strip_all_tags( $raw_message ) );
+			return new WP_Error( $user_id->get_error_code(), $clean_message, array( 'status' => 400 ) );
 		}
 
 		// Auto-login after registration

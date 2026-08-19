@@ -38,7 +38,7 @@ YouMeOS replaces traditional "pages," "dashboards," and "menus" with a celestial
 | **Nexos**      | The social layer (the Hipparcos Level). It visualizes your relationships and connections to other Stars.          |
 | **Noosphere**  | The highest perspective (the Galaxy Level). The collective mind. All Stars, all content, all connections.         |
 | **Oort Cloud** | A user's content cloud—their links, media, consumption. The outer layer of their digital footprint.               |
-| **Satellites** | Wapps (Web-Apps) that orbit your Sun. Functional modules like Blog (Saturn), Messages (Mercury), Gallery (Earth). |
+| **Satellites** | Sparks (Web-Apps) that orbit your Sun. Functional modules like Blog (Saturn), Messages (Mercury), Gallery (Earth). |
 
 ---
 
