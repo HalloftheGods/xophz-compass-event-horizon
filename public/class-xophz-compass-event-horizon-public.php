@@ -1396,6 +1396,9 @@ if (!empty($spark_id)) {
 
 // Check for custom spark icon
 $spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon, $raw_color ) : '';
+if ( empty( $page_title ) ) {
+	$page_title = ! empty( $whitelabel['title'] ) ? $whitelabel['title'] : ( get_bloginfo( 'name' ) ? get_bloginfo( 'name' ) . ' :: YouMeOS' : 'YouMeOS' );
+}
 ?>
 <script>
 window.__pwaInstallPrompt = null;
