@@ -2176,6 +2176,18 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			'callback' => array( $this, 'render_spark_icon' ),
 			'permission_callback' => '__return_true',
 		) );
+
+		register_rest_route( 'xophz/v1', '/stripe/checkout', array(
+			'methods' => 'POST',
+			'callback' => array( $this, 'handle_stripe_checkout' ),
+			'permission_callback' => '__return_true',
+		) );
+
+		register_rest_route( 'xophz-compass/v1', '/stripe/checkout', array(
+			'methods' => 'POST',
+			'callback' => array( $this, 'handle_stripe_checkout' ),
+			'permission_callback' => '__return_true',
+		) );
 	}
 
 	/**
@@ -3359,6 +3371,98 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		return rest_ensure_response( array( 
 			'success' => true,
 			'message' => 'Rhythm Matrix synchronized.'
+		) );
+	}
+
+	/**
+	 * Create a Stripe Checkout session for licenses and hosting tiers.
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function handle_stripe_checkout( $request ) {
+		$price        = (float) $request->get_param( 'price' );
+		$license      = sanitize_text_field( (string) $request->get_param( 'license' ) );
+		$product_name = sanitize_text_field( (string) $request->get_param( 'product_name' ) );
+		$success_url  = esc_url_raw( (string) $request->get_param( 'success_url' ) );
+		$cancel_url   = esc_url_raw( (string) $request->get_param( 'cancel_url' ) );
+		$tier         = sanitize_text_field( (string) $request->get_param( 'tier' ) );
+
+		if ( empty( $price ) && $price !== 0.0 ) {
+			return new WP_Error( 'invalid_params', 'Price parameter is required.', array( 'status' => 400 ) );
+		}
+
+		if ( empty( $product_name ) ) {
+			$product_name = ! empty( $license ) ? $license : 'YouMeOS Sovereignty License';
+		}
+
+		// Retrieve Stripe Secret Key from WP options or constants
+		$stripe_secret_key = get_option( 'compass_stripe_secret_key' );
+		if ( empty( $stripe_secret_key ) ) {
+			$stripe_secret_key = get_option( 'xophz_compass_stripe_secret_key' );
+		}
+		if ( empty( $stripe_secret_key ) ) {
+			$stripe_secret_key = get_option( 'stripe_secret_key' );
+		}
+		if ( empty( $stripe_secret_key ) && defined( 'STRIPE_SECRET_KEY' ) ) {
+			$stripe_secret_key = STRIPE_SECRET_KEY;
+		}
+
+		if ( empty( $stripe_secret_key ) ) {
+			return new WP_Error( 'missing_stripe_key', 'Stripe Secret Key is missing in WordPress Settings (compass_stripe_secret_key).', array( 'status' => 500 ) );
+		}
+
+		$unit_amount     = (int) round( $price * 100 );
+		$license_lower   = strtolower( $product_name . ' ' . $license );
+		$is_subscription = ( strpos( $license_lower, 'month' ) !== false || strpos( $license_lower, '/mo' ) !== false || strpos( $license_lower, 'subscription' ) !== false || strpos( $license_lower, 'concierge' ) !== false || strpos( $license_lower, 'sovereign' ) !== false || $price >= 99 );
+		$mode            = $is_subscription ? 'subscription' : 'payment';
+
+		$default_success = home_url( '/callback/stripe?status=success' . ( ! empty( $tier ) ? '&tier=' . urlencode( $tier ) : '' ) . '&session_id={CHECKOUT_SESSION_ID}' );
+		$default_cancel  = home_url( '/callback/stripe?status=cancel' . ( ! empty( $tier ) ? '&tier=' . urlencode( $tier ) : '' ) );
+
+		$body = array(
+			'line_items[0][price_data][currency]'          => 'usd',
+			'line_items[0][price_data][product_data][name]' => $product_name,
+			'line_items[0][price_data][unit_amount]'        => $unit_amount,
+			'line_items[0][quantity]'                       => 1,
+			'mode'                                          => $mode,
+			'success_url'                                   => ! empty( $success_url ) ? $success_url : $default_success,
+			'cancel_url'                                    => ! empty( $cancel_url ) ? $cancel_url : $default_cancel,
+			'allow_promotion_codes'                         => 'true',
+		);
+
+		if ( $is_subscription ) {
+			$body['line_items[0][price_data][recurring][interval]'] = 'month';
+		}
+
+		if ( ! empty( $tier ) ) {
+			$body['metadata[tier]'] = $tier;
+		}
+
+		$response = wp_remote_post( 'https://api.stripe.com/v1/checkout/sessions', array(
+			'headers' => array(
+				'Authorization' => 'Bearer ' . trim( $stripe_secret_key ),
+				'Content-Type'  => 'application/x-www-form-urlencoded',
+			),
+			'body'    => http_build_query( $body ),
+			'timeout' => 15,
+		) );
+
+		if ( is_wp_error( $response ) ) {
+			return new WP_Error( 'stripe_connection_error', 'Failed to connect to Stripe API: ' . $response->get_error_message(), array( 'status' => 500 ) );
+		}
+
+		$body_res = wp_remote_retrieve_body( $response );
+		$data     = json_decode( $body_res, true );
+
+		if ( wp_remote_retrieve_response_code( $response ) !== 200 || empty( $data['url'] ) ) {
+			$err_msg = isset( $data['error']['message'] ) ? $data['error']['message'] : 'Stripe API returned an invalid response.';
+			return new WP_Error( 'stripe_api_error', 'Stripe error: ' . $err_msg, array( 'status' => 500 ) );
+		}
+
+		return rest_ensure_response( array(
+			'url'        => $data['url'],
+			'session_id' => isset( $data['id'] ) ? $data['id'] : '',
 		) );
 	}
 }
