@@ -2,7 +2,7 @@ var galacticTexture0 = THREE.ImageUtils.loadTexture(
   "images/galactic_sharp.png"
 );
 var galacticTexture1 = THREE.ImageUtils.loadTexture("images/galactic_blur.png");
-var galaxypng = THREE.ImageUtils.loadTexture("images/galactictop.png");
+var galaxypng = THREE.ImageUtils.loadTexture("images/galactictop.png?v=2");
 
 var galacticUniforms = {
   color: { type: "c", value: new THREE.Color(0xffffff) },
