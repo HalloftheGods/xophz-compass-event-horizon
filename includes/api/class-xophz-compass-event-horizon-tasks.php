@@ -85,16 +85,38 @@ class Xophz_Compass_Event_Horizon_Tasks {
 	public function get_tasks( WP_REST_Request $request ) {
 		$user_id = get_current_user_id();
 
-		// Fetch ONLY tasks authored by this user
-		// In the future, we can add a complex meta_query here to also fetch shared tasks
-		$args = array(
+		// Fetch tasks authored by this user
+		$authored_posts = get_posts( array(
 			'post_type'      => 'youmeos_task',
 			'posts_per_page' => -1,
 			'post_status'    => 'publish',
 			'author'         => $user_id, 
-		);
+		) );
 
-		$posts = get_posts( $args );
+		// Fetch tasks shared with this user
+		$shared_posts = get_posts( array(
+			'post_type'      => 'youmeos_task',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'meta_query'     => array(
+				array(
+					'key'     => '_shared_with_users',
+					'value'   => '"' . $user_id . '"',
+					'compare' => 'LIKE',
+				),
+			),
+		) );
+
+		// Merge and deduplicate
+		$all_posts = array_merge( $authored_posts, $shared_posts );
+		$unique_posts = array();
+		foreach ( $all_posts as $post ) {
+			if ( ! isset( $unique_posts[ $post->ID ] ) ) {
+				$unique_posts[ $post->ID ] = $post;
+			}
+		}
+
+		$posts = array_values( $unique_posts );
 		$tasks = array();
 
 		foreach ( $posts as $post ) {
@@ -127,7 +149,7 @@ class Xophz_Compass_Event_Horizon_Tasks {
 			return new WP_Error( 'create_failed', 'Could not create task.', array( 'status' => 500 ) );
 		}
 
-		$this->save_meta( $post_id, $params );
+		$this->save_meta( $post_id, $params, true );
 
 		return rest_ensure_response( $this->format_task( get_post( $post_id ) ) );
 	}
@@ -140,20 +162,23 @@ class Xophz_Compass_Event_Horizon_Tasks {
 		$params  = $request->get_json_params();
 		$post    = get_post( $post_id );
 
-		// 🔒 SECURITY GATE: Verify the post exists, is a task, and the user owns it
+		// 🔒 SECURITY GATE: Verify the post exists, is a task, and the user owns it or it's shared with them
 		if ( ! $post || $post->post_type !== 'youmeos_task' ) {
 			return new WP_Error( 'not_found', 'Task not found.', array( 'status' => 404 ) );
 		}
 		
-		if ( (int) $post->post_author !== get_current_user_id() ) {
-			return new WP_Error( 'forbidden', 'You do not own this task.', array( 'status' => 403 ) );
+		$is_author = (int) $post->post_author === get_current_user_id();
+		$shared_with = get_post_meta($post_id, '_shared_with_users', true) ?: array();
+		
+		if ( ! $is_author && ! in_array( get_current_user_id(), $shared_with ) ) {
+			return new WP_Error( 'forbidden', 'You do not own this task and it is not shared with you.', array( 'status' => 403 ) );
 		}
 
 		$post_data = array(
 			'ID' => $post_id
 		);
 
-		if ( isset( $params['title'] ) ) {
+		if ( isset( $params['title'] ) && $is_author ) {
 			$post_data['post_title'] = sanitize_text_field( $params['title'] );
 		}
 		if ( isset( $params['content'] ) ) {
@@ -161,7 +186,7 @@ class Xophz_Compass_Event_Horizon_Tasks {
 		}
 
 		wp_update_post( $post_data );
-		$this->save_meta( $post_id, $params );
+		$this->save_meta( $post_id, $params, $is_author );
 
 		return rest_ensure_response( $this->format_task( get_post( $post_id ) ) );
 	}
@@ -293,6 +318,7 @@ class Xophz_Compass_Event_Horizon_Tasks {
 			'content'     => $content,
 			'status'      => get_post_meta( $post->ID, '_task_status', true ) ?: 'do',
 			'theme_color' => get_post_meta( $post->ID, '_theme_color', true ) ?: '',
+			'author_id'   => (int) $post->post_author,
 			'shared_with' => get_post_meta( $post->ID, '_shared_with_users', true ) ?: array(),
 			'created_at'  => $post->post_date_gmt,
 		);
@@ -301,14 +327,14 @@ class Xophz_Compass_Event_Horizon_Tasks {
 	/**
 	 * Helper: Save Meta variables safely
 	 */
-	private function save_meta( $post_id, $params ) {
+	private function save_meta( $post_id, $params, $is_author = true ) {
 		if ( isset( $params['status'] ) ) {
 			update_post_meta( $post_id, '_task_status', sanitize_text_field( $params['status'] ) );
 		}
 		if ( isset( $params['theme_color'] ) ) {
 			update_post_meta( $post_id, '_theme_color', sanitize_text_field( $params['theme_color'] ) );
 		}
-		if ( isset( $params['shared_with'] ) && is_array( $params['shared_with'] ) ) {
+		if ( $is_author && isset( $params['shared_with'] ) && is_array( $params['shared_with'] ) ) {
 			$safe_ids = array_map( 'intval', $params['shared_with'] );
 			update_post_meta( $post_id, '_shared_with_users', $safe_ids );
 		}

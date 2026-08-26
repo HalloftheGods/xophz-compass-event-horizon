@@ -290,6 +290,7 @@ class Xophz_Compass_Event_Horizon {
 
 		// Register AJAX handler for nonce refresh
 		$this->loader->add_action( 'wp_ajax_youmeos_refresh_nonce', $plugin_public, 'ajax_refresh_nonce' );
+		$this->loader->add_action( 'wp_ajax_nopriv_youmeos_refresh_nonce', $plugin_public, 'ajax_refresh_nonce' );
 
 		// Inject Pi Trigger on Frontend
 		$this->loader->add_action( 'wp_footer', $plugin_public, 'inject_pi_trigger' );

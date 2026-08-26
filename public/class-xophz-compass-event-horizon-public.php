@@ -1999,6 +1999,9 @@ window.addEventListener('beforeinstallprompt', function(e) {
 	}
 
 	public function ajax_refresh_nonce() {
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( array( 'message' => 'User not logged in' ), 401 );
+		}
 		// Since this is wp_ajax_, the user is implicitly authenticated via cookie.
 		// We can generate a new REST API nonce.
 		wp_send_json_success( array(
@@ -2025,6 +2028,12 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			}
 			return $error;
 		}, 999 );
+
+		register_rest_route( 'xophz-compass/v1', '/me', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'handle_get_me' ),
+			'permission_callback' => '__return_true',
+		) );
 
 		register_rest_route( 'xophz-compass/v1', '/register', array(
 			'methods' => 'POST',
@@ -2843,6 +2852,39 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		}
 
 		return rest_ensure_response( $body );
+	}
+
+	public function handle_get_me( $request ) {
+		$current_user = wp_get_current_user();
+		if ( ! $current_user || ! $current_user->exists() ) {
+			return rest_ensure_response( array(
+				'authenticated' => false,
+				'user_id' => 0,
+				'user_login' => '',
+				'user_email' => '',
+				'user_display_name' => 'Anonymous',
+				'user_roles' => array(),
+				'nonce' => wp_create_nonce( 'wp_rest' )
+			) );
+		}
+
+		$global_variant = get_user_meta( $current_user->ID, 'youmeos_global_variant', true );
+		$global_blur = get_user_meta( $current_user->ID, 'youmeos_global_blur', true );
+		$display_name = ! empty( $current_user->display_name ) ? $current_user->display_name : ( ! empty( $current_user->user_login ) ? $current_user->user_login : 'Explorer' );
+		$user_nicename = ! empty( $current_user->user_nicename ) ? $current_user->user_nicename : $display_name;
+
+		return rest_ensure_response( array(
+			'authenticated' => true,
+			'user_id' => $current_user->ID,
+			'user_login' => $current_user->user_login,
+			'user_email' => $current_user->user_email,
+			'user_nicename' => $user_nicename,
+			'user_display_name' => $display_name,
+			'user_roles' => $current_user->roles,
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'global_variant' => $global_variant,
+			'global_blur' => $global_blur,
+		) );
 	}
 
 	public function handle_user_login( $request ) {
