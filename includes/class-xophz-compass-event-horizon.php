@@ -246,6 +246,8 @@ class Xophz_Compass_Event_Horizon {
     $this->loader->add_action( 'template_redirect', $plugin_public, 'template_redirect' );
     $this->loader->add_action( 'rest_api_init', $plugin_public, 'register_api_routes' );
 		
+		$this->loader->add_action( 'wp_ajax_youmeos_refresh_nonce', $plugin_public, 'refresh_nonce' );
+		$this->loader->add_action( 'wp_ajax_nopriv_youmeos_refresh_nonce', $plugin_public, 'refresh_nonce' );
     // Expose nav menus to REST API natively
     $this->loader->add_filter( 'register_taxonomy_args', $plugin_public, 'expose_menus_to_rest', 10, 2 );
     $this->loader->add_filter( 'register_post_type_args', $plugin_public, 'expose_menu_items_to_rest', 10, 2 );

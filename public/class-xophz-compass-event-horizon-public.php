@@ -1493,6 +1493,11 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		$spark_icon = isset($_GET['icon']) ? sanitize_text_field($_GET['icon']) : 'fal fa-sparkles';
 		$plugin_rel_path = plugin_dir_url( __FILE__ );
 		
+		$spark_raw_name = isset( $_GET['name'] ) && !empty( $_GET['name'] ) 
+			? sanitize_text_field( $_GET['name'] ) 
+			: preg_replace( '/^(?:u-|webspark-(?:custom-|yellow-links-)?)|\.vue$/i', '', $spark_id );
+		$spark_display_name = trim( str_replace( '-', ' ', preg_replace( '/^u-/i', '', $spark_raw_name ) ) );
+
 		// Build the URL to launch into the actual OS shell, not the interceptor
 		$launch_url = esc_url_raw( add_query_arg( [
 			'fullspark' => 'true',
@@ -1512,7 +1517,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 			<meta charset="UTF-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-			<title>Incoming <?php echo esc_html(ucwords(str_replace('-', ' ', $spark_id))); ?> | YouMeOS</title>
+			<title>Incoming <?php echo esc_html(ucwords($spark_display_name)); ?> | YouMeOS</title>
 			<?php wp_site_icon(); ?>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.iife.js"></script>
@@ -1703,7 +1708,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			<div id="bg-container"></div>
 			
 			<div id="countdown-text" style="position: absolute; top: calc(50% - 130px); left: 50%; transform: translateX(-50%); z-index: 5; text-align: center; color: white; font-family: 'Source Sans Pro', sans-serif; font-size: 18px; font-weight: 200; opacity: 0.9; letter-spacing: 1px; display: none; width: 100%;">
-				Opening wormhole to <span style="color: #d9be6f; font-weight: 400; text-transform: uppercase;"><?php echo esc_html(str_replace('-', ' ', $spark_id)); ?></span> in <strong id="countdown-timer" style="font-weight: 400; color: #d9be6f;">5</strong>... <a href="#" id="open-now-btn" onclick="launchSpark(); return false;" style="color: #62c9ff; text-decoration: underline; margin-left: 10px; font-size: 16px; font-weight: 400; vertical-align: middle; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">(open now)</a>
+				Opening wormhole to <span style="color: #d9be6f; font-weight: 400; text-transform: uppercase;"><?php echo esc_html($spark_display_name); ?></span> in <strong id="countdown-timer" style="font-weight: 400; color: #d9be6f;">5</strong>... <a href="#" id="open-now-btn" onclick="launchSpark(); return false;" style="color: #62c9ff; text-decoration: underline; margin-left: 10px; font-size: 16px; font-weight: 400; vertical-align: middle; opacity: 0.8; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">(open now)</a>
 			</div>
 
 			<div id="nostalgia-text">
@@ -1716,7 +1721,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
 					A Wormhole Opens Source...<br>
 					Through this rough G-force...<br>
 					<strong style="color: #d9be6f; text-transform: uppercase; font-weight: 400;">
-					<?php echo esc_html(str_replace('-', ' ', $spark_id)); ?></strong>
+					<?php echo esc_html($spark_display_name); ?></strong>
 					... stays the course ...
 				</div>
 			</div>
@@ -2887,24 +2892,90 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		) );
 	}
 
+	private function strip_captcha_filters() {
+		remove_filter( 'authenticate', 'wp_authenticate_application_password', 20 );
+
+		global $wp_filter;
+		$filters_to_clean = array( 'authenticate', 'wp_authenticate_user', 'wp_authenticate' );
+		foreach ( $filters_to_clean as $filter_name ) {
+			if ( ! isset( $wp_filter[ $filter_name ] ) ) {
+				continue;
+			}
+
+			$callbacks_by_priority = $wp_filter[ $filter_name ]->callbacks;
+			foreach ( $callbacks_by_priority as $priority => $callbacks ) {
+				foreach ( $callbacks as $id => $callback ) {
+					$is_captcha = false;
+					$func = $callback['function'] ?? null;
+
+					if ( is_array( $func ) ) {
+						$class_name  = is_object( $func[0] ) ? get_class( $func[0] ) : ( is_string( $func[0] ) ? $func[0] : '' );
+						$method_name = is_string( $func[1] ) ? $func[1] : '';
+
+						if ( preg_match( '/turnstile|captcha|recaptcha|hcaptcha|defender|wordfence|cloudflare/i', $class_name ) ||
+						     preg_match( '/turnstile|captcha|recaptcha|hcaptcha|defender/i', $method_name ) ) {
+							$is_captcha = true;
+						}
+					} elseif ( is_string( $func ) ) {
+						if ( preg_match( '/turnstile|captcha|recaptcha|hcaptcha|defender|wordfence|cloudflare/i', $func ) ) {
+							$is_captcha = true;
+						}
+					} elseif ( is_object( $func ) && ! ( $func instanceof \Closure ) ) {
+						$class_name = get_class( $func );
+						if ( preg_match( '/turnstile|captcha|recaptcha|hcaptcha|defender|wordfence|cloudflare/i', $class_name ) ) {
+							$is_captcha = true;
+						}
+					}
+
+					if ( $is_captcha ) {
+						remove_filter( $filter_name, $callback['function'], $priority );
+					}
+				}
+			}
+		}
+	}
+
 	public function handle_user_login( $request ) {
 		$username = $request->get_param( 'username' );
 		$password = $request->get_param( 'password' );
 
-		// Authenticate directly bypassing 'authenticate' filters (avoids CAPTCHA & App Passwords conflicts)
-		$user = wp_authenticate_username_password( null, $username, $password );
-		if ( is_wp_error( $user ) ) {
-			$user = wp_authenticate_email_password( null, $username, $password );
+		if ( empty( $username ) || empty( $password ) ) {
+			return new WP_Error( 'missing_credentials', 'Username/email and password are required.', array( 'status' => 400 ) );
 		}
 
-		if ( is_wp_error( $user ) ) {
-			do_action( 'wp_login_failed', $username, clone $user );
-			$raw_message = $user->get_error_message();
-			$clean_message = trim( wp_strip_all_tags( $raw_message ) );
-			if ( preg_match( '/^Error\s+[A-Z]/i', $clean_message ) ) {
-				$clean_message = preg_replace( '/^Error\s+/i', 'Error: ', $clean_message );
+		$this->strip_captcha_filters();
+
+		$user = null;
+		if ( is_email( $username ) ) {
+			$user = get_user_by( 'email', $username );
+		}
+		if ( ! $user ) {
+			$user = get_user_by( 'login', $username );
+		}
+		if ( ! $user && ! is_email( $username ) ) {
+			$user = get_user_by( 'email', $username );
+		}
+
+		if ( ! $user ) {
+			do_action( 'wp_login_failed', $username, new WP_Error( 'invalid_user', 'Invalid credentials.' ) );
+			return new WP_Error( 'invalid_credentials', 'Invalid credentials. Please check your username and password.', array( 'status' => 403 ) );
+		}
+
+		if ( ! wp_check_password( $password, $user->user_pass, $user->ID ) ) {
+			do_action( 'wp_login_failed', $username, new WP_Error( 'incorrect_password', 'Invalid credentials.' ) );
+			return new WP_Error( 'invalid_credentials', 'Invalid password. Please check your credentials and try again.', array( 'status' => 403 ) );
+		}
+
+		$filtered_user = apply_filters( 'wp_authenticate_user', $user, $password );
+		if ( is_wp_error( $filtered_user ) ) {
+			$error_code = $filtered_user->get_error_code();
+			if ( stripos( $error_code, 'turnstile' ) === false && stripos( $error_code, 'captcha' ) === false && stripos( $error_code, 'invalid_captcha' ) === false ) {
+				$raw_message = $filtered_user->get_error_message();
+				$clean_message = trim( wp_strip_all_tags( $raw_message ) );
+				return new WP_Error( 'invalid_credentials', ! empty( $clean_message ) ? $clean_message : 'Authentication failed.', array( 'status' => 403 ) );
 			}
-			return new WP_Error( 'invalid_credentials', $clean_message, array( 'status' => 403 ) );
+		} else {
+			$user = $filtered_user;
 		}
 
 		// Ensure global user state is updated before generating the REST nonce
@@ -3506,5 +3577,16 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			'url'        => $data['url'],
 			'session_id' => isset( $data['id'] ) ? $data['id'] : '',
 		) );
+	}
+
+	/**
+	 * AJAX endpoint to refresh the REST API nonce for YouMeOS.
+	 */
+	public function refresh_nonce() {
+		if ( is_user_logged_in() ) {
+			wp_send_json_success( array( 'nonce' => wp_create_nonce( 'wp_rest' ) ) );
+		} else {
+			wp_send_json_error( array( 'message' => 'Not logged in' ), 401 );
+		}
 	}
 }
