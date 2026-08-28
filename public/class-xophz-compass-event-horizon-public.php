@@ -8,6 +8,7 @@ class Xophz_Compass_Event_Horizon_Public {
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		add_filter( 'validate_current_theme', '__return_false' );
 	}
 
 	public function register_shortcodes() {
