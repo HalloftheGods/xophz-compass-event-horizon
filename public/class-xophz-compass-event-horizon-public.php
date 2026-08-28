@@ -1220,6 +1220,13 @@ class Xophz_Compass_Event_Horizon_Public {
 		$routing = get_option( 'youmeos_routing_settings', [] );
 		$audio = get_option( 'youmeos_audio_settings', [] );
 
+		$registered_sparks = apply_filters( 'xophz_register_sparks', array() );
+		$registered_sparks = apply_filters( 'youmeos_register_sparks', $registered_sparks );
+		if ( ! is_array( $registered_sparks ) ) {
+			$registered_sparks = array();
+		}
+		$sparks_config['registered_sparks'] = $registered_sparks;
+
 		$settings = [
 			'currentUser' => [
 				'ID' => $current_user->ID,
@@ -1251,6 +1258,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			'whitelabel' => $whitelabel,
 			'visuals' => $visuals,
 			'sparks' => $sparks_config,
+			'registered_sparks' => $registered_sparks,
 			'routing' => $routing,
 			'audio' => $audio,
 		];

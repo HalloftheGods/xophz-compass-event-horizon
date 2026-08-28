@@ -50,11 +50,11 @@ class Xophz_Compass_Event_Horizon_Spark_Registry {
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
 	public function get_items( $request ) {
-		// Apply filter to allow plugins to register their sparks
-		// Plugins should return an array of simplified objects: { id, title, icon }
+		// Apply filters to allow plugins to register their sparks
 		$sparks = apply_filters( 'xophz_register_sparks', array() );
+		$sparks = apply_filters( 'youmeos_register_sparks', $sparks );
 
-		return rest_ensure_response( $sparks );
+		return rest_ensure_response( is_array( $sparks ) ? $sparks : array() );
 	}
 
 	/**
