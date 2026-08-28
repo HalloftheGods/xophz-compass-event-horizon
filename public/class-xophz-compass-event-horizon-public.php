@@ -61,9 +61,16 @@ class Xophz_Compass_Event_Horizon_Public {
 	public function template_redirect() {
 		global $wp_query;
 
-		// Do not intercept WordPress admin or login routes.
+		// Do not intercept WordPress admin, login, REST API, or AJAX routes.
 		$request_uri = $_SERVER['REQUEST_URI'] ?? '';
-		if ( strpos( $request_uri, '/wp-admin' ) === 0 || strpos( $request_uri, '/wp-login.php' ) === 0 ) {
+		if ( 
+			strpos( $request_uri, '/wp-admin' ) === 0 || 
+			strpos( $request_uri, '/wp-login.php' ) === 0 ||
+			strpos( $request_uri, '/wp-json' ) !== false ||
+			strpos( $request_uri, 'rest_route=' ) !== false ||
+			( defined( 'REST_REQUEST' ) && REST_REQUEST ) ||
+			! empty( $wp_query->query_vars['rest_route'] )
+		) {
 			return;
 		}
 
