@@ -146,7 +146,7 @@ class Xophz_Compass_Event_Horizon_Admin {
 		Xophz_Compass::add_submenu( $this->plugin_name );
 
 		add_submenu_page(
-			'w4-protocol',
+			'options-general.php',
 			'YouMeOS Settings',
 			'YouMeOS',
 			'manage_options',
