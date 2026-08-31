@@ -21,7 +21,7 @@ class Xophz_Compass_Event_Horizon_Public {
 		add_rewrite_rule( '^u(/.*)?$', 'index.php?u=1', 'top' );
 		add_rewrite_rule( '^youniverse(/.*)?$', 'index.php?youniverse=1', 'top' );
 
-		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+		$loadMode = $this->get_load_mode();
 		$custom_slug = get_option( 'youmeos_custom_slug', '' );
 		if ( $loadMode === 'custom_slug' && ! empty( $custom_slug ) ) {
 			add_rewrite_rule( '^' . preg_quote( $custom_slug, '/' ) . '(/.*)?$', 'index.php?youmeos=1', 'top' );
@@ -164,7 +164,7 @@ class Xophz_Compass_Event_Horizon_Public {
 		$isConfiguredPageMatch = $this->is_configured_page();
 
 		// Intercept 404s when in homepage mode so we can route SPA sub-paths.
-		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+		$loadMode = $this->get_load_mode();
 		$isHomepage404Fallback = ( $loadMode === 'homepage' && is_404() );
 
 		if ( $isRouteMatch || $isConfiguredPageMatch || $isHomepage404Fallback ) {
@@ -1044,7 +1044,7 @@ class Xophz_Compass_Event_Horizon_Public {
 	}
 
 	private function get_youmeos_base_url( $path = '' ) {
-		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+		$loadMode = $this->get_load_mode();
 		$custom_slug = get_option( 'youmeos_custom_slug', '' );
 		$default_path = ( $loadMode === 'custom_slug' && ! empty( $custom_slug ) ) ? '/' . $custom_slug . '/' : '/youmeos/';
 		$base_url = home_url( $default_path );
@@ -1164,8 +1164,26 @@ class Xophz_Compass_Event_Horizon_Public {
 		<?php
 	}
 
+	private function get_load_mode() {
+		if ( defined( 'OS_HOMEPAGE_MODE' ) && OS_HOMEPAGE_MODE !== '' ) {
+			return OS_HOMEPAGE_MODE;
+		}
+		$env_os_mode = getenv( 'OS_HOMEPAGE_MODE' );
+		if ( false !== $env_os_mode && '' !== $env_os_mode ) {
+			return $env_os_mode;
+		}
+		if ( defined( 'YOUMEOS_LOAD_MODE' ) && YOUMEOS_LOAD_MODE !== '' ) {
+			return YOUMEOS_LOAD_MODE;
+		}
+		$env_youmeos_mode = getenv( 'YOUMEOS_LOAD_MODE' );
+		if ( false !== $env_youmeos_mode && '' !== $env_youmeos_mode ) {
+			return $env_youmeos_mode;
+		}
+		return get_option( 'youmeos_load_mode', 'routes_only' );
+	}
+
 	private function is_configured_page() {
-		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+		$loadMode = $this->get_load_mode();
 
 		$isHomepageMode = $loadMode === 'homepage' && is_front_page();
 
@@ -1177,7 +1195,7 @@ class Xophz_Compass_Event_Horizon_Public {
 
 	private function resolve_app_base( $wp_query, $isRouteMatch ) {
 		if ( $isRouteMatch ) {
-			$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+			$loadMode = $this->get_load_mode();
 			$custom_slug = get_option( 'youmeos_custom_slug', '' );
 			$requestPath = trim( parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) ?: '', '/' );
 			
@@ -1191,7 +1209,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			return 'os';
 		}
 
-		$loadMode = get_option( 'youmeos_load_mode', 'routes_only' );
+		$loadMode = $this->get_load_mode();
 		$isHomepage = $loadMode === 'homepage';
 
 		if ( $isHomepage ) {
@@ -1242,7 +1260,7 @@ class Xophz_Compass_Event_Horizon_Public {
 			'sitePath' => $site_path,
 			'appBase' => $app_base,
 			'homeUrl' => $home_url,
-			'loadMode' => get_option( 'youmeos_load_mode', 'routes_only' ),
+			'loadMode' => $this->get_load_mode(),
 			'isBlackboxCertified' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
 			'youmeosBaseUrl' => rtrim( $plugin_rel_path, '/' ),
 			'youmeosDataUrl' => rtrim( $plugin_rel_path, '/' ) . '/data',
