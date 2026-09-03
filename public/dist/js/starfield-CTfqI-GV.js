@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:public/dist/js/starfield-Bzp6JkUq.js
-import{D as l,E as e}from"./youmeos-ZRCjlUKQ.js";import{l as M,q as x,d as y,A as z,e as A,p as S,w as m,t as P}from"./vendor-three-t6OjKSDq.js";import"./vendor-core-BCGDVfqk.js";import"./vendor-DfC0bJvB.js";import"./vendor-vuetify-Bb7KOohK.js";import"./vendor-echarts-Dv2s21TS.js";function q(p){const w=new M().load(p.youmeosBaseUrl+"/images/p_0.png"),r={color:{value:new x(16777215)},pointTexture:{value:w},scale:{value:1},opacity:{value:1}},C=new y({glslVersion:A,uniforms:r,vertexShader:`
-========
 import{D as l,E as e}from"./youmeos-DFETm8Zq.js";import{l as M,q as x,d as y,A as z,e as A,p as S,w as m,t as P}from"./vendor-three-t6OjKSDq.js";import"./vendor-core-BCGDVfqk.js";import"./vendor-DfC0bJvB.js";import"./vendor-vuetify-Bb7KOohK.js";import"./vendor-echarts-Dv2s21TS.js";function q(p){const w=new M().load(p.youmeosBaseUrl+"/images/p_0.png"),r={color:{value:new x(16777215)},pointTexture:{value:w},scale:{value:1},opacity:{value:1}},C=new y({glslVersion:A,uniforms:r,vertexShader:`
->>>>>>>> d329f90a:public/dist/js/starfield-CTfqI-GV.js
       uniform float scale;
       
       in float size;
