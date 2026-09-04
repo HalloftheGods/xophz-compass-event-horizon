@@ -1,11 +1,8 @@
 <?php
-
 /**
  * Fired during plugin activation
  *
- * @link       http://example.com
  * @since      1.0.0
- *
  * @package    Xophz_Compass_Event_Horizon
  * @subpackage Xophz_Compass_Event_Horizon/includes
  */
@@ -18,21 +15,21 @@
  * @since      1.0.0
  * @package    Xophz_Compass_Event_Horizon
  * @subpackage Xophz_Compass_Event_Horizon/includes
- * @author     Your Name <email@example.com>
  */
 class Xophz_Compass_Event_Horizon_Activator {
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
+	 * Activate plugin prerequisites.
 	 *
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-	    if ( !class_exists( 'Xophz_Compass' ) ) {  
-	    	die('This plugin requires COMPASS to be active.</a></div>');
-	    } 
+		if ( ! class_exists( 'Xophz_Compass' ) ) {
+			if ( ! function_exists( 'deactivate_plugins' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			}
+			deactivate_plugins( plugin_basename( dirname( __DIR__ ) . '/xophz-compass-event-horizon.php' ) );
+			return;
+		}
 	}
-
 }

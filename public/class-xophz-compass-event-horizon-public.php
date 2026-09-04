@@ -2005,16 +2005,11 @@ window.addEventListener('beforeinstallprompt', function(e) {
 	}
 
 	private function check_dev_server() {
-		$vite_port = defined( 'VITE_DEV_SERVER_PORT' ) ? VITE_DEV_SERVER_PORT : '8081';
-		$context   = stream_context_create( array(
-			'http' => array( 'timeout' => 0.5 ),
-		) );
-		$internal_host = 'compass';
-		$response      = @file_get_contents( "http://{$internal_host}:{$vite_port}/", false, $context );
-		if ( empty( $response ) ) {
-			$response = @file_get_contents( "http://127.0.0.1:{$vite_port}/", false, $context );
+		$vite_port = (int) ( defined( 'VITE_DEV_SERVER_PORT' ) ? VITE_DEV_SERVER_PORT : 8081 );
+		if ( class_exists( 'Xophz_Compass_Dev_Proxy' ) ) {
+			return Xophz_Compass_Dev_Proxy::resolve_host( $vite_port ) !== null;
 		}
-		return ! empty( $response );
+		return false;
 	}
 
 	private function is_dev_server() {
