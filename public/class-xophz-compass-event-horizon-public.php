@@ -136,6 +136,23 @@ class Xophz_Compass_Event_Horizon_Public {
 			exit;
 		}
 
+		// Handle Clean Buy / Direct Checkout Redirects (e.g., /buy/quantum, /buy/bronze/whiteglove, /buy/bronze/diy)
+		if ( preg_match( '#^/(?:buy|checkout)/([a-zA-Z0-9_-]+)(?:/([a-zA-Z0-9_-]+))?/?$#', $request_uri, $matches ) ) {
+			$tier_slug = strtolower( $matches[1] );
+			if ( ! in_array( $tier_slug, array( 'success', 'cancel', 'verify' ), true ) ) {
+				$plan_slug = ! empty( $matches[2] ) ? strtolower( $matches[2] ) : 'whiteglove';
+				$checkout_api_url = add_query_arg(
+					array(
+						'tier' => $tier_slug,
+						'plan' => $plan_slug,
+					),
+					rest_url( 'xophz/v1/stripe/checkout' )
+				);
+				wp_redirect( $checkout_api_url );
+				exit;
+			}
+		}
+
 		// Handle Stripe Checkout Callback / Wormhole Return / Mock Checkout
 		if ( 
 			strpos( $request_uri, '/callback/stripe' ) !== false || 
@@ -2223,13 +2240,13 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		) );
 
 		register_rest_route( 'xophz/v1', '/stripe/checkout', array(
-			'methods' => 'POST',
+			'methods' => array( 'GET', 'POST' ),
 			'callback' => array( $this, 'handle_stripe_checkout' ),
 			'permission_callback' => '__return_true',
 		) );
 
 		register_rest_route( 'xophz-compass/v1', '/stripe/checkout', array(
-			'methods' => 'POST',
+			'methods' => array( 'GET', 'POST' ),
 			'callback' => array( $this, 'handle_stripe_checkout' ),
 			'permission_callback' => '__return_true',
 		) );
@@ -3544,7 +3561,62 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		$product_name = sanitize_text_field( (string) $request->get_param( 'product_name' ) );
 		$success_url  = esc_url_raw( (string) $request->get_param( 'success_url' ) );
 		$cancel_url   = esc_url_raw( (string) $request->get_param( 'cancel_url' ) );
-		$tier         = sanitize_text_field( (string) $request->get_param( 'tier' ) );
+		$tier         = sanitize_key( (string) ( $request->get_param( 'tier' ) ?: $request->get_param( 'tier_id' ) ) );
+
+		// Detect Plan / Service Mode: Defaults to 'whiteglove'
+		$plan_param = sanitize_key( (string) (
+			$request->get_param( 'plan' ) ?:
+			$request->get_param( 'tier_type' ) ?:
+			$request->get_param( 'service' ) ?:
+			$request->get_param( 'type' ) ?:
+			( in_array( $request->get_param( 'mode' ), array( 'diy', 'selfhost', 'self-host', 'whiteglove', 'concierge', 'done-for-you', 'doneforyou' ), true ) ? $request->get_param( 'mode' ) : '' )
+		) );
+		$is_diy = in_array( $plan_param, array( 'diy', 'selfhost', 'self-host', 'bare' ), true );
+
+		// Known Tesseract hosting tier catalog (DIY vs White Glove Done-For-You)
+		$tier_catalog = array(
+			'quantum'            => array( 'name' => 'Quantum', 'diy_price' => 14.99, 'white_glove_price' => 149.00, 'hours' => 1 ),
+			'bronze'             => array( 'name' => 'Bronze', 'diy_price' => 34.99, 'white_glove_price' => 299.00, 'hours' => 2 ),
+			'silver'             => array( 'name' => 'Silver', 'diy_price' => 74.99, 'white_glove_price' => 399.00, 'hours' => 3 ),
+			'silver-enhanced'    => array( 'name' => 'Silver Enhanced', 'diy_price' => 99.99, 'white_glove_price' => 599.00, 'hours' => 4 ),
+			'gold'               => array( 'name' => 'Gold', 'diy_price' => 129.99, 'white_glove_price' => 799.00, 'hours' => 5 ),
+			'gold-enhanced'      => array( 'name' => 'Gold Enhanced', 'diy_price' => 242.40, 'white_glove_price' => 999.00, 'hours' => 6 ),
+			'platinum'           => array( 'name' => 'Platinum', 'diy_price' => 299.00, 'white_glove_price' => 1299.00, 'hours' => 8 ),
+			'platinum-enhanced'  => array( 'name' => 'Platinum Enhanced', 'diy_price' => 420.42, 'white_glove_price' => 1799.00, 'hours' => 10 ),
+			'uranium'            => array( 'name' => 'Uranium', 'diy_price' => 650.00, 'white_glove_price' => 2499.00, 'hours' => 15 ),
+			'titanium'           => array( 'name' => 'Titanium', 'diy_price' => 1250.00, 'white_glove_price' => 3499.00, 'hours' => 20 ),
+			'palladium'          => array( 'name' => 'Palladium', 'diy_price' => 2499.00, 'white_glove_price' => 4999.00, 'hours' => 30 ),
+			'palladium-enhanced' => array( 'name' => 'Palladium Enhanced', 'diy_price' => 4999.00, 'white_glove_price' => 4999.00, 'hours' => 30 ),
+			'rhodium'            => array( 'name' => 'Rhodium', 'diy_price' => 7500.00, 'white_glove_price' => 7500.00, 'hours' => 40 ),
+			'iridium'            => array( 'name' => 'Iridium', 'diy_price' => 10000.00, 'white_glove_price' => 10000.00, 'hours' => 50 ),
+		);
+
+		if ( ! empty( $tier ) && isset( $tier_catalog[ $tier ] ) ) {
+			$entry = $tier_catalog[ $tier ];
+			if ( $is_diy ) {
+				if ( empty( $price ) ) {
+					$price = $entry['diy_price'];
+				}
+				if ( empty( $license ) ) {
+					$license = 'Tesseract ' . $entry['name'] . 'BOX - DIY Bare Hosting';
+				}
+				if ( empty( $product_name ) ) {
+					$product_name = 'YouMeOS Tesseract - ' . $entry['name'] . 'BOX (DIY)';
+				}
+			} else {
+				// Default to White Glove (Done for You)
+				if ( empty( $price ) ) {
+					$price = $entry['white_glove_price'];
+				}
+				if ( empty( $license ) ) {
+					$hours_label = ! empty( $entry['hours'] ) ? ' (' . $entry['hours'] . 'h Support)' : '';
+					$license = 'Tesseract ' . $entry['name'] . 'BOX - White Glove Concierge' . $hours_label;
+				}
+				if ( empty( $product_name ) ) {
+					$product_name = 'YouMeOS Tesseract - ' . $entry['name'] . 'BOX (White Glove Concierge)';
+				}
+			}
+		}
 
 		if ( empty( $price ) && $price !== 0.0 ) {
 			return new WP_Error( 'invalid_params', 'Price parameter is required.', array( 'status' => 400 ) );
@@ -3554,7 +3626,11 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			$product_name = ! empty( $license ) ? $license : 'YouMeOS Sovereignty License';
 		}
 
-		// Retrieve Stripe Secret Key from WP options or constants
+		$plan_query = $is_diy ? '&plan=diy' : '&plan=whiteglove';
+		$default_success = home_url( '/callback/stripe?status=success' . ( ! empty( $tier ) ? '&tier=' . urlencode( $tier ) : '' ) . $plan_query . '&session_id={CHECKOUT_SESSION_ID}' );
+		$default_cancel  = home_url( '/callback/stripe?status=cancel' . ( ! empty( $tier ) ? '&tier=' . urlencode( $tier ) : '' ) . $plan_query );
+
+		// Retrieve Stripe Secret Key from WP options, constants, or environment
 		$stripe_secret_key = get_option( 'compass_stripe_secret_key' );
 		if ( empty( $stripe_secret_key ) ) {
 			$stripe_secret_key = get_option( 'xophz_compass_stripe_secret_key' );
@@ -3565,18 +3641,41 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		if ( empty( $stripe_secret_key ) && defined( 'STRIPE_SECRET_KEY' ) ) {
 			$stripe_secret_key = STRIPE_SECRET_KEY;
 		}
-
 		if ( empty( $stripe_secret_key ) ) {
-			return new WP_Error( 'missing_stripe_key', 'Stripe Secret Key is missing in WordPress Settings (compass_stripe_secret_key).', array( 'status' => 500 ) );
+			$stripe_secret_key = getenv( 'STRIPE_SECRET_KEY' );
+		}
+		if ( empty( $stripe_secret_key ) && isset( $_ENV['STRIPE_SECRET_KEY'] ) ) {
+			$stripe_secret_key = $_ENV['STRIPE_SECRET_KEY'];
+		}
+
+		// Fallback to built-in simulator if no key is configured in dev
+		if ( empty( $stripe_secret_key ) || strpos( $stripe_secret_key, 'sk_test_Mock' ) === 0 ) {
+			$mock_url = add_query_arg( array(
+				'mock_checkout' => '1',
+				'price'         => $price,
+				'license'       => urlencode( $license ),
+				'product_name'  => urlencode( $product_name ),
+				'tier'          => urlencode( $tier ),
+				'success_url'   => urlencode( ! empty( $success_url ) ? $success_url : $default_success ),
+				'cancel_url'    => urlencode( ! empty( $cancel_url ) ? $cancel_url : $default_cancel ),
+			), home_url( '/callback/stripe' ) );
+
+			if ( $request->get_method() === 'GET' ) {
+				wp_redirect( $mock_url );
+				exit;
+			}
+
+			return rest_ensure_response( array(
+				'url'          => $mock_url,
+				'checkout_url' => $mock_url,
+				'session_id'   => 'mock_sim_' . uniqid(),
+			) );
 		}
 
 		$unit_amount     = (int) round( $price * 100 );
 		$license_lower   = strtolower( $product_name . ' ' . $license );
 		$is_subscription = ( strpos( $license_lower, 'month' ) !== false || strpos( $license_lower, '/mo' ) !== false || strpos( $license_lower, 'subscription' ) !== false || strpos( $license_lower, 'concierge' ) !== false || strpos( $license_lower, 'sovereign' ) !== false || $price >= 99 );
 		$mode            = $is_subscription ? 'subscription' : 'payment';
-
-		$default_success = home_url( '/callback/stripe?status=success' . ( ! empty( $tier ) ? '&tier=' . urlencode( $tier ) : '' ) . '&session_id={CHECKOUT_SESSION_ID}' );
-		$default_cancel  = home_url( '/callback/stripe?status=cancel' . ( ! empty( $tier ) ? '&tier=' . urlencode( $tier ) : '' ) );
 
 		$body = array(
 			'line_items[0][price_data][currency]'          => 'usd',
@@ -3616,6 +3715,11 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		if ( wp_remote_retrieve_response_code( $response ) !== 200 || empty( $data['url'] ) ) {
 			$err_msg = isset( $data['error']['message'] ) ? $data['error']['message'] : 'Stripe API returned an invalid response.';
 			return new WP_Error( 'stripe_api_error', 'Stripe error: ' . $err_msg, array( 'status' => 500 ) );
+		}
+
+		if ( $request->get_method() === 'GET' ) {
+			wp_redirect( $data['url'] );
+			exit;
 		}
 
 		return rest_ensure_response( array(
