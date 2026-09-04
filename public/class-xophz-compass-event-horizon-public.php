@@ -1254,6 +1254,8 @@ class Xophz_Compass_Event_Horizon_Public {
 				'user_email' => $current_user->user_email,
 				'user_nicename' => $current_user->user_nicename,
 				'registered' => $current_user->user_registered,
+				'global_variant' => get_user_meta( $current_user->ID, 'youmeos_global_variant', true ) ?: ( ! empty( $visuals['theme_mode'] ) ? $visuals['theme_mode'] : 'luna' ),
+				'global_blur' => get_user_meta( $current_user->ID, 'youmeos_global_blur', true ) ?: ( ! empty( $visuals['wallpaper_blur'] ) ? $visuals['wallpaper_blur'] : 20 ),
 			],
 			'nonce' => wp_create_nonce( 'wp_rest' ),
 			'restUrl' => $rest_rel_path,
@@ -2903,7 +2905,14 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		}
 
 		$global_variant = get_user_meta( $current_user->ID, 'youmeos_global_variant', true );
+		if ( empty( $global_variant ) ) {
+			$visuals = get_option( 'youmeos_visuals_settings', [] );
+			$global_variant = ! empty( $visuals['theme_mode'] ) ? $visuals['theme_mode'] : 'luna';
+		}
 		$global_blur = get_user_meta( $current_user->ID, 'youmeos_global_blur', true );
+		if ( empty( $global_blur ) ) {
+			$global_blur = 20;
+		}
 		$display_name = ! empty( $current_user->display_name ) ? $current_user->display_name : ( ! empty( $current_user->user_login ) ? $current_user->user_login : 'Explorer' );
 		$user_nicename = ! empty( $current_user->user_nicename ) ? $current_user->user_nicename : $display_name;
 
@@ -3293,7 +3302,14 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		
 		$portrait_url = get_user_meta( $user_id, 'youmeos_portrait_url', true );
 		$global_variant = get_user_meta( $user_id, 'youmeos_global_variant', true );
+		if ( empty( $global_variant ) ) {
+			$visuals = get_option( 'youmeos_visuals_settings', [] );
+			$global_variant = ! empty( $visuals['theme_mode'] ) ? $visuals['theme_mode'] : 'luna';
+		}
 		$global_blur = get_user_meta( $user_id, 'youmeos_global_blur', true );
+		if ( empty( $global_blur ) ) {
+			$global_blur = 20;
+		}
 		$birthday = get_user_meta( $user_id, 'birthday', true );
 
 		return rest_ensure_response( array(
