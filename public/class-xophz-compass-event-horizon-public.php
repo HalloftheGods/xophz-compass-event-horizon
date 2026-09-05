@@ -2028,8 +2028,24 @@ window.addEventListener('beforeinstallprompt', function(e) {
 	}
 
 	private function is_dev_server() {
-		$is_dev_env = ( defined( 'WP_ENV' ) && WP_ENV === 'development' ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
-		return $is_dev_env && $this->check_dev_server();
+		if ( class_exists( 'Xophz_Compass_Dev_Proxy' ) ) {
+			if ( ! Xophz_Compass_Dev_Proxy::is_dev_mode() ) {
+				return false;
+			}
+		} else {
+			if ( defined( 'WP_ENV' ) && in_array( strtolower( (string) WP_ENV ), array( 'production', 'staging' ), true ) ) {
+				return false;
+			}
+			$env_wp = getenv( 'WP_ENV' );
+			if ( false !== $env_wp && in_array( strtolower( trim( (string) $env_wp ) ), array( 'production', 'staging' ), true ) ) {
+				return false;
+			}
+			$is_dev_env = ( defined( 'WP_ENV' ) && 'development' === WP_ENV ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
+			if ( ! $is_dev_env ) {
+				return false;
+			}
+		}
+		return $this->check_dev_server();
 	}
 
 	private function get_dev_server_url() {
