@@ -136,19 +136,15 @@ class Xophz_Compass_Event_Horizon_Public {
 			exit;
 		}
 
-		// Handle Clean Buy / Direct Checkout Redirects (e.g., /buy/quantum, /buy/bronze/whiteglove, /buy/bronze/diy)
-		if ( preg_match( '#^/(?:buy|checkout)/([a-zA-Z0-9_-]+)(?:/([a-zA-Z0-9_-]+))?/?$#', $request_uri, $matches ) ) {
+		// Handle Clean Buy / Direct Checkout Redirects (e.g., /buy/quantum, /buy/bronze/whiteglove, /buy/bronze/diy, or /buy./bronze)
+		if ( preg_match( '#^/(?:buy|checkout)\.?/([a-zA-Z0-9_-]+)\.?(?:/([a-zA-Z0-9_-]+)\.?)?/?$#', $request_uri, $matches ) ) {
 			$tier_slug = strtolower( $matches[1] );
 			if ( ! in_array( $tier_slug, array( 'success', 'cancel', 'verify' ), true ) ) {
 				$plan_slug = ! empty( $matches[2] ) ? strtolower( $matches[2] ) : 'whiteglove';
-				$checkout_api_url = add_query_arg(
-					array(
-						'tier' => $tier_slug,
-						'plan' => $plan_slug,
-					),
-					rest_url( 'xophz/v1/stripe/checkout' )
-				);
-				wp_redirect( $checkout_api_url );
+				$req = new WP_REST_Request( 'GET', '/xophz/v1/stripe/checkout' );
+				$req->set_param( 'tier', $tier_slug );
+				$req->set_param( 'plan', $plan_slug );
+				$this->handle_stripe_checkout( $req );
 				exit;
 			}
 		}
@@ -3692,8 +3688,17 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			$body['line_items[0][price_data][recurring][interval]'] = 'month';
 		}
 
+		// For White Glove service, add the one-time setup & onboarding fee ($749)
+		if ( ! $is_diy ) {
+			$body['line_items[1][price_data][currency]']          = 'usd';
+			$body['line_items[1][price_data][product_data][name]'] = 'White Glove Setup & Onboarding Fee';
+			$body['line_items[1][price_data][unit_amount]']        = 74900; // $749.00 in cents
+			$body['line_items[1][quantity]']                       = 1;
+		}
+
 		if ( ! empty( $tier ) ) {
 			$body['metadata[tier]'] = $tier;
+			$body['metadata[plan]'] = $is_diy ? 'diy' : 'whiteglove';
 		}
 
 		$response = wp_remote_post( 'https://api.stripe.com/v1/checkout/sessions', array(
