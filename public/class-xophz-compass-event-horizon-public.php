@@ -100,6 +100,12 @@ class Xophz_Compass_Event_Horizon_Public {
 			echo "  <url>\n    <loc>" . $home . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>\n  </url>\n";
 			echo "  <url>\n    <loc>" . esc_url( home_url( '/youmeos' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n";
 			echo "  <url>\n    <loc>" . esc_url( home_url( '/os' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.9</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/spark/tesseract' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/spark/midnight-nerd' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.9</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/spark/yellow-links' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/spark/author-note' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/spark/solitaire' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n";
+			echo "  <url>\n    <loc>" . esc_url( home_url( '/login' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n";
 			echo "  <url>\n    <loc>" . esc_url( home_url( '/u' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n";
 			echo "  <url>\n    <loc>" . esc_url( home_url( '/youniverse' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n";
 			echo "  <url>\n    <loc>" . esc_url( home_url( '/flow' ) ) . "</loc>\n    <lastmod>" . $today . "</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>\n";
@@ -1296,13 +1302,122 @@ class Xophz_Compass_Event_Horizon_Public {
 			'audio' => $audio,
 		];
 
-		$og_title = !empty($whitelabel['os_title']) ? $whitelabel['os_title'] : (!empty($routing['og_title']) ? $routing['og_title'] : get_bloginfo( 'name' ));
-		if ( empty( $og_title ) ) {
-			$og_title = 'YouMeOS';
+		$req_uri = $_SERVER['REQUEST_URI'] ?? '';
+		$path_spark_id = '';
+		if ( preg_match( '#/(?:os/u/|u/)?spark/([a-zA-Z0-9_-]+)#', $req_uri, $matches ) ) {
+			$path_spark_id = sanitize_text_field( $matches[1] );
 		}
 
-		$og_desc = !empty($whitelabel['os_tagline']) ? $whitelabel['os_tagline'] : (!empty($routing['og_description']) ? $routing['og_description'] : 'The Omega Source. Navigate the spatial web, decentralized infrastructure, and your entire digital life from a single God-eye view.');
+		$raw_sparks = isset($_GET['sparks']) ? wp_unslash($_GET['sparks']) : '';
+		$spark_id = !empty($path_spark_id) ? $path_spark_id : sanitize_text_field($raw_sparks);
+		$is_lite = (isset($_GET['fullspark']) && $_GET['fullspark'] === 'true') || !empty($path_spark_id);
+		$raw_name = isset($_GET['name']) ? sanitize_text_field(wp_unslash($_GET['name'])) : '';
+		$raw_icon = isset($_GET['icon']) ? sanitize_text_field(wp_unslash($_GET['icon'])) : '';
+		$raw_color = isset($_GET['color']) ? sanitize_text_field(wp_unslash($_GET['color'])) : '';
+
+		if (!empty($spark_id)) {
+			$decoded = json_decode($spark_id, true);
+			$s_name = '';
+			if (is_array($decoded) && isset($decoded[0][0])) {
+				$s_name = $decoded[0][0];
+			} elseif (is_array($decoded) && isset($decoded[0]) && is_string($decoded[0])) {
+				$s_name = $decoded[0];
+			} elseif (!is_array($decoded)) {
+				$s_name = $spark_id;
+			}
+			if (!empty($s_name)) {
+				$spark_id = $s_name;
+			}
+		}
+
+		$site_name = !empty($whitelabel['os_title']) ? $whitelabel['os_title'] : get_bloginfo('name');
+		if ( empty( $site_name ) ) {
+			$site_name = 'YouMeOS';
+		}
+
+		$page_title = '';
+		$meta_description = '';
+
+		if ( ! empty( $spark_id ) ) {
+			if ( $spark_id === 'midnight-nerd' ) {
+				$page_title = 'Support - Contact the Midnight Nerd';
+				$meta_description = 'Direct developer support desk, live engineering transmissions, retro terminal devlogs, and dedicated assistance for YouMeOS.';
+			} elseif ( $spark_id === 'tesseract' ) {
+				$page_title = 'Tesseract Hub - 4D Sovereign Hosting';
+				$meta_description = '4D Sovereign Hosting, Infrastructure Provisioning, and Box Node Deployment in YouMeOS.';
+			} elseif ( $spark_id === 'yellow-links' ) {
+				$page_title = 'Yellow Links - Sovereign Webwork Directory';
+				$meta_description = 'Public Webwork Registry, Community Node Directory, and WebSpark discovery index for the YouMeOS ecosystem.';
+			} elseif ( $spark_id === 'author-note' ) {
+				$page_title = "Author's Note - Vision & Philosophy";
+				$meta_description = 'The architectural vision, philosophy, and origin story of the YouMeOS Youniverse by the architect.';
+			} elseif ( $spark_id === 'solitaire' ) {
+				$page_title = 'Solitaire - Sovereign WebTop Game';
+				$meta_description = 'Classic Klondike Solitaire card game engine with algorithmic hint solver and victory cascade physics.';
+			} else {
+				if ( ! empty( $raw_name ) ) {
+					$human_title = $raw_name;
+				} else {
+					$clean_title = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $spark_id );
+					$clean_title = preg_replace( '/-[0-9a-z]{5,14}$/i', '', $clean_title );
+					$clean_title = preg_replace( '/-app$/i', '', $clean_title );
+					$human_title = ucwords( str_replace( '-', ' ', $clean_title ) );
+				}
+				$page_title = $human_title . ' - ' . $site_name;
+				$meta_description = !empty($whitelabel['os_tagline']) ? $whitelabel['os_tagline'] : 'Launch and run sovereign applications inside the YouMeOS spatial computing webtop.';
+			}
+		}
+
+		if ( empty( $page_title ) ) {
+			if ( ! empty( $whitelabel['title'] ) ) {
+				$page_title = $whitelabel['title'];
+			} elseif ( ! empty( $whitelabel['os_title'] ) && ! empty( $whitelabel['os_tagline'] ) ) {
+				$page_title = $whitelabel['os_title'] . ' - ' . $whitelabel['os_tagline'];
+			} elseif ( ! empty( $whitelabel['os_title'] ) ) {
+				$page_title = $whitelabel['os_title'];
+			} else {
+				$wp_tagline = get_bloginfo( 'description' );
+				if ( stripos( $site_name, 'YouMeOS' ) !== false ) {
+					if ( ! empty( $wp_tagline ) && stripos( $wp_tagline, 'YouMeOS' ) === false ) {
+						$page_title = 'YouMeOS - ' . $wp_tagline;
+					} else {
+						$page_title = 'YouMeOS - Sovereign Web Operating System';
+					}
+				} else {
+					$page_title = $site_name . ' - YouMeOS';
+				}
+			}
+		}
+
+		if ( empty( $meta_description ) ) {
+			$meta_description = !empty($whitelabel['os_tagline']) ? $whitelabel['os_tagline'] : (!empty($routing['og_description']) ? $routing['og_description'] : 'The Omega Source. Navigate the spatial web, decentralized infrastructure, and your entire digital life from a single God-eye view.');
+		}
+
+		$og_title = $page_title;
+		$og_desc = $meta_description;
 		$og_image = !empty($routing['og_image']) ? $routing['og_image'] : (!empty($whitelabel['splash_image_url']) ? $whitelabel['splash_image_url'] : plugins_url( 'images/gods-eye-view.jpg', __FILE__ ));
+
+		// For the manifest URL, we pass the spark_id, name, icon, and color if present
+		$manifest_url = rest_url( 'xophz-compass/v1/spark-manifest' );
+		if (!empty($spark_id)) {
+			$manifest_url .= '?spark=' . urlencode($spark_id);
+			if (!empty($raw_name)) {
+				$manifest_url .= '&name=' . urlencode($raw_name);
+			}
+			if (!empty($raw_icon)) {
+				$manifest_url .= '&icon=' . urlencode($raw_icon);
+			}
+			if (!empty($raw_color)) {
+				$manifest_url .= '&color=' . urlencode($raw_color);
+			}
+		} else {
+			if (isset($app_base) && $app_base !== '') {
+				$manifest_url .= '?base=' . urlencode($app_base);
+			}
+		}
+
+		// Check for custom spark icon
+		$spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon, $raw_color ) : '';
 
 		$current_url = home_url( $_SERVER['REQUEST_URI'] ?? '' );
 
@@ -1369,6 +1484,55 @@ class Xophz_Compass_Event_Horizon_Public {
         "name": "Xophz / COMPASS",
         "url": "<?php echo esc_url( home_url( '/' ) ); ?>"
       }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "<?php echo esc_url( home_url( '/#navigation' ) ); ?>",
+      "name": "Featured Sparks & Portals",
+      "itemListElement": [
+        {
+          "@type": "SiteNavigationElement",
+          "position": 1,
+          "name": "Tesseract Hub",
+          "description": "4D Sovereign Hosting, Infrastructure Provisioning, and Box Node Deployment",
+          "url": "<?php echo esc_url( home_url( '/spark/tesseract' ) ); ?>"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 2,
+          "name": "Support - Contact the Midnight Nerd",
+          "description": "Direct developer support desk, live engineering transmissions, and technical assistance",
+          "url": "<?php echo esc_url( home_url( '/spark/midnight-nerd' ) ); ?>"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 3,
+          "name": "Yellow Links",
+          "description": "Public Webwork Registry, Community Node Directory, and WebSpark discovery index",
+          "url": "<?php echo esc_url( home_url( '/spark/yellow-links' ) ); ?>"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 4,
+          "name": "Author's Note",
+          "description": "The architectural vision, philosophy, and origin story of the YouMeOS Youniverse",
+          "url": "<?php echo esc_url( home_url( '/spark/author-note' ) ); ?>"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 5,
+          "name": "Login to Youniverse",
+          "description": "Secure authentication portal for your sovereign 4D WebTop environment",
+          "url": "<?php echo esc_url( home_url( '/login' ) ); ?>"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 6,
+          "name": "Solitaire",
+          "description": "Classic Klondike Solitaire card game engine with hint solver and cascade physics",
+          "url": "<?php echo esc_url( home_url( '/spark/solitaire' ) ); ?>"
+        }
+      ]
     }
   ]
 }
@@ -1384,71 +1548,6 @@ class Xophz_Compass_Event_Horizon_Public {
   gtag('config', 'G-YHY2WZFMDM');
 </script>
 
-<?php 
-$req_uri = $_SERVER['REQUEST_URI'] ?? '';
-$path_spark_id = '';
-if ( preg_match( '#/(?:os/u/|u/)?spark/([a-zA-Z0-9_-]+)#', $req_uri, $matches ) ) {
-	$path_spark_id = sanitize_text_field( $matches[1] );
-}
-
-$raw_sparks = isset($_GET['sparks']) ? wp_unslash($_GET['sparks']) : '';
-$spark_id = !empty($path_spark_id) ? $path_spark_id : sanitize_text_field($raw_sparks);
-$is_lite = (isset($_GET['fullspark']) && $_GET['fullspark'] === 'true') || !empty($path_spark_id);
-$raw_name = isset($_GET['name']) ? sanitize_text_field(wp_unslash($_GET['name'])) : '';
-$raw_icon = isset($_GET['icon']) ? sanitize_text_field(wp_unslash($_GET['icon'])) : '';
-$raw_color = isset($_GET['color']) ? sanitize_text_field(wp_unslash($_GET['color'])) : '';
-
-if (!empty($spark_id)) {
-	$decoded = json_decode($spark_id, true);
-	$s_name = '';
-	if (is_array($decoded) && isset($decoded[0][0])) {
-		$s_name = $decoded[0][0];
-	} elseif (is_array($decoded) && isset($decoded[0]) && is_string($decoded[0])) {
-		$s_name = $decoded[0];
-	} elseif (!is_array($decoded)) {
-		$s_name = $spark_id;
-	}
-	if (!empty($s_name)) {
-		$spark_id = $s_name; // Use clean name for manifest
-		if ($is_lite) {
-			if (!empty($raw_name)) {
-				$human_title = $raw_name;
-			} else {
-				$clean_title = preg_replace( '/^webspark-(?:custom-|yellow-links-)?/i', '', $s_name );
-				$clean_title = preg_replace( '/-[0-9a-z]{5,14}$/i', '', $clean_title );
-				$clean_title = preg_replace( '/-app$/i', '', $clean_title );
-				$human_title = ucwords( str_replace( '-', ' ', $clean_title ) );
-			}
-			$page_title = 'w⁴ ' . $human_title . ' :: ' . get_bloginfo('name');
-		}
-	}
-}
-
-// For the manifest URL, we pass the spark_id, name, icon, and color if present
-$manifest_url = rest_url( 'xophz-compass/v1/spark-manifest' );
-if (!empty($spark_id)) {
-	$manifest_url .= '?spark=' . urlencode($spark_id);
-	if (!empty($raw_name)) {
-		$manifest_url .= '&name=' . urlencode($raw_name);
-	}
-	if (!empty($raw_icon)) {
-		$manifest_url .= '&icon=' . urlencode($raw_icon);
-	}
-	if (!empty($raw_color)) {
-		$manifest_url .= '&color=' . urlencode($raw_color);
-	}
-} else {
-	if (isset($app_base) && $app_base !== '') {
-		$manifest_url .= '?base=' . urlencode($app_base);
-	}
-}
-
-// Check for custom spark icon
-$spark_icon_url = !empty($spark_id) ? $this->resolve_spark_icon_url( $spark_id, $raw_icon, $raw_color ) : '';
-if ( empty( $page_title ) ) {
-	$page_title = ! empty( $whitelabel['title'] ) ? $whitelabel['title'] : ( get_bloginfo( 'name' ) ? get_bloginfo( 'name' ) . ' :: YouMeOS' : 'YouMeOS' );
-}
-?>
 <script>
 window.__pwaInstallPrompt = null;
 window.addEventListener('beforeinstallprompt', function(e) {
@@ -1471,6 +1570,17 @@ window.addEventListener('beforeinstallprompt', function(e) {
 <style>
     body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
     #youmeos-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .youmeos-crawlable-nav {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
 	<?php if ($is_lite): ?>
 	:root {
 		--loader-start-bg: #ffffff;
@@ -1531,6 +1641,17 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 </head>
 <body>
+<nav class="youmeos-crawlable-nav" aria-label="Featured Sparks &amp; Portals">
+	<h2>Featured Sparks &amp; Portals</h2>
+	<ul>
+		<li><a href="<?php echo esc_url( home_url( '/spark/tesseract' ) ); ?>">Tesseract Hub - 4D Sovereign Hosting</a></li>
+		<li><a href="<?php echo esc_url( home_url( '/spark/midnight-nerd' ) ); ?>">Support - Contact the Midnight Nerd</a></li>
+		<li><a href="<?php echo esc_url( home_url( '/spark/yellow-links' ) ); ?>">Yellow Links - Sovereign Webwork Directory</a></li>
+		<li><a href="<?php echo esc_url( home_url( '/spark/author-note' ) ); ?>">Author's Note - Vision &amp; Philosophy</a></li>
+		<li><a href="<?php echo esc_url( home_url( '/login' ) ); ?>">Login to Youniverse</a></li>
+		<li><a href="<?php echo esc_url( home_url( '/spark/solitaire' ) ); ?>">Solitaire - Sovereign WebTop Game</a></li>
+	</ul>
+</nav>
 <div id="youmeos-container"></div>
 </body>
 </html><?php
