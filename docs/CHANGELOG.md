@@ -4,6 +4,12 @@ All notable changes to the Xophz COMPASS Event Horizon module will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-09-07]
+
+### Fixed
+- **Dev Mode Production Isolation**: Reordered checks in `is_dev_server()` so SSL (`is_ssl()`), production domain (`youmeos.com`, `tempurl.host`, `mycompassconsulting.com`), and environment (`WP_ENV === 'production'`) safety guards execute prior to evaluating Vite `hot` file existence, preventing accidental dev server script injection in production ([class-xophz-compass-event-horizon-public.php](file:///home/xopher/www/elysium/wp-content/plugins/xophz-compass-event-horizon/public/class-xophz-compass-event-horizon-public.php)).
+- **Untrack Stale Dev Marker**: Removed `public/hot` from repository tracking and created `.gitignore` to prevent transient dev server marker files from being committed in the submodule.
+
 ## [2026-09-06]
 
 ### Fixed

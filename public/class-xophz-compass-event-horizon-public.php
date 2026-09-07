@@ -2165,18 +2165,7 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			return false;
 		}
 
-		// 2. Explicit dev override via query param
-		if ( isset( $_GET['dev'] ) || isset( $_GET['vite'] ) ) {
-			return true;
-		}
-
-		// 3. Hot file check: only active when Vite dev server is explicitly managing hot file
-		$hot_file = plugin_dir_path( __FILE__ ) . 'hot';
-		if ( file_exists( $hot_file ) ) {
-			return true;
-		}
-
-		// 4. Safety checks for production environments: prevent insecure dev assets on HTTPS or production domains
+		// 2. Safety checks for production environments: prevent insecure dev assets on HTTPS or production domains
 		if ( is_ssl() ) {
 			return false;
 		}
@@ -2190,6 +2179,17 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		$env_wp = getenv( 'WP_ENV' );
 		if ( false !== $env_wp && in_array( strtolower( trim( (string) $env_wp ) ), array( 'production', 'staging' ), true ) ) {
 			return false;
+		}
+
+		// 3. Explicit dev override via query param
+		if ( isset( $_GET['dev'] ) || isset( $_GET['vite'] ) ) {
+			return true;
+		}
+
+		// 4. Hot file check: only active when Vite dev server is explicitly managing hot file
+		$hot_file = plugin_dir_path( __FILE__ ) . 'hot';
+		if ( file_exists( $hot_file ) ) {
+			return true;
 		}
 
 		// 5. Automatic local dev detection: probe dev server when running in local development
