@@ -126,7 +126,8 @@ class Xophz_Compass_Event_Horizon_Public {
 				$_GET['height'] = $matches[3];
 			}
 			
-			$this->render_youmeos_shell( 'spark' );
+			$app_base = $this->get_load_mode() === 'homepage' ? '' : $this->resolve_app_base( $wp_query, false );
+			$this->render_youmeos_shell( $app_base );
 			exit;
 		}
 		

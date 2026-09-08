@@ -4,6 +4,11 @@ All notable changes to the Xophz COMPASS Event Horizon module will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-09-08]
+
+### Fixed
+- **Clean Spark URL Base Alignment ([class-xophz-compass-event-horizon-public.php](file:///home/xopher/www/x/Xophz-COMPASS/wp-content/plugins/xophz-compass-event-horizon/public/class-xophz-compass-event-horizon-public.php))**: Resolved `app_base` to empty string on homepage configurations for clean `/spark/:sparkId` share URLs instead of hardcoding `spark`, allowing the SPA router to resolve the route at root without mangling the history base into an unmatched route.
+
 ## [2026-09-07]
 
 ### Fixed
