@@ -1,6 +1,6 @@
 {
-  "_bubblegum-canvas-Ggj-T4ZL.js": {
-    "file": "js/bubblegum-canvas-Ggj-T4ZL.js",
+  "_bubblegum-canvas-EMXEgH29.js": {
+    "file": "js/bubblegum-canvas-EMXEgH29.js",
     "name": "bubblegum-canvas",
     "isDynamicEntry": true,
     "imports": [
@@ -15,16 +15,20 @@
       "_vendor-three-t6OjKSDq.js"
     ]
   },
-  "_lensflare-CIAqYvBe.js": {
-    "file": "js/lensflare-CIAqYvBe.js",
+  "_lensflare-DwL-e7pl.js": {
+    "file": "js/lensflare-DwL-e7pl.js",
     "name": "lensflare",
     "imports": [
       "_vendor-three-t6OjKSDq.js",
       "apps/youmeos/index.html"
     ]
   },
-  "_m-dictation-btn-BI4zH96T.js": {
-    "file": "js/m-dictation-btn-BI4zH96T.js",
+  "_m-dictation-btn-BduHq-iu.css": {
+    "file": "css/m-dictation-btn-BduHq-iu.css",
+    "src": "_m-dictation-btn-BduHq-iu.css"
+  },
+  "_m-dictation-btn-DFs2xu5y.js": {
+    "file": "js/m-dictation-btn-DFs2xu5y.js",
     "name": "m-dictation-btn",
     "imports": [
       "_vendor-DJDm7qH9.js",
@@ -33,10 +37,6 @@
     "css": [
       "css/m-dictation-btn-BduHq-iu.css"
     ]
-  },
-  "_m-dictation-btn-BduHq-iu.css": {
-    "file": "css/m-dictation-btn-BduHq-iu.css",
-    "src": "_m-dictation-btn-BduHq-iu.css"
   },
   "_material.factory-D02YVjQS.js": {
     "file": "js/material.factory-D02YVjQS.js",
@@ -49,8 +49,8 @@
     "file": "js/notepad-commands-COUIL5iQ.js",
     "name": "notepad-commands"
   },
-  "_o-banner-carousel--xJkRpmD.js": {
-    "file": "js/o-banner-carousel--xJkRpmD.js",
+  "_o-banner-carousel-CcOO_SFI.js": {
+    "file": "js/o-banner-carousel-CcOO_SFI.js",
     "name": "o-banner-carousel",
     "imports": [
       "_vendor-DJDm7qH9.js",
@@ -65,15 +65,15 @@
     "file": "css/o-banner-carousel-CvcNZgyU.css",
     "src": "_o-banner-carousel-CvcNZgyU.css"
   },
-  "_o-forum-window-BfaobrSg.js": {
-    "file": "js/o-forum-window-BfaobrSg.js",
+  "_o-forum-window-CDa7_s6h.js": {
+    "file": "js/o-forum-window-CDa7_s6h.js",
     "name": "o-forum-window",
     "imports": [
       "_vendor-core-BCGDVfqk.js",
       "apps/youmeos/index.html",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
-      "_o-markdown-editor-_QfWBqJ0.js",
+      "_o-markdown-editor-BeQWmunX.js",
       "_useForumEngine-Dti1Ha_e.js"
     ],
     "css": [
@@ -84,12 +84,8 @@
     "file": "css/o-forum-window-Cj3UJG6N.css",
     "src": "_o-forum-window-Cj3UJG6N.css"
   },
-  "_o-markdown-editor-DoJKp3HI.css": {
-    "file": "css/o-markdown-editor-DoJKp3HI.css",
-    "src": "_o-markdown-editor-DoJKp3HI.css"
-  },
-  "_o-markdown-editor-_QfWBqJ0.js": {
-    "file": "js/o-markdown-editor-_QfWBqJ0.js",
+  "_o-markdown-editor-BeQWmunX.js": {
+    "file": "js/o-markdown-editor-BeQWmunX.js",
     "name": "o-markdown-editor",
     "imports": [
       "_vendor-DJDm7qH9.js",
@@ -100,6 +96,10 @@
       "css/o-markdown-editor-DoJKp3HI.css"
     ]
   },
+  "_o-markdown-editor-DoJKp3HI.css": {
+    "file": "css/o-markdown-editor-DoJKp3HI.css",
+    "src": "_o-markdown-editor-DoJKp3HI.css"
+  },
   "_o-mechanical-odometer.vue_vue_type_script_setup_true_lang-CFAlqM45.js": {
     "file": "js/o-mechanical-odometer.vue_vue_type_script_setup_true_lang-CFAlqM45.js",
     "name": "o-mechanical-odometer.vue_vue_type_script_setup_true_lang",
@@ -107,12 +107,8 @@
       "_vendor-DJDm7qH9.js"
     ]
   },
-  "_o-spark-card-DNB6B-Fy.css": {
-    "file": "css/o-spark-card-DNB6B-Fy.css",
-    "src": "_o-spark-card-DNB6B-Fy.css"
-  },
-  "_o-spark-card-rMVh0tQB.js": {
-    "file": "js/o-spark-card-rMVh0tQB.js",
+  "_o-spark-card-BSbPOcsB.js": {
+    "file": "js/o-spark-card-BSbPOcsB.js",
     "name": "o-spark-card",
     "imports": [
       "apps/youmeos/index.html",
@@ -123,8 +119,16 @@
       "css/o-spark-card-DNB6B-Fy.css"
     ]
   },
-  "_o-webspark-installer-modal-C5Q-kANx.js": {
-    "file": "js/o-webspark-installer-modal-C5Q-kANx.js",
+  "_o-spark-card-DNB6B-Fy.css": {
+    "file": "css/o-spark-card-DNB6B-Fy.css",
+    "src": "_o-spark-card-DNB6B-Fy.css"
+  },
+  "_o-webspark-installer-modal-CrjYlKk_.css": {
+    "file": "css/o-webspark-installer-modal-CrjYlKk_.css",
+    "src": "_o-webspark-installer-modal-CrjYlKk_.css"
+  },
+  "_o-webspark-installer-modal-Dvr9DdjZ.js": {
+    "file": "js/o-webspark-installer-modal-Dvr9DdjZ.js",
     "name": "o-webspark-installer-modal",
     "imports": [
       "apps/youmeos/index.html",
@@ -135,12 +139,8 @@
       "css/o-webspark-installer-modal-CrjYlKk_.css"
     ]
   },
-  "_o-webspark-installer-modal-CrjYlKk_.css": {
-    "file": "css/o-webspark-installer-modal-CrjYlKk_.css",
-    "src": "_o-webspark-installer-modal-CrjYlKk_.css"
-  },
-  "_o-youmeos-logo.vue_vue_type_script_setup_true_lang-DOrQ5TzU.js": {
-    "file": "js/o-youmeos-logo.vue_vue_type_script_setup_true_lang-DOrQ5TzU.js",
+  "_o-youmeos-logo.vue_vue_type_script_setup_true_lang-DwQ20h6n.js": {
+    "file": "js/o-youmeos-logo.vue_vue_type_script_setup_true_lang-DwQ20h6n.js",
     "name": "o-youmeos-logo.vue_vue_type_script_setup_true_lang",
     "imports": [
       "apps/youmeos/index.html",
@@ -166,12 +166,12 @@
     "file": "css/sub-app-billboard-BVODxV_L.css",
     "src": "_sub-app-billboard-BVODxV_L.css"
   },
-  "_sub-app-billboard-DYx784AD.js": {
-    "file": "js/sub-app-billboard-DYx784AD.js",
+  "_sub-app-billboard-CfqWn015.js": {
+    "file": "js/sub-app-billboard-CfqWn015.js",
     "name": "sub-app-billboard",
     "isDynamicEntry": true,
     "imports": [
-      "_useSubAppNavigation-DGCRNYbA.js",
+      "_useSubAppNavigation-BOIKYm_A.js",
       "_vendor-DJDm7qH9.js",
       "apps/youmeos/index.html",
       "_vendor-vuetify-V0a1Ypm-.js"
@@ -191,8 +191,8 @@
     "file": "css/u-spark-view-BqYRkzVj.css",
     "src": "_u-spark-view-BqYRkzVj.css"
   },
-  "_u-spark-view-DHj9h1Vh.js": {
-    "file": "js/u-spark-view-DHj9h1Vh.js",
+  "_u-spark-view-fy695FPu.js": {
+    "file": "js/u-spark-view-fy695FPu.js",
     "name": "u-spark-view",
     "imports": [
       "_vendor-vuetify-V0a1Ypm-.js",
@@ -203,8 +203,12 @@
       "css/u-spark-view-BqYRkzVj.css"
     ]
   },
-  "_u-webapp-BS945t78.js": {
-    "file": "js/u-webapp-BS945t78.js",
+  "_u-webapp-BwtBb1T9.css": {
+    "file": "css/u-webapp-BwtBb1T9.css",
+    "src": "_u-webapp-BwtBb1T9.css"
+  },
+  "_u-webapp-OaumqgJU.js": {
+    "file": "js/u-webapp-OaumqgJU.js",
     "name": "u-webapp",
     "imports": [
       "apps/youmeos/index.html",
@@ -215,12 +219,8 @@
       "css/u-webapp-BwtBb1T9.css"
     ]
   },
-  "_u-webapp-BwtBb1T9.css": {
-    "file": "css/u-webapp-BwtBb1T9.css",
-    "src": "_u-webapp-BwtBb1T9.css"
-  },
-  "_useDiscord-kj0KPizW.js": {
-    "file": "js/useDiscord-kj0KPizW.js",
+  "_useDiscord-CGqpZzhN.js": {
+    "file": "js/useDiscord-CGqpZzhN.js",
     "name": "useDiscord",
     "imports": [
       "_vendor-DJDm7qH9.js",
@@ -236,8 +236,8 @@
       "_vendor-DJDm7qH9.js"
     ]
   },
-  "_useGoogle-ChYRlTCU.js": {
-    "file": "js/useGoogle-ChYRlTCU.js",
+  "_useGoogle-DkVnC5ar.js": {
+    "file": "js/useGoogle-DkVnC5ar.js",
     "name": "useGoogle",
     "imports": [
       "_vendor-DJDm7qH9.js",
@@ -249,8 +249,8 @@
     "file": "js/useIconMapper-DMhu7BCZ.js",
     "name": "useIconMapper"
   },
-  "_useLexicon-C3-zomUW.js": {
-    "file": "js/useLexicon-C3-zomUW.js",
+  "_useLexicon-NqwDy284.js": {
+    "file": "js/useLexicon-NqwDy284.js",
     "name": "useLexicon",
     "imports": [
       "apps/youmeos/index.html",
@@ -265,16 +265,16 @@
       "_vendor-DJDm7qH9.js"
     ]
   },
-  "_useSparkNav-DLf11dmd.js": {
-    "file": "js/useSparkNav-DLf11dmd.js",
+  "_useSparkNav-CO9kd_Na.js": {
+    "file": "js/useSparkNav-CO9kd_Na.js",
     "name": "useSparkNav",
     "imports": [
       "apps/youmeos/index.html",
       "_vendor-DJDm7qH9.js"
     ]
   },
-  "_useSubAppNavigation-DGCRNYbA.js": {
-    "file": "js/useSubAppNavigation-DGCRNYbA.js",
+  "_useSubAppNavigation-BOIKYm_A.js": {
+    "file": "js/useSubAppNavigation-BOIKYm_A.js",
     "name": "useSubAppNavigation",
     "imports": [
       "_vendor-DJDm7qH9.js",
@@ -336,7 +336,7 @@
     "name": "yellow-links"
   },
   "apps/youmeos/app/sparks/app-launcher/app-launcher-spark.vue": {
-    "file": "js/app-launcher-spark-CKUA1o6G.js",
+    "file": "js/app-launcher-spark-DHpqGCjv.js",
     "name": "app-launcher-spark",
     "src": "apps/youmeos/app/sparks/app-launcher/app-launcher-spark.vue",
     "isDynamicEntry": true,
@@ -344,7 +344,7 @@
       "apps/youmeos/index.html",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-three-t6OjKSDq.js",
       "_vendor-echarts-DaMW5ohk.js"
@@ -354,13 +354,13 @@
     ]
   },
   "apps/youmeos/app/sparks/author-note/author-note-spark.vue": {
-    "file": "js/author-note-spark-QV8rwTEN.js",
+    "file": "js/author-note-spark-PifMtaZn.js",
     "name": "author-note-spark",
     "src": "apps/youmeos/app/sparks/author-note/author-note-spark.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
@@ -372,7 +372,7 @@
     ]
   },
   "apps/youmeos/app/sparks/blackbox/blackbox-app.vue": {
-    "file": "js/blackbox-app-D6L5vlhr.js",
+    "file": "js/blackbox-app-B6k1Nf4t.js",
     "name": "blackbox-app",
     "src": "apps/youmeos/app/sparks/blackbox/blackbox-app.vue",
     "isDynamicEntry": true,
@@ -389,7 +389,7 @@
     ]
   },
   "apps/youmeos/app/sparks/blackjack/blackjack-app.vue": {
-    "file": "js/blackjack-app-Die16dz6.js",
+    "file": "js/blackjack-app-Dt-dn4A5.js",
     "name": "blackjack-app",
     "src": "apps/youmeos/app/sparks/blackjack/blackjack-app.vue",
     "isDynamicEntry": true,
@@ -406,19 +406,19 @@
     ]
   },
   "apps/youmeos/app/sparks/bubblegum/bubblegum-spark.vue": {
-    "file": "js/bubblegum-spark-0RNa6t8m.js",
+    "file": "js/bubblegum-spark-BujVr0_o.js",
     "name": "bubblegum-spark",
     "src": "apps/youmeos/app/sparks/bubblegum/bubblegum-spark.vue",
     "isDynamicEntry": true,
     "imports": [
       "_vendor-DJDm7qH9.js",
-      "_bubblegum-canvas-Ggj-T4ZL.js",
+      "_bubblegum-canvas-EMXEgH29.js",
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_vendor-vuetify-V0a1Ypm-.js",
-      "_o-markdown-editor-_QfWBqJ0.js",
+      "_o-markdown-editor-BeQWmunX.js",
       "_o-mechanical-odometer.vue_vue_type_script_setup_true_lang-CFAlqM45.js",
-      "_m-dictation-btn-BI4zH96T.js",
+      "_m-dictation-btn-DFs2xu5y.js",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-three-t6OjKSDq.js",
       "_vendor-echarts-DaMW5ohk.js"
@@ -434,41 +434,41 @@
     "isDynamicEntry": true
   },
   "apps/youmeos/app/sparks/bugnet/bugnet-spark.vue": {
-    "file": "js/bugnet-spark-rK47SPtG.js",
+    "file": "js/bugnet-spark-D0xlcX-2.js",
     "name": "bugnet-spark",
     "src": "apps/youmeos/app/sparks/bugnet/bugnet-spark.vue",
     "isDynamicEntry": true,
     "imports": [
       "_vendor-core-BCGDVfqk.js",
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
-      "_o-banner-carousel--xJkRpmD.js",
+      "_o-banner-carousel-CcOO_SFI.js",
       "_vendor-three-t6OjKSDq.js",
       "_vendor-echarts-DaMW5ohk.js"
     ]
   },
   "apps/youmeos/app/sparks/cafeteria/cafeteria-app.vue": {
-    "file": "js/cafeteria-app-CiyyLIqX.js",
+    "file": "js/cafeteria-app-B10C4QVx.js",
     "name": "cafeteria-app",
     "src": "apps/youmeos/app/sparks/cafeteria/cafeteria-app.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_o-forum-window-BfaobrSg.js",
+      "_o-forum-window-CDa7_s6h.js",
       "apps/youmeos/app/sparks/cafeteria/cafeteria-canvas.vue",
       "_vendor-DJDm7qH9.js",
       "apps/youmeos/index.html",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-vuetify-V0a1Ypm-.js",
-      "_o-markdown-editor-_QfWBqJ0.js",
+      "_o-markdown-editor-BeQWmunX.js",
       "_useForumEngine-Dti1Ha_e.js",
       "_vendor-three-t6OjKSDq.js",
       "_vendor-echarts-DaMW5ohk.js"
     ]
   },
   "apps/youmeos/app/sparks/cafeteria/cafeteria-canvas.vue": {
-    "file": "js/cafeteria-canvas-eWywCnln.js",
+    "file": "js/cafeteria-canvas-v0By6Ygl.js",
     "name": "cafeteria-canvas",
     "src": "apps/youmeos/app/sparks/cafeteria/cafeteria-canvas.vue",
     "isDynamicEntry": true,
@@ -485,7 +485,7 @@
     ]
   },
   "apps/youmeos/app/sparks/calculator/calculator-app.vue": {
-    "file": "js/calculator-app-BIMlCEu_.js",
+    "file": "js/calculator-app-CxxwbNvb.js",
     "name": "calculator-app",
     "src": "apps/youmeos/app/sparks/calculator/calculator-app.vue",
     "isDynamicEntry": true,
@@ -502,12 +502,12 @@
     ]
   },
   "apps/youmeos/app/sparks/chronos/chronos-spark.vue": {
-    "file": "js/chronos-spark-B-SdvOsX.js",
+    "file": "js/chronos-spark-zkxLXyWv.js",
     "name": "chronos-spark",
     "src": "apps/youmeos/app/sparks/chronos/chronos-spark.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_useGoogle-ChYRlTCU.js",
+      "_useGoogle-DkVnC5ar.js",
       "_vendor-DJDm7qH9.js",
       "apps/youmeos/index.html",
       "_vendor-vuetify-V0a1Ypm-.js",
@@ -531,7 +531,7 @@
     ]
   },
   "apps/youmeos/app/sparks/debug-console/debug-console-app.vue": {
-    "file": "js/debug-console-app-tBkfXN5B.js",
+    "file": "js/debug-console-app-C38JA4NX.js",
     "name": "debug-console-app",
     "src": "apps/youmeos/app/sparks/debug-console/debug-console-app.vue",
     "isDynamicEntry": true,
@@ -548,7 +548,7 @@
     ]
   },
   "apps/youmeos/app/sparks/enchiridion/enchiridion-app.vue": {
-    "file": "js/enchiridion-app-7Q1toJfG.js",
+    "file": "js/enchiridion-app-B9sNcd6g.js",
     "name": "enchiridion-app",
     "src": "apps/youmeos/app/sparks/enchiridion/enchiridion-app.vue",
     "isDynamicEntry": true,
@@ -567,7 +567,7 @@
     ]
   },
   "apps/youmeos/app/sparks/enchiridion/enchiridion-canvas.vue": {
-    "file": "js/enchiridion-canvas-CX_FNEVS.js",
+    "file": "js/enchiridion-canvas-DltBfg6l.js",
     "name": "enchiridion-canvas",
     "src": "apps/youmeos/app/sparks/enchiridion/enchiridion-canvas.vue",
     "isDynamicEntry": true,
@@ -584,7 +584,7 @@
     ]
   },
   "apps/youmeos/app/sparks/gaea/gaea-app.vue": {
-    "file": "js/gaea-app-CL5MuQ2C.js",
+    "file": "js/gaea-app-BbCQqgin.js",
     "name": "gaea-app",
     "src": "apps/youmeos/app/sparks/gaea/gaea-app.vue",
     "isDynamicEntry": true,
@@ -602,7 +602,7 @@
     ]
   },
   "apps/youmeos/app/sparks/generic-spark/u-generic-spark.vue": {
-    "file": "js/u-generic-spark-skwFbqt9.js",
+    "file": "js/u-generic-spark-CRcuwq5A.js",
     "name": "u-generic-spark",
     "src": "apps/youmeos/app/sparks/generic-spark/u-generic-spark.vue",
     "isDynamicEntry": true,
@@ -619,7 +619,7 @@
     ]
   },
   "apps/youmeos/app/sparks/jukebox/jukebox-app.vue": {
-    "file": "js/jukebox-app-Ex1b15HF.js",
+    "file": "js/jukebox-app-8tKQREbu.js",
     "name": "jukebox-app",
     "src": "apps/youmeos/app/sparks/jukebox/jukebox-app.vue",
     "isDynamicEntry": true,
@@ -636,7 +636,7 @@
     ]
   },
   "apps/youmeos/app/sparks/lemon-aid/lemon-aid-app.vue": {
-    "file": "js/lemon-aid-app-C0FJTYVh.js",
+    "file": "js/lemon-aid-app-CqRP2Ts2.js",
     "name": "lemon-aid-app",
     "src": "apps/youmeos/app/sparks/lemon-aid/lemon-aid-app.vue",
     "isDynamicEntry": true,
@@ -653,7 +653,7 @@
     ]
   },
   "apps/youmeos/app/sparks/local-produce/local-produce-app.vue": {
-    "file": "js/local-produce-app-DTjJmpP_.js",
+    "file": "js/local-produce-app-BA4IEoD6.js",
     "name": "local-produce-app",
     "src": "apps/youmeos/app/sparks/local-produce/local-produce-app.vue",
     "isDynamicEntry": true,
@@ -677,7 +677,7 @@
     "isDynamicEntry": true
   },
   "apps/youmeos/app/sparks/logos/logos-app.vue": {
-    "file": "js/logos-app-k5VvKLYi.js",
+    "file": "js/logos-app-h5fLW5Ib.js",
     "name": "logos-app",
     "src": "apps/youmeos/app/sparks/logos/logos-app.vue",
     "isDynamicEntry": true,
@@ -696,7 +696,7 @@
     ]
   },
   "apps/youmeos/app/sparks/logos/logos-canvas.vue": {
-    "file": "js/logos-canvas-CA8Zv9sX.js",
+    "file": "js/logos-canvas-BaoybZld.js",
     "name": "logos-canvas",
     "src": "apps/youmeos/app/sparks/logos/logos-canvas.vue",
     "isDynamicEntry": true,
@@ -713,24 +713,24 @@
     ]
   },
   "apps/youmeos/app/sparks/lunch-room/lunch-room-app.vue": {
-    "file": "js/lunch-room-app-vnihrJ6D.js",
+    "file": "js/lunch-room-app-Cc5WQ9cc.js",
     "name": "lunch-room-app",
     "src": "apps/youmeos/app/sparks/lunch-room/lunch-room-app.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_o-forum-window-BfaobrSg.js",
+      "_o-forum-window-CDa7_s6h.js",
       "_vendor-DJDm7qH9.js",
       "apps/youmeos/index.html",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-vuetify-V0a1Ypm-.js",
-      "_o-markdown-editor-_QfWBqJ0.js",
+      "_o-markdown-editor-BeQWmunX.js",
       "_useForumEngine-Dti1Ha_e.js",
       "_vendor-three-t6OjKSDq.js",
       "_vendor-echarts-DaMW5ohk.js"
     ]
   },
   "apps/youmeos/app/sparks/magic-formula/magic-formula-app.vue": {
-    "file": "js/magic-formula-app-BubNT97l.js",
+    "file": "js/magic-formula-app-BnFQUZJ7.js",
     "name": "magic-formula-app",
     "src": "apps/youmeos/app/sparks/magic-formula/magic-formula-app.vue",
     "isDynamicEntry": true,
@@ -738,7 +738,7 @@
       "apps/youmeos/index.html",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
-      "_m-dictation-btn-BI4zH96T.js",
+      "_m-dictation-btn-DFs2xu5y.js",
       "apps/youmeos/app/sparks/magic-formula/magic-formula-canvas.vue",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-three-t6OjKSDq.js",
@@ -749,7 +749,7 @@
     ]
   },
   "apps/youmeos/app/sparks/magic-formula/magic-formula-canvas.vue": {
-    "file": "js/magic-formula-canvas-YvtkiFTO.js",
+    "file": "js/magic-formula-canvas-C1TPMNFu.js",
     "name": "magic-formula-canvas",
     "src": "apps/youmeos/app/sparks/magic-formula/magic-formula-canvas.vue",
     "isDynamicEntry": true,
@@ -766,7 +766,7 @@
     ]
   },
   "apps/youmeos/app/sparks/media-drive/components/nimbus-canvas.vue": {
-    "file": "js/nimbus-canvas-CJ6K40kn.js",
+    "file": "js/nimbus-canvas-Cbp_l9A-.js",
     "name": "nimbus-canvas",
     "src": "apps/youmeos/app/sparks/media-drive/components/nimbus-canvas.vue",
     "isDynamicEntry": true,
@@ -783,14 +783,14 @@
     ]
   },
   "apps/youmeos/app/sparks/media-drive/media-drive-spark.vue": {
-    "file": "js/media-drive-spark-D6lOHk5Y.js",
+    "file": "js/media-drive-spark-CF3o95pI.js",
     "name": "media-drive-spark",
     "src": "apps/youmeos/app/sparks/media-drive/media-drive-spark.vue",
     "isDynamicEntry": true,
     "imports": [
       "_vendor-DJDm7qH9.js",
-      "_useSparkNav-DLf11dmd.js",
-      "_useGoogle-ChYRlTCU.js",
+      "_useSparkNav-CO9kd_Na.js",
+      "_useGoogle-DkVnC5ar.js",
       "_useIconMapper-DMhu7BCZ.js",
       "apps/youmeos/index.html",
       "apps/youmeos/app/sparks/media-drive/components/nimbus-canvas.vue",
@@ -804,7 +804,7 @@
     ]
   },
   "apps/youmeos/app/sparks/midnight-nerd/midnight-nerd-canvas.vue": {
-    "file": "js/midnight-nerd-canvas-BWS7RhZF.js",
+    "file": "js/midnight-nerd-canvas-CARbhg6L.js",
     "name": "midnight-nerd-canvas",
     "src": "apps/youmeos/app/sparks/midnight-nerd/midnight-nerd-canvas.vue",
     "isDynamicEntry": true,
@@ -821,7 +821,7 @@
     ]
   },
   "apps/youmeos/app/sparks/midnight-nerd/midnight-nerd-spark.vue": {
-    "file": "js/midnight-nerd-spark-526J0jWP.js",
+    "file": "js/midnight-nerd-spark-DaylbO6W.js",
     "name": "midnight-nerd-spark",
     "src": "apps/youmeos/app/sparks/midnight-nerd/midnight-nerd-spark.vue",
     "isDynamicEntry": true,
@@ -840,7 +840,7 @@
     ]
   },
   "apps/youmeos/app/sparks/midnight-nerd/midnight-terminal-bg.vue": {
-    "file": "js/midnight-terminal-bg-CiYb1_7h.js",
+    "file": "js/midnight-terminal-bg-CKCWkDXq.js",
     "name": "midnight-terminal-bg",
     "src": "apps/youmeos/app/sparks/midnight-nerd/midnight-terminal-bg.vue",
     "isDynamicEntry": true,
@@ -857,7 +857,7 @@
     ]
   },
   "apps/youmeos/app/sparks/minesweeper/minesweeper-app.vue": {
-    "file": "js/minesweeper-app-UBs2lUth.js",
+    "file": "js/minesweeper-app-DMHuvI0q.js",
     "name": "minesweeper-app",
     "src": "apps/youmeos/app/sparks/minesweeper/minesweeper-app.vue",
     "isDynamicEntry": true,
@@ -874,7 +874,7 @@
     ]
   },
   "apps/youmeos/app/sparks/my-compass/my-compass-app.vue": {
-    "file": "js/my-compass-app-C8S9pOF7.js",
+    "file": "js/my-compass-app-CDbu2fW8.js",
     "name": "my-compass-app",
     "src": "apps/youmeos/app/sparks/my-compass/my-compass-app.vue",
     "isDynamicEntry": true,
@@ -891,7 +891,7 @@
     ]
   },
   "apps/youmeos/app/sparks/my-planner/my-planner-app.vue": {
-    "file": "js/my-planner-app-BZNvuzdP.js",
+    "file": "js/my-planner-app-C9ADF0cf.js",
     "name": "my-planner-app",
     "src": "apps/youmeos/app/sparks/my-planner/my-planner-app.vue",
     "isDynamicEntry": true,
@@ -908,7 +908,7 @@
     ]
   },
   "apps/youmeos/app/sparks/neon-notes/neon-notes-spark.vue": {
-    "file": "js/neon-notes-spark-slZkJ6zy.js",
+    "file": "js/neon-notes-spark-D1ylIGTl.js",
     "name": "neon-notes-spark",
     "src": "apps/youmeos/app/sparks/neon-notes/neon-notes-spark.vue",
     "isDynamicEntry": true,
@@ -925,7 +925,7 @@
     ]
   },
   "apps/youmeos/app/sparks/notepad/alphabet-soup-canvas.vue": {
-    "file": "js/alphabet-soup-canvas-DGinUSS4.js",
+    "file": "js/alphabet-soup-canvas-D0tO6Y2P.js",
     "name": "alphabet-soup-canvas",
     "src": "apps/youmeos/app/sparks/notepad/alphabet-soup-canvas.vue",
     "isDynamicEntry": true,
@@ -942,21 +942,21 @@
     ]
   },
   "apps/youmeos/app/sparks/notepad/notepad-spark.vue": {
-    "file": "js/notepad-spark-LEuTc9CY.js",
+    "file": "js/notepad-spark-ffGdjIpC.js",
     "name": "notepad-spark",
     "src": "apps/youmeos/app/sparks/notepad/notepad-spark.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_useLexicon-C3-zomUW.js",
+      "_useLexicon-NqwDy284.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-core-BCGDVfqk.js",
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_notepad-commands-COUIL5iQ.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_useIconMapper-DMhu7BCZ.js",
       "apps/youmeos/app/sparks/notepad/alphabet-soup-canvas.vue",
-      "_m-dictation-btn-BI4zH96T.js",
+      "_m-dictation-btn-DFs2xu5y.js",
       "_vendor-three-t6OjKSDq.js",
       "_vendor-echarts-DaMW5ohk.js"
     ],
@@ -971,19 +971,19 @@
     "isDynamicEntry": true
   },
   "apps/youmeos/app/sparks/nucleos/nucleos-spark.vue": {
-    "file": "js/nucleos-spark-ZIMrz71M.js",
+    "file": "js/nucleos-spark-Bx_A79ms.js",
     "name": "nucleos-spark",
     "src": "apps/youmeos/app/sparks/nucleos/nucleos-spark.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "apps/youmeos/app/sparks/nucleos/views/nucleos-canvas.vue",
-      "_useLexicon-C3-zomUW.js",
-      "_o-spark-card-rMVh0tQB.js",
-      "_u-spark-view-DHj9h1Vh.js",
+      "_useLexicon-NqwDy284.js",
+      "_o-spark-card-BSbPOcsB.js",
+      "_u-spark-view-fy695FPu.js",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-three-t6OjKSDq.js",
       "_vendor-echarts-DaMW5ohk.js"
@@ -992,7 +992,7 @@
       "apps/youmeos/app/sparks/spark-plugs/electric-wave-canvas.vue",
       "apps/youmeos/app/sparks/notepad/alphabet-soup-canvas.vue",
       "apps/youmeos/app/sparks/midnight-nerd/midnight-nerd-canvas.vue",
-      "_bubblegum-canvas-Ggj-T4ZL.js",
+      "_bubblegum-canvas-EMXEgH29.js",
       "apps/youmeos/app/sparks/wizards-tower/wizards-tower-canvas.vue",
       "apps/youmeos/app/sparks/magic-formula/magic-formula-canvas.vue",
       "apps/youmeos/app/sparks/logos/logos-canvas.vue",
@@ -1037,7 +1037,7 @@
     "isDynamicEntry": true
   },
   "apps/youmeos/app/sparks/nucleos/views/nucleos-canvas.vue": {
-    "file": "js/nucleos-canvas-D0UU6loQ.js",
+    "file": "js/nucleos-canvas-7x-PQqsY.js",
     "name": "nucleos-canvas",
     "src": "apps/youmeos/app/sparks/nucleos/views/nucleos-canvas.vue",
     "isDynamicEntry": true,
@@ -1054,7 +1054,7 @@
     ]
   },
   "apps/youmeos/app/sparks/omega-source/omega-source-app.vue": {
-    "file": "js/omega-source-app-BxELOeDS.js",
+    "file": "js/omega-source-app-C3-V1MGA.js",
     "name": "omega-source-app",
     "src": "apps/youmeos/app/sparks/omega-source/omega-source-app.vue",
     "isDynamicEntry": true,
@@ -1064,8 +1064,8 @@
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_useOmegaSource-SkggCv93.js",
-      "_useDiscord-kj0KPizW.js",
-      "_useGoogle-ChYRlTCU.js",
+      "_useDiscord-CGqpZzhN.js",
+      "_useGoogle-DkVnC5ar.js",
       "apps/youmeos/app/sparks/midnight-nerd/midnight-terminal-bg.vue",
       "src/mechanics/useWeb3Gateways.ts",
       "_vendor-core-BCGDVfqk.js",
@@ -1077,7 +1077,7 @@
     ]
   },
   "apps/youmeos/app/sparks/omega-source/omega-source-canvas.vue": {
-    "file": "js/omega-source-canvas-KTqMUOQj.js",
+    "file": "js/omega-source-canvas-CVmuyzhp.js",
     "name": "omega-source-canvas",
     "src": "apps/youmeos/app/sparks/omega-source/omega-source-canvas.vue",
     "isDynamicEntry": true,
@@ -1094,13 +1094,13 @@
     ]
   },
   "apps/youmeos/app/sparks/oscar/oscar-app.vue": {
-    "file": "js/oscar-app-DCBFEimn.js",
+    "file": "js/oscar-app-D80V_nMS.js",
     "name": "oscar-app",
     "src": "apps/youmeos/app/sparks/oscar/oscar-app.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useGoogle-ChYRlTCU.js",
+      "_useGoogle-DkVnC5ar.js",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
@@ -1112,7 +1112,7 @@
     ]
   },
   "apps/youmeos/app/sparks/paint/paint-app.vue": {
-    "file": "js/paint-app-BKnnhYDW.js",
+    "file": "js/paint-app-BAcYV1ss.js",
     "name": "paint-app",
     "src": "apps/youmeos/app/sparks/paint/paint-app.vue",
     "isDynamicEntry": true,
@@ -1129,7 +1129,7 @@
     ]
   },
   "apps/youmeos/app/sparks/polos/polos-app.vue": {
-    "file": "js/polos-app-B-48hHZi.js",
+    "file": "js/polos-app-0klRKAgg.js",
     "name": "polos-app",
     "src": "apps/youmeos/app/sparks/polos/polos-app.vue",
     "isDynamicEntry": true,
@@ -1146,7 +1146,7 @@
     ]
   },
   "apps/youmeos/app/sparks/skiptrace/skiptrace-app.vue": {
-    "file": "js/skiptrace-app-CyNLecMV.js",
+    "file": "js/skiptrace-app-CuCUCw_d.js",
     "name": "skiptrace-app",
     "src": "apps/youmeos/app/sparks/skiptrace/skiptrace-app.vue",
     "isDynamicEntry": true,
@@ -1160,7 +1160,7 @@
     ]
   },
   "apps/youmeos/app/sparks/snake/snake-app.vue": {
-    "file": "js/snake-app-DGlkDcCb.js",
+    "file": "js/snake-app-COXkQY6q.js",
     "name": "snake-app",
     "src": "apps/youmeos/app/sparks/snake/snake-app.vue",
     "isDynamicEntry": true,
@@ -1177,7 +1177,7 @@
     ]
   },
   "apps/youmeos/app/sparks/social-preview/social-preview-spark.vue": {
-    "file": "js/social-preview-spark-QG29I76M.js",
+    "file": "js/social-preview-spark-CvARW8zi.js",
     "name": "social-preview-spark",
     "src": "apps/youmeos/app/sparks/social-preview/social-preview-spark.vue",
     "isDynamicEntry": true,
@@ -1194,7 +1194,7 @@
     ]
   },
   "apps/youmeos/app/sparks/solitaire/solitaire-spark.vue": {
-    "file": "js/solitaire-spark-93wlA3US.js",
+    "file": "js/solitaire-spark-DLK7N4NB.js",
     "name": "solitaire-spark",
     "src": "apps/youmeos/app/sparks/solitaire/solitaire-spark.vue",
     "isDynamicEntry": true,
@@ -1218,7 +1218,7 @@
     "isDynamicEntry": true
   },
   "apps/youmeos/app/sparks/spark-plugs/electric-wave-canvas.vue": {
-    "file": "js/electric-wave-canvas-DSa3a5xi.js",
+    "file": "js/electric-wave-canvas-cF4ZOK_3.js",
     "name": "electric-wave-canvas",
     "src": "apps/youmeos/app/sparks/spark-plugs/electric-wave-canvas.vue",
     "isDynamicEntry": true,
@@ -1235,7 +1235,7 @@
     ]
   },
   "apps/youmeos/app/sparks/spark-plugs/smoke-canvas.vue": {
-    "file": "js/smoke-canvas-D3uDIsbr.js",
+    "file": "js/smoke-canvas-bnU162cI.js",
     "name": "smoke-canvas",
     "src": "apps/youmeos/app/sparks/spark-plugs/smoke-canvas.vue",
     "isDynamicEntry": true,
@@ -1252,17 +1252,17 @@
     ]
   },
   "apps/youmeos/app/sparks/spark-plugs/spark-plugs-app.vue": {
-    "file": "js/spark-plugs-app-CJ5MWFQL.js",
+    "file": "js/spark-plugs-app-Ba6s-3hk.js",
     "name": "spark-plugs-app",
     "src": "apps/youmeos/app/sparks/spark-plugs/spark-plugs-app.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
-      "_o-webspark-installer-modal-C5Q-kANx.js",
-      "_u-webapp-BS945t78.js",
-      "_o-banner-carousel--xJkRpmD.js",
-      "_o-spark-card-rMVh0tQB.js",
+      "_useSparkNav-CO9kd_Na.js",
+      "_o-webspark-installer-modal-Dvr9DdjZ.js",
+      "_u-webapp-OaumqgJU.js",
+      "_o-banner-carousel-CcOO_SFI.js",
+      "_o-spark-card-BSbPOcsB.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
@@ -1274,24 +1274,24 @@
     ]
   },
   "apps/youmeos/app/sparks/suggestion-box/suggestion-box-app.vue": {
-    "file": "js/suggestion-box-app-B45hvP0d.js",
+    "file": "js/suggestion-box-app-DTCoR4yk.js",
     "name": "suggestion-box-app",
     "src": "apps/youmeos/app/sparks/suggestion-box/suggestion-box-app.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_o-forum-window-BfaobrSg.js",
+      "_o-forum-window-CDa7_s6h.js",
       "_vendor-DJDm7qH9.js",
       "apps/youmeos/index.html",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-vuetify-V0a1Ypm-.js",
-      "_o-markdown-editor-_QfWBqJ0.js",
+      "_o-markdown-editor-BeQWmunX.js",
       "_useForumEngine-Dti1Ha_e.js",
       "_vendor-three-t6OjKSDq.js",
       "_vendor-echarts-DaMW5ohk.js"
     ]
   },
   "apps/youmeos/app/sparks/swag-shop/swag-shop-app.vue": {
-    "file": "js/swag-shop-app-BEmXYfa4.js",
+    "file": "js/swag-shop-app-cqmCcLvX.js",
     "name": "swag-shop-app",
     "src": "apps/youmeos/app/sparks/swag-shop/swag-shop-app.vue",
     "isDynamicEntry": true,
@@ -1305,7 +1305,7 @@
     ]
   },
   "apps/youmeos/app/sparks/sys-monitor/sys-monitor-app.vue": {
-    "file": "js/sys-monitor-app-BsRb1JHC.js",
+    "file": "js/sys-monitor-app-DqfWI7Yt.js",
     "name": "sys-monitor-app",
     "src": "apps/youmeos/app/sparks/sys-monitor/sys-monitor-app.vue",
     "isDynamicEntry": true,
@@ -1324,14 +1324,14 @@
     ]
   },
   "apps/youmeos/app/sparks/take-my-money/take-my-money-spark.vue": {
-    "file": "js/take-my-money-spark-BMUcS8Bj.js",
+    "file": "js/take-my-money-spark-jvJmr2Gd.js",
     "name": "take-my-money-spark",
     "src": "apps/youmeos/app/sparks/take-my-money/take-my-money-spark.vue",
     "isDynamicEntry": true,
     "imports": [
       "_vendor-DJDm7qH9.js",
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-three-t6OjKSDq.js",
@@ -1342,7 +1342,7 @@
     ]
   },
   "apps/youmeos/app/sparks/telescope/telescope-app.vue": {
-    "file": "js/telescope-app-CEvC07kp.js",
+    "file": "js/telescope-app-DTzH3fSk.js",
     "name": "telescope-app",
     "src": "apps/youmeos/app/sparks/telescope/telescope-app.vue",
     "isDynamicEntry": true,
@@ -1360,7 +1360,7 @@
     ]
   },
   "apps/youmeos/app/sparks/telescope/telescope-canvas.vue": {
-    "file": "js/telescope-canvas-DD2tm2z_.js",
+    "file": "js/telescope-canvas-l9rbTUtt.js",
     "name": "telescope-canvas",
     "src": "apps/youmeos/app/sparks/telescope/telescope-canvas.vue",
     "isDynamicEntry": true,
@@ -1377,7 +1377,7 @@
     ]
   },
   "apps/youmeos/app/sparks/terminal/terminal-app.vue": {
-    "file": "js/terminal-app-B5HH7dge.js",
+    "file": "js/terminal-app-DVtYEgBQ.js",
     "name": "terminal-app",
     "src": "apps/youmeos/app/sparks/terminal/terminal-app.vue",
     "isDynamicEntry": true,
@@ -1408,13 +1408,13 @@
     ]
   },
   "apps/youmeos/app/sparks/tesseract/tesseract-spark.vue": {
-    "file": "js/tesseract-spark-nL0dHV1-.js",
+    "file": "js/tesseract-spark-D0DY7tcz.js",
     "name": "tesseract-spark",
     "src": "apps/youmeos/app/sparks/tesseract/tesseract-spark.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-DJDm7qH9.js",
       "_tesseract-canvas.vue_vue_type_script_setup_true_lang-BCT3RLyk.js",
@@ -1433,7 +1433,7 @@
     "isDynamicEntry": true
   },
   "apps/youmeos/app/sparks/tourguide/tourguide-app.vue": {
-    "file": "js/tourguide-app-GHJcbnMH.js",
+    "file": "js/tourguide-app-cx0MPApG.js",
     "name": "tourguide-app",
     "src": "apps/youmeos/app/sparks/tourguide/tourguide-app.vue",
     "isDynamicEntry": true,
@@ -1450,7 +1450,7 @@
     ]
   },
   "apps/youmeos/app/sparks/trenchess/trenchess-app.vue": {
-    "file": "js/trenchess-app-CpFvhYng.js",
+    "file": "js/trenchess-app-CEH2mH9H.js",
     "name": "trenchess-app",
     "src": "apps/youmeos/app/sparks/trenchess/trenchess-app.vue",
     "isDynamicEntry": true,
@@ -1467,7 +1467,7 @@
     ]
   },
   "apps/youmeos/app/sparks/trophy-case/trophy-case-app.vue": {
-    "file": "js/trophy-case-app-B9OZ_Gqv.js",
+    "file": "js/trophy-case-app-Bpcgocnu.js",
     "name": "trophy-case-app",
     "src": "apps/youmeos/app/sparks/trophy-case/trophy-case-app.vue",
     "isDynamicEntry": true,
@@ -1484,13 +1484,13 @@
     ]
   },
   "apps/youmeos/app/sparks/webspark/u-webspark.vue": {
-    "file": "js/u-webspark-R6MdFoRU.js",
+    "file": "js/u-webspark-UcP6hIQT.js",
     "name": "u-webspark",
     "src": "apps/youmeos/app/sparks/webspark/u-webspark.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_u-webapp-BS945t78.js",
+      "_u-webapp-OaumqgJU.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
@@ -1499,7 +1499,7 @@
     ]
   },
   "apps/youmeos/app/sparks/welcome-u/welcome-canvas.vue": {
-    "file": "js/welcome-canvas-eA5Y6Wpd.js",
+    "file": "js/welcome-canvas-CYXv5uf6.js",
     "name": "welcome-canvas",
     "src": "apps/youmeos/app/sparks/welcome-u/welcome-canvas.vue",
     "isDynamicEntry": true,
@@ -1516,15 +1516,15 @@
     ]
   },
   "apps/youmeos/app/sparks/welcome-u/welcome-u-spark.vue": {
-    "file": "js/welcome-u-spark-BgGmThS0.js",
+    "file": "js/welcome-u-spark-CqwN2IbB.js",
     "name": "welcome-u-spark",
     "src": "apps/youmeos/app/sparks/welcome-u/welcome-u-spark.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "apps/youmeos/app/sparks/welcome-u/welcome-canvas.vue",
-      "_o-youmeos-logo.vue_vue_type_script_setup_true_lang-DOrQ5TzU.js",
+      "_o-youmeos-logo.vue_vue_type_script_setup_true_lang-DwQ20h6n.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-core-BCGDVfqk.js",
@@ -1542,12 +1542,12 @@
     "isDynamicEntry": true
   },
   "apps/youmeos/app/sparks/wizards-tower/wizards-tower-app.vue": {
-    "file": "js/wizards-tower-app-lLhXuCnN.js",
+    "file": "js/wizards-tower-app-DEuVpxo4.js",
     "name": "wizards-tower-app",
     "src": "apps/youmeos/app/sparks/wizards-tower/wizards-tower-app.vue",
     "isDynamicEntry": true,
     "imports": [
-      "_useSparkNav-DLf11dmd.js",
+      "_useSparkNav-CO9kd_Na.js",
       "apps/youmeos/index.html",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
@@ -1561,7 +1561,7 @@
     ]
   },
   "apps/youmeos/app/sparks/wizards-tower/wizards-tower-canvas.vue": {
-    "file": "js/wizards-tower-canvas-BbuAhjr3.js",
+    "file": "js/wizards-tower-canvas-B3XJCY3q.js",
     "name": "wizards-tower-canvas",
     "src": "apps/youmeos/app/sparks/wizards-tower/wizards-tower-canvas.vue",
     "isDynamicEntry": true,
@@ -1578,7 +1578,7 @@
     ]
   },
   "apps/youmeos/app/sparks/wp-admin/wp-admin-spark.vue": {
-    "file": "js/wp-admin-spark-Dud3twIm.js",
+    "file": "js/wp-admin-spark-bN_Yi5Ix.js",
     "name": "wp-admin-spark",
     "src": "apps/youmeos/app/sparks/wp-admin/wp-admin-spark.vue",
     "isDynamicEntry": true,
@@ -1595,14 +1595,14 @@
     ]
   },
   "apps/youmeos/app/sparks/yellow-links/yellow-links-app.vue": {
-    "file": "js/yellow-links-app-CVH8YC0E.js",
+    "file": "js/yellow-links-app-B0PUbfOc.js",
     "name": "yellow-links-app",
     "src": "apps/youmeos/app/sparks/yellow-links/yellow-links-app.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_o-webspark-installer-modal-C5Q-kANx.js",
-      "_useSparkNav-DLf11dmd.js",
+      "_o-webspark-installer-modal-Dvr9DdjZ.js",
+      "_useSparkNav-CO9kd_Na.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
@@ -1618,7 +1618,7 @@
     "src": "apps/youmeos/assets/logos/y-logo-v2.png"
   },
   "apps/youmeos/engine/webgl/generators/dust.ts": {
-    "file": "js/dust-CgTE3tbK.js",
+    "file": "js/dust-SG92J4pc.js",
     "name": "dust",
     "src": "apps/youmeos/engine/webgl/generators/dust.ts",
     "isDynamicEntry": true,
@@ -1632,13 +1632,13 @@
     ]
   },
   "apps/youmeos/engine/webgl/generators/galaxy.ts": {
-    "file": "js/galaxy-DhuytfQx.js",
+    "file": "js/galaxy-CCo9_spE.js",
     "name": "galaxy",
     "src": "apps/youmeos/engine/webgl/generators/galaxy.ts",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_lensflare-CIAqYvBe.js",
+      "_lensflare-DwL-e7pl.js",
       "_guides-Dx4S-iUw.js",
       "_material.factory-D02YVjQS.js",
       "_vendor-three-t6OjKSDq.js",
@@ -1649,7 +1649,7 @@
     ]
   },
   "apps/youmeos/engine/webgl/generators/gas.ts": {
-    "file": "js/gas-ULOYIcz6.js",
+    "file": "js/gas-C1LczLHw.js",
     "name": "gas",
     "src": "apps/youmeos/engine/webgl/generators/gas.ts",
     "isDynamicEntry": true,
@@ -1664,7 +1664,7 @@
     ]
   },
   "apps/youmeos/engine/webgl/generators/hipparcos.ts": {
-    "file": "js/hipparcos-CuuWdm2K.js",
+    "file": "js/hipparcos-CV-9yjLU.js",
     "name": "hipparcos",
     "src": "apps/youmeos/engine/webgl/generators/hipparcos.ts",
     "isDynamicEntry": true,
@@ -1680,7 +1680,7 @@
     ]
   },
   "apps/youmeos/engine/webgl/generators/starfield.ts": {
-    "file": "js/starfield-D0St4Qbi.js",
+    "file": "js/starfield-wnljMcbd.js",
     "name": "starfield",
     "src": "apps/youmeos/engine/webgl/generators/starfield.ts",
     "isDynamicEntry": true,
@@ -1694,7 +1694,7 @@
     ]
   },
   "apps/youmeos/engine/webgpu/generators/galactic-clusters.ts": {
-    "file": "js/galactic-clusters-C7Dw42AT.js",
+    "file": "js/galactic-clusters-mzXv5pJR.js",
     "name": "galactic-clusters",
     "src": "apps/youmeos/engine/webgpu/generators/galactic-clusters.ts",
     "isDynamicEntry": true,
@@ -1708,7 +1708,7 @@
     ]
   },
   "apps/youmeos/engine/webgpu/generators/helios/solarsystem.ts": {
-    "file": "js/solarsystem-C2R-uejZ.js",
+    "file": "js/solarsystem-DEpKseBw.js",
     "name": "solarsystem",
     "src": "apps/youmeos/engine/webgpu/generators/helios/solarsystem.ts",
     "isDynamicEntry": true,
@@ -1725,13 +1725,13 @@
     ]
   },
   "apps/youmeos/engine/webgpu/generators/helios/sun.ts": {
-    "file": "js/sun-BD2bHg49.js",
+    "file": "js/sun-CIZFIZDL.js",
     "name": "sun",
     "src": "apps/youmeos/engine/webgpu/generators/helios/sun.ts",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_lensflare-CIAqYvBe.js",
+      "_lensflare-DwL-e7pl.js",
       "_polyfills-Dr6PMnKV.js",
       "_material.factory-D02YVjQS.js",
       "_vendor-three-t6OjKSDq.js",
@@ -1742,7 +1742,7 @@
     ]
   },
   "apps/youmeos/engine/webgpu/generators/nexus/stars.ts": {
-    "file": "js/stars-C7dfjnn2.js",
+    "file": "js/stars-DQ9rC0TA.js",
     "name": "stars",
     "src": "apps/youmeos/engine/webgpu/generators/nexus/stars.ts",
     "isDynamicEntry": true,
@@ -1758,7 +1758,7 @@
     ]
   },
   "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-dust.ts": {
-    "file": "js/interstellar-dust-CAa_aOeb.js",
+    "file": "js/interstellar-dust-DEF9DfIw.js",
     "name": "interstellar-dust",
     "src": "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-dust.ts",
     "isDynamicEntry": true,
@@ -1773,7 +1773,7 @@
     ]
   },
   "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-gas.ts": {
-    "file": "js/interstellar-gas-ULOYIcz6.js",
+    "file": "js/interstellar-gas-C1LczLHw.js",
     "name": "interstellar-gas",
     "src": "apps/youmeos/engine/webgpu/generators/noosphere/interstellar-gas.ts",
     "isDynamicEntry": true,
@@ -1788,7 +1788,7 @@
     ]
   },
   "apps/youmeos/engine/webgpu/generators/noosphere/milky-way.ts": {
-    "file": "js/milky-way-CAJHzbYI.js",
+    "file": "js/milky-way-Dcf-HA1Q.js",
     "name": "milky-way",
     "src": "apps/youmeos/engine/webgpu/generators/noosphere/milky-way.ts",
     "isDynamicEntry": true,
@@ -1804,7 +1804,7 @@
     ]
   },
   "apps/youmeos/engine/webgpu/generators/noosphere/starfield.ts": {
-    "file": "js/starfield-ouXs0Wwx.js",
+    "file": "js/starfield-C_abdpix.js",
     "name": "starfield",
     "src": "apps/youmeos/engine/webgpu/generators/noosphere/starfield.ts",
     "isDynamicEntry": true,
@@ -1819,7 +1819,7 @@
     ]
   },
   "apps/youmeos/index.html": {
-    "file": "js/youmeos-Cbdm11R8.js",
+    "file": "js/youmeos-DpqvAgyT.js",
     "name": "youmeos",
     "src": "apps/youmeos/index.html",
     "isEntry": true,
@@ -1860,7 +1860,7 @@
       "apps/youmeos/app/sparks/spark-plugs/electric-wave-canvas.vue",
       "apps/youmeos/app/sparks/notepad/alphabet-soup-canvas.vue",
       "apps/youmeos/app/sparks/midnight-nerd/midnight-nerd-canvas.vue",
-      "_bubblegum-canvas-Ggj-T4ZL.js",
+      "_bubblegum-canvas-EMXEgH29.js",
       "apps/youmeos/app/sparks/wizards-tower/wizards-tower-canvas.vue",
       "apps/youmeos/app/sparks/magic-formula/magic-formula-canvas.vue",
       "apps/youmeos/app/sparks/logos/logos-canvas.vue",
@@ -1959,7 +1959,7 @@
       "src/components/blueprints/layouts/x-sub-app-layout/x-sub-app-layout.vue",
       "src/components/blueprints/layouts/x-sub-route-layout/x-sub-route-layout.vue",
       "src/components/blueprints/layouts/x-sub-app-page-layout/x-sub-app-page-layout.vue",
-      "_sub-app-billboard-DYx784AD.js",
+      "_sub-app-billboard-CfqWn015.js",
       "src/components/constructs/routes-navigation-drawer/routes-navigation-drawer.vue",
       "src/components/constructs/plugin-grid-item/plugin-grid-item.vue",
       "src/components/prefabs/animated-number/animated-number.vue",
@@ -2019,7 +2019,7 @@
     "isDynamicEntry": true
   },
   "apps/youmeos/routes/auth/LockView.vue": {
-    "file": "js/LockView-BWmmNzre.js",
+    "file": "js/LockView-BIncDqh7.js",
     "name": "LockView",
     "src": "apps/youmeos/routes/auth/LockView.vue",
     "isDynamicEntry": true,
@@ -2036,15 +2036,15 @@
     ]
   },
   "apps/youmeos/routes/auth/LoginView.vue": {
-    "file": "js/LoginView-CCCUw1XU.js",
+    "file": "js/LoginView-DYglEImT.js",
     "name": "LoginView",
     "src": "apps/youmeos/routes/auth/LoginView.vue",
     "isDynamicEntry": true,
     "imports": [
       "_vendor-DJDm7qH9.js",
       "apps/youmeos/index.html",
-      "_useDiscord-kj0KPizW.js",
-      "_useGoogle-ChYRlTCU.js",
+      "_useDiscord-CGqpZzhN.js",
+      "_useGoogle-DkVnC5ar.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-three-t6OjKSDq.js",
@@ -2055,15 +2055,15 @@
     ]
   },
   "apps/youmeos/routes/auth/RegisterView.vue": {
-    "file": "js/RegisterView-Ba12gvoz.js",
+    "file": "js/RegisterView-BzJq7TP1.js",
     "name": "RegisterView",
     "src": "apps/youmeos/routes/auth/RegisterView.vue",
     "isDynamicEntry": true,
     "imports": [
       "_vendor-DJDm7qH9.js",
       "apps/youmeos/index.html",
-      "_useDiscord-kj0KPizW.js",
-      "_useGoogle-ChYRlTCU.js",
+      "_useDiscord-CGqpZzhN.js",
+      "_useGoogle-DkVnC5ar.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-three-t6OjKSDq.js",
@@ -2074,7 +2074,7 @@
     ]
   },
   "apps/youmeos/routes/auth/ResetView.vue": {
-    "file": "js/ResetView-B1rk5HyP.js",
+    "file": "js/ResetView-CAp_WKkk.js",
     "name": "ResetView",
     "src": "apps/youmeos/routes/auth/ResetView.vue",
     "isDynamicEntry": true,
@@ -2091,7 +2091,7 @@
     ]
   },
   "apps/youmeos/routes/flow/GlowLanding.vue": {
-    "file": "js/GlowLanding-DXaoh80I.js",
+    "file": "js/GlowLanding-BE10JVu_.js",
     "name": "GlowLanding",
     "src": "apps/youmeos/routes/flow/GlowLanding.vue",
     "isDynamicEntry": true,
@@ -2108,7 +2108,7 @@
     ]
   },
   "apps/youmeos/routes/helios/helios-canvas.vue": {
-    "file": "js/helios-canvas-CUgGaC5R.js",
+    "file": "js/helios-canvas-DciOqPx4.js",
     "name": "helios-canvas",
     "src": "apps/youmeos/routes/helios/helios-canvas.vue",
     "isDynamicEntry": true,
@@ -2126,13 +2126,13 @@
     ]
   },
   "apps/youmeos/routes/helios/helios.vue": {
-    "file": "js/helios-B4DPxOgr.js",
+    "file": "js/helios-CrfDS-lj.js",
     "name": "helios",
     "src": "apps/youmeos/routes/helios/helios.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_u-spark-view-DHj9h1Vh.js",
+      "_u-spark-view-fy695FPu.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-core-BCGDVfqk.js",
       "_vendor-vuetify-V0a1Ypm-.js",
@@ -2147,7 +2147,7 @@
     ]
   },
   "apps/youmeos/routes/nexus/nexos-canvas.vue": {
-    "file": "js/nexos-canvas-fWWW6UaC.js",
+    "file": "js/nexos-canvas-DYtsUkOb.js",
     "name": "nexos-canvas",
     "src": "apps/youmeos/routes/nexus/nexos-canvas.vue",
     "isDynamicEntry": true,
@@ -2164,13 +2164,13 @@
     ]
   },
   "apps/youmeos/routes/nexus/nexus.vue": {
-    "file": "js/nexus-UZjTxsG0.js",
+    "file": "js/nexus-CL-qIGAO.js",
     "name": "nexus",
     "src": "apps/youmeos/routes/nexus/nexus.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_u-spark-view-DHj9h1Vh.js",
+      "_u-spark-view-fy695FPu.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-core-BCGDVfqk.js",
       "apps/youmeos/routes/nexus/nexos-canvas.vue",
@@ -2183,7 +2183,7 @@
     ]
   },
   "apps/youmeos/routes/noosphere/noosphere-canvas.vue": {
-    "file": "js/noosphere-canvas-CizoJUzd.js",
+    "file": "js/noosphere-canvas-CE5Mu-r2.js",
     "name": "noosphere-canvas",
     "src": "apps/youmeos/routes/noosphere/noosphere-canvas.vue",
     "isDynamicEntry": true,
@@ -2200,13 +2200,13 @@
     ]
   },
   "apps/youmeos/routes/noosphere/noosphere.vue": {
-    "file": "js/noosphere-CwsSVnql.js",
+    "file": "js/noosphere-Ds4nuLSB.js",
     "name": "noosphere",
     "src": "apps/youmeos/routes/noosphere/noosphere.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_u-spark-view-DHj9h1Vh.js",
+      "_u-spark-view-fy695FPu.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-core-BCGDVfqk.js",
       "apps/youmeos/routes/noosphere/noosphere-canvas.vue",
@@ -2221,7 +2221,7 @@
     ]
   },
   "apps/youmeos/routes/portal/PortalDashboard.vue": {
-    "file": "js/PortalDashboard-i5bnO-sL.js",
+    "file": "js/PortalDashboard-Bl7_GSS0.js",
     "name": "PortalDashboard",
     "src": "apps/youmeos/routes/portal/PortalDashboard.vue",
     "isDynamicEntry": true,
@@ -2238,7 +2238,7 @@
     ]
   },
   "apps/youmeos/routes/portal/PortalView.vue": {
-    "file": "js/PortalView-Bdbhw-T6.js",
+    "file": "js/PortalView-3vQGiQif.js",
     "name": "PortalView",
     "src": "apps/youmeos/routes/portal/PortalView.vue",
     "isDynamicEntry": true,
@@ -2255,7 +2255,7 @@
     ]
   },
   "apps/youmeos/routes/support/SupportView.vue": {
-    "file": "js/SupportView-C8momrpI.js",
+    "file": "js/SupportView-CsRWk1bA.js",
     "name": "SupportView",
     "src": "apps/youmeos/routes/support/SupportView.vue",
     "isDynamicEntry": true,
@@ -2272,7 +2272,7 @@
     ]
   },
   "apps/youmeos/routes/welcome/AboutView.vue": {
-    "file": "js/AboutView-CiAq5vZ_.js",
+    "file": "js/AboutView-CNc8rVTu.js",
     "name": "AboutView",
     "src": "apps/youmeos/routes/welcome/AboutView.vue",
     "isDynamicEntry": true,
@@ -2289,13 +2289,13 @@
     ]
   },
   "apps/youmeos/routes/welcome/WelcomeLanding.vue": {
-    "file": "js/WelcomeLanding-D_t68Tkf.js",
+    "file": "js/WelcomeLanding-BqxUlVHg.js",
     "name": "WelcomeLanding",
     "src": "apps/youmeos/routes/welcome/WelcomeLanding.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_o-youmeos-logo.vue_vue_type_script_setup_true_lang-DOrQ5TzU.js",
+      "_o-youmeos-logo.vue_vue_type_script_setup_true_lang-DwQ20h6n.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-core-BCGDVfqk.js",
@@ -2307,7 +2307,7 @@
     ]
   },
   "apps/youmeos/routes/welcome/WelcomeView.vue": {
-    "file": "js/WelcomeView-CE10h6xW.js",
+    "file": "js/WelcomeView-CSKZObVU.js",
     "name": "WelcomeView",
     "src": "apps/youmeos/routes/welcome/WelcomeView.vue",
     "isDynamicEntry": true,
@@ -2374,7 +2374,7 @@
     "src": "node_modules/.pnpm/@fortawesome+fontawesome-pro@https+++www.mycompassconsulting.com+wp-content+uploads+sit_d80e38fa175a6899651b735cd66d7a69/node_modules/@fortawesome/fontawesome-pro/webfonts/fa-solid-900.woff2"
   },
   "src/components/atoms/x-animated-tachometer/x-animated-tachometer.vue": {
-    "file": "js/x-animated-tachometer-4QT3-iXQ.js",
+    "file": "js/x-animated-tachometer-Cn-shBaj.js",
     "name": "x-animated-tachometer",
     "src": "src/components/atoms/x-animated-tachometer/x-animated-tachometer.vue",
     "isDynamicEntry": true,
@@ -2391,7 +2391,7 @@
     ]
   },
   "src/components/atoms/x-countdown-clock.vue": {
-    "file": "js/x-countdown-clock-DvJ66ZTT.js",
+    "file": "js/x-countdown-clock-DlrcyGaf.js",
     "name": "x-countdown-clock",
     "src": "src/components/atoms/x-countdown-clock.vue",
     "isDynamicEntry": true,
@@ -2408,7 +2408,7 @@
     ]
   },
   "src/components/atoms/x-declaration.vue": {
-    "file": "js/x-declaration-CcciEZVV.js",
+    "file": "js/x-declaration-B9UyDrQQ.js",
     "name": "x-declaration",
     "src": "src/components/atoms/x-declaration.vue",
     "isDynamicEntry": true,
@@ -2425,7 +2425,7 @@
     ]
   },
   "src/components/atoms/x-live-tachometer/x-live-tachometer.vue": {
-    "file": "js/x-live-tachometer-DbKiqWZc.js",
+    "file": "js/x-live-tachometer-BrNSoghf.js",
     "name": "x-live-tachometer",
     "src": "src/components/atoms/x-live-tachometer/x-live-tachometer.vue",
     "isDynamicEntry": true,
@@ -2443,7 +2443,7 @@
     ]
   },
   "src/components/atoms/x-note-tosser.vue": {
-    "file": "js/x-note-tosser-BSiFY2IV.js",
+    "file": "js/x-note-tosser-CaxQQN-k.js",
     "name": "x-note-tosser",
     "src": "src/components/atoms/x-note-tosser.vue",
     "isDynamicEntry": true,
@@ -2460,14 +2460,14 @@
     ]
   },
   "src/components/blueprints/layouts/x-sub-app-layout/x-sub-app-layout.vue": {
-    "file": "js/x-sub-app-layout-CR9Xcq3z.js",
+    "file": "js/x-sub-app-layout-B_4L965I.js",
     "name": "x-sub-app-layout",
     "src": "src/components/blueprints/layouts/x-sub-app-layout/x-sub-app-layout.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useSubAppNavigation-DGCRNYbA.js",
-      "_sub-app-billboard-DYx784AD.js",
+      "_useSubAppNavigation-BOIKYm_A.js",
+      "_sub-app-billboard-CfqWn015.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
@@ -2479,7 +2479,7 @@
     ]
   },
   "src/components/blueprints/layouts/x-sub-app-page-layout/x-sub-app-page-layout.vue": {
-    "file": "js/x-sub-app-page-layout-5-hTErrp.js",
+    "file": "js/x-sub-app-page-layout-CF97zUMD.js",
     "name": "x-sub-app-page-layout",
     "src": "src/components/blueprints/layouts/x-sub-app-page-layout/x-sub-app-page-layout.vue",
     "isDynamicEntry": true,
@@ -2496,13 +2496,13 @@
     ]
   },
   "src/components/blueprints/layouts/x-sub-route-layout/x-sub-route-layout.vue": {
-    "file": "js/x-sub-route-layout-0sy65zs_.js",
+    "file": "js/x-sub-route-layout-BKFgrkR_.js",
     "name": "x-sub-route-layout",
     "src": "src/components/blueprints/layouts/x-sub-route-layout/x-sub-route-layout.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useSubAppNavigation-DGCRNYbA.js",
+      "_useSubAppNavigation-BOIKYm_A.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
@@ -2514,7 +2514,7 @@
     ]
   },
   "src/components/constructs/plugin-grid-item/plugin-grid-item.vue": {
-    "file": "js/plugin-grid-item-BvO64Vph.js",
+    "file": "js/plugin-grid-item-DwdU3Rn2.js",
     "name": "plugin-grid-item",
     "src": "src/components/constructs/plugin-grid-item/plugin-grid-item.vue",
     "isDynamicEntry": true,
@@ -2531,13 +2531,13 @@
     ]
   },
   "src/components/constructs/routes-navigation-drawer/routes-navigation-drawer.vue": {
-    "file": "js/routes-navigation-drawer-DsP7iA8v.js",
+    "file": "js/routes-navigation-drawer-CJBF0hrp.js",
     "name": "routes-navigation-drawer",
     "src": "src/components/constructs/routes-navigation-drawer/routes-navigation-drawer.vue",
     "isDynamicEntry": true,
     "imports": [
       "apps/youmeos/index.html",
-      "_useSubAppNavigation-DGCRNYbA.js",
+      "_useSubAppNavigation-BOIKYm_A.js",
       "_vendor-DJDm7qH9.js",
       "_vendor-vuetify-V0a1Ypm-.js",
       "_vendor-core-BCGDVfqk.js",
@@ -2549,7 +2549,7 @@
     ]
   },
   "src/components/organisms/o-email-builder/o-email-builder.vue": {
-    "file": "js/o-email-builder-LnCLejlP.js",
+    "file": "js/o-email-builder-B-_TYlEV.js",
     "name": "o-email-builder",
     "src": "src/components/organisms/o-email-builder/o-email-builder.vue",
     "isDynamicEntry": true,
@@ -2567,7 +2567,7 @@
     ]
   },
   "src/components/organisms/o-item-editor-layout/o-item-editor-layout.vue": {
-    "file": "js/o-item-editor-layout-Duqi_gxD.js",
+    "file": "js/o-item-editor-layout-sKArIbvG.js",
     "name": "o-item-editor-layout",
     "src": "src/components/organisms/o-item-editor-layout/o-item-editor-layout.vue",
     "isDynamicEntry": true,
@@ -2581,7 +2581,7 @@
     ]
   },
   "src/components/organisms/o-media-library-modal/o-media-library-modal.vue": {
-    "file": "js/o-media-library-modal-CgZnK90u.js",
+    "file": "js/o-media-library-modal-Cm2gbAEV.js",
     "name": "o-media-library-modal",
     "src": "src/components/organisms/o-media-library-modal/o-media-library-modal.vue",
     "isDynamicEntry": true,
@@ -2598,7 +2598,7 @@
     ]
   },
   "src/components/organisms/o-rich-text-editor/o-rich-text-editor.vue": {
-    "file": "js/o-rich-text-editor-jyaypNiZ.js",
+    "file": "js/o-rich-text-editor-D-Iy_EwZ.js",
     "name": "o-rich-text-editor",
     "src": "src/components/organisms/o-rich-text-editor/o-rich-text-editor.vue",
     "isDynamicEntry": true,
@@ -2615,7 +2615,7 @@
     ]
   },
   "src/components/organisms/o-widget/o-widget.vue": {
-    "file": "js/o-widget-BShKx3m0.js",
+    "file": "js/o-widget-I_0pFBs2.js",
     "name": "o-widget",
     "src": "src/components/organisms/o-widget/o-widget.vue",
     "isDynamicEntry": true,
@@ -2632,7 +2632,7 @@
     ]
   },
   "src/components/prefabs/animated-number/animated-number.vue": {
-    "file": "js/animated-number-8N3GOM_7.js",
+    "file": "js/animated-number-Dosg1z9u.js",
     "name": "animated-number",
     "src": "src/components/prefabs/animated-number/animated-number.vue",
     "isDynamicEntry": true,
@@ -2646,7 +2646,7 @@
     ]
   },
   "src/components/prefabs/compass-circle/compass-circle.vue": {
-    "file": "js/compass-circle-nxSVtgMD.js",
+    "file": "js/compass-circle-BAhPUY3-.js",
     "name": "compass-circle",
     "src": "src/components/prefabs/compass-circle/compass-circle.vue",
     "isDynamicEntry": true,
@@ -2663,7 +2663,7 @@
     ]
   },
   "src/components/prefabs/menu-skeleton.vue": {
-    "file": "js/menu-skeleton-CiUZAy8C.js",
+    "file": "js/menu-skeleton-DfRv0dQ8.js",
     "name": "menu-skeleton",
     "src": "src/components/prefabs/menu-skeleton.vue",
     "isDynamicEntry": true,
@@ -2680,7 +2680,7 @@
     ]
   },
   "src/components/prefabs/plugin-grid-circle/plugin-grid-circle.vue": {
-    "file": "js/plugin-grid-circle-BSerZu9Z.js",
+    "file": "js/plugin-grid-circle-CEX2Nmit.js",
     "name": "plugin-grid-circle",
     "src": "src/components/prefabs/plugin-grid-circle/plugin-grid-circle.vue",
     "isDynamicEntry": true,
