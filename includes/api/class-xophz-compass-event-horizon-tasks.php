@@ -136,7 +136,9 @@ class Xophz_Compass_Event_Horizon_Tasks {
 
 		// Token-based access
 		$share_token = get_post_meta( $post_id, '_share_token', true );
-		$token_param = sanitize_text_field( $request->get_param( 'token' ) ?? '' );
+		$params      = $request->get_json_params();
+		$body_token  = is_array( $params ) ? ( $params['share_token'] ?? $params['token'] ?? '' ) : '';
+		$token_param = sanitize_text_field( $request->get_param( 'token' ) ?: $request->get_param( 'share_token' ) ?: $body_token );
 		if ( ! empty( $share_token ) && ! empty( $token_param ) && hash_equals( $share_token, $token_param ) ) {
 			return true;
 		}
@@ -176,7 +178,9 @@ class Xophz_Compass_Event_Horizon_Tasks {
 
 		// Token
 		$share_token = get_post_meta( $post_id, '_share_token', true );
-		$token_param = sanitize_text_field( $request->get_param( 'token' ) ?? '' );
+		$params      = $request->get_json_params();
+		$body_token  = is_array( $params ) ? ( $params['share_token'] ?? $params['token'] ?? '' ) : '';
+		$token_param = sanitize_text_field( $request->get_param( 'token' ) ?: $request->get_param( 'share_token' ) ?: $body_token );
 		if ( ! empty( $share_token ) && ! empty( $token_param ) && hash_equals( $share_token, $token_param ) ) {
 			return true;
 		}
@@ -320,7 +324,8 @@ class Xophz_Compass_Event_Horizon_Tasks {
 		$is_shared    = $user_id > 0 && in_array( $user_id, $shared_with );
 		$share_token  = get_post_meta( $post_id, '_share_token', true );
 		$access_level = get_post_meta( $post_id, '_access_level', true ) ?: 'workspace';
-		$token_param  = sanitize_text_field( $request->get_param( 'token' ) ?? '' );
+		$body_token   = is_array( $params ) ? ( $params['share_token'] ?? $params['token'] ?? '' ) : '';
+		$token_param  = sanitize_text_field( $request->get_param( 'token' ) ?: $request->get_param( 'share_token' ) ?: $body_token );
 		$valid_token  = ! empty( $share_token ) && ! empty( $token_param ) && hash_equals( $share_token, $token_param );
 		$is_workspace = ( $access_level === 'workspace' );
 		
@@ -332,7 +337,7 @@ class Xophz_Compass_Event_Horizon_Tasks {
 			'ID' => $post_id
 		);
 
-		if ( isset( $params['title'] ) && $is_author ) {
+		if ( isset( $params['title'] ) && ( $is_author || $valid_token || $is_workspace || $is_shared ) ) {
 			$post_data['post_title'] = sanitize_text_field( $params['title'] );
 		}
 		if ( isset( $params['content'] ) ) {
@@ -677,14 +682,21 @@ class Xophz_Compass_Event_Horizon_Tasks {
 			$inc_updated = (int) ( $incoming['updatedAt'] ?? 0 );
 			$ext_updated = (int) ( $existing['updatedAt'] ?? 0 );
 
+			// Preserve cumulative timeSpent (never decrease time)
+			$existing_time = (int) ( $existing['timeSpent'] ?? 0 );
+			$incoming_time = (int) ( $incoming['timeSpent'] ?? 0 );
+			$max_time      = max( $existing_time, $incoming_time );
+
 			// If existing task was updated more recently, preserve existing fields
 			if ( $ext_updated > $inc_updated && $inc_updated > 0 ) {
-				$merged = $existing;
-				$merged['tasks'] = $merged_subtasks;
+				$merged              = $existing;
+				$merged['timeSpent'] = $max_time;
+				$merged['tasks']     = $merged_subtasks;
 				return $merged;
 			}
 
-			$incoming['tasks'] = $merged_subtasks;
+			$incoming['timeSpent'] = $max_time;
+			$incoming['tasks']     = $merged_subtasks;
 			return $incoming;
 		};
 
