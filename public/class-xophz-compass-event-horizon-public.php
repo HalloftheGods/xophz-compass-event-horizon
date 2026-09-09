@@ -2223,6 +2223,15 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 	public function ajax_refresh_nonce() {
 		if ( ! is_user_logged_in() ) {
+			$uid = wp_validate_auth_cookie( '', 'secure_auth' );
+			if ( ! $uid ) {
+				$uid = wp_validate_auth_cookie( '', 'auth' );
+			}
+			if ( $uid ) {
+				wp_set_current_user( $uid );
+			}
+		}
+		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( array( 'message' => 'User not logged in' ), 401 );
 		}
 		// Since this is wp_ajax_, the user is implicitly authenticated via cookie.
@@ -2233,6 +2242,56 @@ window.addEventListener('beforeinstallprompt', function(e) {
 	}
 
 	public function register_api_routes() {
+		// Ensure reverse proxy HTTPS headers are recognized so is_ssl() returns true
+		if ( ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === strtolower( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ) ||
+		     ( isset( $_SERVER['HTTP_CF_VISITOR'] ) && strpos( $_SERVER['HTTP_CF_VISITOR'], 'https' ) !== false ) ) {
+			$_SERVER['HTTPS'] = 'on';
+			$_SERVER['SERVER_PORT'] = '443';
+		}
+
+		// Bridge SECURE_AUTH_COOKIE into LOGGED_IN_COOKIE for REST API requests when only secure_auth cookie was sent
+		$logged_in_cookie_name = defined( 'LOGGED_IN_COOKIE' ) ? LOGGED_IN_COOKIE : ( defined( 'COOKIEHASH' ) ? 'wordpress_logged_in_' . COOKIEHASH : 'wordpress_logged_in_' );
+		$secure_cookie_name    = defined( 'SECURE_AUTH_COOKIE' ) ? SECURE_AUTH_COOKIE : ( defined( 'COOKIEHASH' ) ? 'wordpress_sec_' . COOKIEHASH : 'wordpress_sec_' );
+
+		if ( empty( $_COOKIE[ $logged_in_cookie_name ] ) ) {
+			$sec_val = ! empty( $_COOKIE[ $secure_cookie_name ] ) ? $_COOKIE[ $secure_cookie_name ] : null;
+			if ( ! $sec_val ) {
+				foreach ( $_COOKIE as $c_name => $c_val ) {
+					if ( strpos( $c_name, 'wordpress_sec_' ) === 0 && ! empty( $c_val ) ) {
+						$sec_val = $c_val;
+						break;
+					}
+				}
+			}
+			if ( $sec_val ) {
+				$parsed = wp_parse_auth_cookie( $sec_val, 'secure_auth' );
+				if ( $parsed && ! empty( $parsed['token'] ) && ! empty( $parsed['username'] ) ) {
+					$gen_cookie = wp_generate_auth_cookie( $parsed['username'], $parsed['expiration'], 'logged_in', $parsed['token'] );
+					$_COOKIE[ $logged_in_cookie_name ] = $gen_cookie;
+					$_COOKIE['wordpress_logged_in_']   = $gen_cookie;
+					if ( defined( 'COOKIEHASH' ) && COOKIEHASH !== '' ) {
+						$_COOKIE[ 'wordpress_logged_in_' . COOKIEHASH ] = $gen_cookie;
+					}
+				}
+			}
+		}
+
+		// Fallback user determination for REST requests when logged_in cookie is missing but secure_auth is valid
+		add_filter( 'determine_current_user', function( $user_id ) {
+			if ( ! empty( $user_id ) ) {
+				return $user_id;
+			}
+			$uid = wp_validate_auth_cookie( '', 'logged_in' );
+			if ( $uid ) {
+				return $uid;
+			}
+			$uid = wp_validate_auth_cookie( '', 'secure_auth' );
+			if ( $uid ) {
+				return $uid;
+			}
+			return wp_validate_auth_cookie( '', 'auth' );
+		}, 15 );
+
 		// Populate $_COOKIE[ LOGGED_IN_COOKIE ] when setting auth cookie so wp_create_nonce() in REST login responses uses the active session token
 		add_action( 'set_logged_in_cookie', function( $logged_in_cookie ) {
 			if ( defined( 'LOGGED_IN_COOKIE' ) ) {
@@ -3257,27 +3316,27 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 		// Ensure global user state is updated before generating the REST nonce
 		wp_set_current_user( $user->ID );
-		wp_set_auth_cookie( $user->ID, true, is_ssl() );
+
+		// Create session token and set auth cookie explicitly with the token
+		$expiration = time() + 14 * DAY_IN_SECONDS;
+		$manager = WP_Session_Tokens::get_instance( $user->ID );
+		$session_token = $manager->create( $expiration );
+
+		$is_secure_conn = is_ssl() || 
+			( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && 'https' === strtolower( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ) ||
+			( isset( $_SERVER['HTTP_CF_VISITOR'] ) && strpos( $_SERVER['HTTP_CF_VISITOR'], 'https' ) !== false );
+
+		wp_set_auth_cookie( $user->ID, true, $is_secure_conn, $session_token );
 		do_action( 'wp_login', $user->user_login, $user );
 
-		// Ensure active session token is in $_COOKIE so wp_create_nonce('wp_rest') hashes against it
-		$session_token = wp_get_session_token();
-		if ( empty( $session_token ) ) {
-			$manager = WP_Session_Tokens::get_instance( $user->ID );
-			$sessions = $manager->get_all();
-			if ( ! empty( $sessions ) ) {
-				end( $sessions );
-				$session_token = key( $sessions );
-				$expiration = time() + 14 * DAY_IN_SECONDS;
-				$logged_in_cookie = wp_generate_auth_cookie( $user->ID, $expiration, 'logged_in', $session_token );
-				if ( defined( 'LOGGED_IN_COOKIE' ) ) {
-					$_COOKIE[ LOGGED_IN_COOKIE ] = $logged_in_cookie;
-				}
-				$_COOKIE['wordpress_logged_in_'] = $logged_in_cookie;
-				if ( defined( 'COOKIEHASH' ) && COOKIEHASH !== '' ) {
-					$_COOKIE[ 'wordpress_logged_in_' . COOKIEHASH ] = $logged_in_cookie;
-				}
-			}
+		// Populate $_COOKIE with the newly generated auth cookie using the plaintext token
+		$logged_in_cookie = wp_generate_auth_cookie( $user->ID, $expiration, 'logged_in', $session_token );
+		if ( defined( 'LOGGED_IN_COOKIE' ) ) {
+			$_COOKIE[ LOGGED_IN_COOKIE ] = $logged_in_cookie;
+		}
+		$_COOKIE['wordpress_logged_in_'] = $logged_in_cookie;
+		if ( defined( 'COOKIEHASH' ) && COOKIEHASH !== '' ) {
+			$_COOKIE[ 'wordpress_logged_in_' . COOKIEHASH ] = $logged_in_cookie;
 		}
 
 		$global_variant = get_user_meta( $user->ID, 'youmeos_global_variant', true );
@@ -3562,7 +3621,13 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 	public function get_user_profile( $request ) {
 		$user_id = get_current_user_id();
+		if ( empty( $user_id ) ) {
+			return new WP_Error( 'rest_not_logged_in', 'User not authenticated.', array( 'status' => 401 ) );
+		}
 		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return new WP_Error( 'rest_not_logged_in', 'User not authenticated.', array( 'status' => 401 ) );
+		}
 		
 		$avatar_url = get_user_meta( $user_id, 'youmeos_avatar_url', true );
 		if ( empty( $avatar_url ) ) {
@@ -3581,6 +3646,11 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		}
 		$birthday = get_user_meta( $user_id, 'birthday', true );
 
+		$disabled_sparks = get_user_meta( $user_id, 'youmeos_disabled_sparks', true ) ?: [];
+		$pinned_webtop_sparks = get_user_meta( $user_id, 'youmeos_pinned_webtop_sparks', true ) ?: [];
+		$pinned_rail_sparks = get_user_meta( $user_id, 'youmeos_pinned_rail_sparks', true ) ?: [];
+		$webtop_positions = get_user_meta( $user_id, 'youmeos_webtop_shortcut_positions', true ) ?: new \stdClass();
+
 		return rest_ensure_response( array(
 			'user_login' => $user->user_login,
 			'first_name' => $user->first_name,
@@ -3595,6 +3665,10 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			'global_variant' => $global_variant,
 			'global_blur' => $global_blur,
 			'birthday' => $birthday,
+			'disabledSparks' => $disabled_sparks,
+			'pinnedWebtopSparks' => $pinned_webtop_sparks,
+			'pinnedRailSparks' => $pinned_rail_sparks,
+			'webtopShortcutPositions' => $webtop_positions,
 		) );
 	}
 
@@ -3634,25 +3708,31 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 	public function update_user_profile( $request ) {
 		$user_id = get_current_user_id();
+		if ( empty( $user_id ) ) {
+			return new WP_Error( 'rest_not_logged_in', 'User not authenticated.', array( 'status' => 401 ) );
+		}
 		$parameters = $request->get_json_params();
 		
 		$args = array( 'ID' => $user_id );
+		$has_user_fields = false;
 		
 		$current_user = get_userdata( $user_id );
-		if ( isset( $parameters['first_name'] ) ) $args['first_name'] = sanitize_text_field( $parameters['first_name'] );
-		if ( isset( $parameters['last_name'] ) ) $args['last_name'] = sanitize_text_field( $parameters['last_name'] );
-		if ( isset( $parameters['nickname'] ) ) $args['nickname'] = sanitize_text_field( $parameters['nickname'] );
-		if ( isset( $parameters['display_name'] ) ) $args['display_name'] = sanitize_text_field( $parameters['display_name'] );
-		if ( isset( $parameters['user_email'] ) && ! empty( $parameters['user_email'] ) && $parameters['user_email'] !== $current_user->user_email ) {
+		if ( isset( $parameters['first_name'] ) ) { $args['first_name'] = sanitize_text_field( $parameters['first_name'] ); $has_user_fields = true; }
+		if ( isset( $parameters['last_name'] ) ) { $args['last_name'] = sanitize_text_field( $parameters['last_name'] ); $has_user_fields = true; }
+		if ( isset( $parameters['nickname'] ) ) { $args['nickname'] = sanitize_text_field( $parameters['nickname'] ); $has_user_fields = true; }
+		if ( isset( $parameters['display_name'] ) ) { $args['display_name'] = sanitize_text_field( $parameters['display_name'] ); $has_user_fields = true; }
+		if ( isset( $parameters['user_email'] ) && ! empty( $parameters['user_email'] ) && $current_user && $parameters['user_email'] !== $current_user->user_email ) {
 			$args['user_email'] = sanitize_email( $parameters['user_email'] );
+			$has_user_fields = true;
 		}
-		if ( isset( $parameters['user_url'] ) ) $args['user_url'] = esc_url_raw( $parameters['user_url'] );
-		if ( isset( $parameters['user_description'] ) ) $args['description'] = sanitize_textarea_field( $parameters['user_description'] );
+		if ( isset( $parameters['user_url'] ) ) { $args['user_url'] = esc_url_raw( $parameters['user_url'] ); $has_user_fields = true; }
+		if ( isset( $parameters['user_description'] ) ) { $args['description'] = sanitize_textarea_field( $parameters['user_description'] ); $has_user_fields = true; }
 		
-		$result = wp_update_user( $args );
-		
-		if ( is_wp_error( $result ) ) {
-			return $result;
+		if ( $has_user_fields ) {
+			$result = wp_update_user( $args );
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
 		}
 
 		if ( isset( $parameters['birthday'] ) ) {
@@ -3665,6 +3745,22 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		
 		if ( isset( $parameters['global_blur'] ) ) {
 			update_user_meta( $user_id, 'youmeos_global_blur', sanitize_text_field( $parameters['global_blur'] ) );
+		}
+
+		if ( isset( $parameters['disabledSparks'] ) && is_array( $parameters['disabledSparks'] ) ) {
+			update_user_meta( $user_id, 'youmeos_disabled_sparks', array_map( 'sanitize_text_field', $parameters['disabledSparks'] ) );
+		}
+
+		if ( isset( $parameters['pinnedWebtopSparks'] ) && is_array( $parameters['pinnedWebtopSparks'] ) ) {
+			update_user_meta( $user_id, 'youmeos_pinned_webtop_sparks', array_map( 'sanitize_text_field', $parameters['pinnedWebtopSparks'] ) );
+		}
+
+		if ( isset( $parameters['pinnedRailSparks'] ) && is_array( $parameters['pinnedRailSparks'] ) ) {
+			update_user_meta( $user_id, 'youmeos_pinned_rail_sparks', array_map( 'sanitize_text_field', $parameters['pinnedRailSparks'] ) );
+		}
+
+		if ( isset( $parameters['webtopShortcutPositions'] ) && is_array( $parameters['webtopShortcutPositions'] ) ) {
+			update_user_meta( $user_id, 'youmeos_webtop_shortcut_positions', $parameters['webtopShortcutPositions'] );
 		}
 
 		if ( isset( $parameters['avatar_base64'] ) && ! empty( $parameters['avatar_base64'] ) ) {
