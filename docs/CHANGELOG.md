@@ -4,6 +4,13 @@ All notable changes to the Xophz COMPASS Event Horizon module will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-09-09]
+
+### Added
+- **Default Sparks REST Registry ([class-xophz-compass-event-horizon-spark-registry.php](file:///home/xopher/www/x/Xophz-COMPASS/wp-content/plugins/xophz-compass-event-horizon/includes/api/class-xophz-compass-event-horizon-spark-registry.php), [class-xophz-compass-event-horizon-default-sparks.php](file:///home/xopher/www/x/Xophz-COMPASS/wp-content/plugins/xophz-compass-event-horizon/includes/api/class-xophz-compass-event-horizon-default-sparks.php))**: Seeded the full baseline roster of 56+ native YouMeOS sparks into `GET /wp-json/xophz/v1/sparks`, exposing titles, categories, icons, brand colors, and standalone PWA launch URLs (`/spark/:id/?fullspark=true`) to external clients.
+- **Brand Color & Manifest Normalization**: Ensured `brand_color`, `brandColor`, and `color` are consistently normalized and propagated across both list and individual manifest REST endpoints.
+- **Dynamic Manifest Fallback**: Generated PWA standalone manifests automatically for default sparks in `GET /wp-json/xophz/v1/sparks/:id` when no plugin override filter is registered.
+
 ## [2026-09-08]
 
 ### Changed

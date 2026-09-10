@@ -88,6 +88,7 @@ class Xophz_Compass_Event_Horizon extends Xophz_Compass_Plugin_Base {
 
 		require_once $plugin_dir . 'admin/class-xophz-compass-event-horizon-admin.php';
 		require_once $plugin_dir . 'public/class-xophz-compass-event-horizon-public.php';
+		require_once $plugin_dir . 'includes/api/class-xophz-compass-event-horizon-default-sparks.php';
 		require_once $plugin_dir . 'includes/api/class-xophz-compass-event-horizon-spark-registry.php';
 		require_once $plugin_dir . 'includes/api/class-xophz-compass-event-horizon-tasks.php';
 		require_once $plugin_dir . 'includes/api/class-xophz-compass-event-horizon-reflections.php';
