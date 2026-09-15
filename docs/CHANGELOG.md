@@ -4,6 +4,12 @@ All notable changes to the Xophz COMPASS Event Horizon module will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-09-14]
+
+### Changed
+- **Default Social Share Artwork ([class-xophz-compass-event-horizon-public.php](file:///home/xopher/www/elysium/wp-content/plugins/xophz-compass-event-horizon/public/class-xophz-compass-event-horizon-public.php))**: Replaced legacy default OpenGraph fallback image with the 1200x630 retro superhero comic book cover preview (`images/og-comic-cover.jpg`).
+- **Enhanced OpenGraph & Twitter Card Metadata ([class-xophz-compass-event-horizon-public.php](file:///home/xopher/www/elysium/wp-content/plugins/xophz-compass-event-horizon/public/class-xophz-compass-event-horizon-public.php))**: Added explicit `og:image:width`, `og:image:height`, `og:image:type`, `og:image:secure_url`, and accessible `og:image:alt` and `twitter:image:alt` tags for optimal card unfurling across Discord, Twitter/X, LinkedIn, and Facebook.
+
 ## [2026-09-09]
 
 ### Added
