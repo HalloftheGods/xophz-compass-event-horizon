@@ -75,6 +75,11 @@ class Xophz_Compass_Event_Horizon_Public {
 			return;
 		}
 
+		$request_host = strtolower( $_SERVER['HTTP_HOST'] ?? '' );
+		if ( strpos( $request_host, 'freshmints' ) !== false || strpos( $request_host, 'glowitheflow' ) !== false ) {
+			return;
+		}
+
 		$path_only = parse_url( $request_uri, PHP_URL_PATH ) ?: '';
 
 		// Handle robots.txt

@@ -4,6 +4,11 @@ All notable changes to the Xophz COMPASS Event Horizon module will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-09-18]
+
+### Fixed
+- **Domain Routing Collision Guard ([class-xophz-compass-event-horizon-public.php](file:///home/xopher/www/x/Xophz-COMPASS/wp-content/plugins/xophz-compass-event-horizon/public/class-xophz-compass-event-horizon-public.php))**: Added early host guard in `template_redirect` to bypass YouMeOS homepage shell hijacking when requests arrive on dedicated subdomains or external hosts such as `freshmints.worldwidewebwork.com` or `glowitheflow.com`.
+
 ## [2026-09-14]
 
 ### Changed

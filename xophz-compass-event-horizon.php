@@ -16,7 +16,7 @@
  * Category:          Command Deck
  * Group:             OS
  * Plugin Name:       Xophz You Me OS 
- * Plugin URI:        https://github.com/HalloftheGods/xophz-compass-event-horizon
+ * Plugin URI:        https://youmeos.com
  * Description:       Bring transparency to your user-to-media connectivity by observing a real life 3D interactive heat map. From micro to macro and unto the avoided.
  * Version:           26.9.16
  * Author:            Hall of the Gods, Inc.
