@@ -1401,7 +1401,7 @@ class Xophz_Compass_Event_Horizon_Public {
 
 		$og_title = $page_title;
 		$og_desc = $meta_description;
-		$og_image = !empty($routing['og_image']) ? $routing['og_image'] : (!empty($whitelabel['splash_image_url']) ? $whitelabel['splash_image_url'] : plugins_url( 'images/og-comic-cover.jpg', __FILE__ ));
+		$og_image = !empty($routing['og_image']) ? $routing['og_image'] : (!empty($whitelabel['splash_image_url']) ? $whitelabel['splash_image_url'] : plugins_url( 'images/og-image.png', __FILE__ ));
 
 		// For the manifest URL, we pass the spark_id, name, icon, and color if present
 		$manifest_url = rest_url( 'xophz-compass/v1/spark-manifest' );
@@ -1451,8 +1451,8 @@ class Xophz_Compass_Event_Horizon_Public {
 <meta property="og:image:secure_url" content="<?php echo esc_url( $og_image ); ?>">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:alt" content="<?php echo esc_attr( !empty($routing['og_image']) ? $og_title : 'Chemical X: The Secret Sauce to Vibe Coding - Retro Superhero Comic Book Cover by XP Comics Group' ); ?>">
+<meta property="og:image:type" content="<?php echo esc_attr( str_ends_with( strtolower( (string) $og_image ), '.png' ) ? 'image/png' : 'image/jpeg' ); ?>">
+<meta property="og:image:alt" content="<?php echo esc_attr( !empty($routing['og_image']) ? $og_title : 'YouMeOS Gateway Interface - Spatial Web Operating System' ); ?>">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
@@ -1460,7 +1460,7 @@ class Xophz_Compass_Event_Horizon_Public {
 <meta name="twitter:title" content="<?php echo esc_attr( $og_title ); ?>">
 <meta name="twitter:description" content="<?php echo esc_attr( $og_desc ); ?>">
 <meta name="twitter:image" content="<?php echo esc_url( $og_image ); ?>">
-<meta name="twitter:image:alt" content="<?php echo esc_attr( !empty($routing['og_image']) ? $og_title : 'Chemical X: The Secret Sauce to Vibe Coding - Retro Superhero Comic Book Cover by XP Comics Group' ); ?>">
+<meta name="twitter:image:alt" content="<?php echo esc_attr( !empty($routing['og_image']) ? $og_title : 'YouMeOS Gateway Interface - Spatial Web Operating System' ); ?>">
 
 <!-- Structured Data (JSON-LD) -->
 <script type="application/ld+json">

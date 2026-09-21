@@ -4,6 +4,11 @@ All notable changes to the Xophz COMPASS Event Horizon module will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-09-20]
+
+### Fixed
+- **Default Social Share Artwork & Metadata ([class-xophz-compass-event-horizon-public.php](file:///home/xopher/www/x/Xophz-COMPASS/wp-content/plugins/xophz-compass-event-horizon/public/class-xophz-compass-event-horizon-public.php))**: Restored canonical YouMeOS spatial galaxy artwork (`images/og-image.png`) as default OpenGraph and Twitter card fallback with dynamic mime-type detection and accessible YouMeOS Gateway Interface descriptions.
+
 ## [2026-09-18]
 
 ### Fixed
