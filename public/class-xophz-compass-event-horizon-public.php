@@ -827,11 +827,25 @@ class Xophz_Compass_Event_Horizon_Public {
 				
 				<?php if ( $status === 'success' ) : ?>
 					<div class="status-badge badge-success">&#10003; Transaction Confirmed</div>
-					<h1 class="wormhole-title">White Glove Concierge Initialized</h1>
-					<div class="wormhole-desc">
-						Space &amp; Time fold coarse... A Wormhole Opens Source.<br>
-						We have received your deployment order and our engineering team will be in contact with you directly via phone and email to coordinate onboarding.
-					</div>
+					<?php if ( strpos( $tier_id, 'card-vault' ) !== false || strpos( $tier_id, 'single' ) !== false || strpos( $tier_id, 'team' ) !== false || strpos( $tier_id, 'node' ) !== false || strpos( $tier_id, 'turnkey' ) !== false ) : ?>
+						<h1 class="wormhole-title">Card Vault License Activated</h1>
+						<div class="wormhole-desc">
+							Your Card Vault commercial license is confirmed and active.<br>
+							Unlimited scans, POS terminal access, and consignor ledger tools are now unlocked.
+						</div>
+					<?php elseif ( strpos( $tier_id, 'chemical-x' ) !== false ) : ?>
+						<h1 class="wormhole-title">Chemical X License Activated</h1>
+						<div class="wormhole-desc">
+							Your Chemical X developer license is confirmed and ready.<br>
+							All developer tools, component presets, and power features are now active.
+						</div>
+					<?php else : ?>
+						<h1 class="wormhole-title">White Glove Concierge Initialized</h1>
+						<div class="wormhole-desc">
+							Space &amp; Time fold coarse... A Wormhole Opens Source.<br>
+							We have received your deployment order and our engineering team will be in contact with you directly via phone and email to coordinate onboarding.
+						</div>
+					<?php endif; ?>
 				<?php else : ?>
 					<div class="status-badge badge-cancel">&#10007; Checkout Cancelled</div>
 					<h1 class="wormhole-title">Checkout Cancelled</h1>
