@@ -4,6 +4,11 @@ All notable changes to the Xophz COMPASS Event Horizon module will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-10-10]
+
+### Security
+- Rebuilt `public/dist` without the Pinata API key, secret and JWT that a bare `import.meta.env` read in the shared logger had inlined into the YouMeOS bundles. Profile pinning now goes through the core plugin's server route `POST /xophz/v1/passport/pin`, and the root build fails if any secret-named env value reaches the output. The old values remain in this repository's git history: rotate them at Pinata.
+
 ## [2026-09-20]
 
 ### Fixed
