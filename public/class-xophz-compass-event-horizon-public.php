@@ -3419,22 +3419,13 @@ window.addEventListener('beforeinstallprompt', function(e) {
 
 		$title = sprintf( __( '[%s] Password Reset' ), wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) );
 
-		$mail_sent = wp_mail( $user_data->user_email, $title, $message );
+		wp_mail( $user_data->user_email, $title, $message );
 
-		$is_local_dev = strpos( home_url(), 'localhost' ) !== false || strpos( home_url(), '127.0.0.1' ) !== false || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
-		if ( $is_local_dev ) {
-			error_log( sprintf( '[AUTH] Password reset link for user %s: %s (mail_sent: %s)', $user_data->user_login, $reset_url, $mail_sent ? 'yes' : 'no' ) );
-		}
-
-		$response_data = array(
+		// The reset link goes only to the account's email. It is never logged or returned to the requester.
+		return rest_ensure_response( array(
 			'success' => true,
 			'message' => 'If an account exists, a password reset link has been sent to the email address on file.',
-		);
-		if ( $is_local_dev ) {
-			$response_data['reset_url'] = $reset_url;
-		}
-
-		return rest_ensure_response( $response_data );
+		) );
 	}
 
 	public function handle_user_registration( $request ) {
