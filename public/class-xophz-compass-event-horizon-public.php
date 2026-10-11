@@ -3314,13 +3314,6 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			}
 		}
 
-		// Auto-heal local development password mismatch for primary administrator
-		if ( ! $password_matched && $is_local_dev && ( (int) $user->ID === 1 || in_array( 'administrator', (array) $user->roles, true ) ) ) {
-			wp_set_password( $password, $user->ID );
-			$password_matched = true;
-			error_log( sprintf( '[AUTH] Synchronized local dev admin password for user %s (ID %d)', $user->user_login, $user->ID ) );
-		}
-
 		if ( ! $password_matched ) {
 			do_action( 'wp_login_failed', $username, new WP_Error( 'incorrect_password', 'Invalid credentials.' ) );
 			return new WP_Error( 'invalid_credentials', 'Invalid password. Please check your credentials and try again.', array( 'status' => 403 ) );
