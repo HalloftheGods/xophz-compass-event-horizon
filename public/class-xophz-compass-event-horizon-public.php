@@ -223,123 +223,16 @@ class Xophz_Compass_Event_Horizon_Public {
 			$status = 'error';
 			$message = 'No authorization code provided.';
 		} else {
-			$client_id     = defined( 'DISCORD_CLIENT_ID' ) ? DISCORD_CLIENT_ID : ( $_ENV['DISCORD_CLIENT_ID'] ?? get_option( 'discord_client_id' ) );
-			$client_secret = defined( 'DISCORD_CLIENT_SECRET' ) ? DISCORD_CLIENT_SECRET : ( $_ENV['DISCORD_CLIENT_SECRET'] ?? get_option( 'discord_client_secret' ) );
-			$redirect_uri  = defined( 'DISCORD_REDIRECT_URI' ) ? DISCORD_REDIRECT_URI : ( $_ENV['DISCORD_REDIRECT_URI'] ?? get_option( 'discord_redirect_uri' ) );
-
-			if ( ! $client_id || ! $client_secret || ! $redirect_uri ) {
+			// Discord credentials resolve through the Connectors API, and the user's Discord
+			// access token stays server-side. The opener gets profile fields and the WP session.
+			$result = Xophz_Compass_Event_Horizon_Discord::complete_login( (string) $code );
+			if ( is_wp_error( $result ) ) {
 				$status = 'error';
-				$message = 'Discord API configuration is missing.';
+				$message = $result->get_error_message();
 			} else {
-				$response = wp_remote_post( 'https://discord.com/api/oauth2/token', array(
-					'body' => array(
-						'client_id' => $client_id,
-						'client_secret' => $client_secret,
-						'grant_type' => 'authorization_code',
-						'code' => $code,
-						'redirect_uri' => $redirect_uri,
-					),
-				) );
-
-				if ( is_wp_error( $response ) ) {
-					$status = 'error';
-					$message = 'Failed to exchange Discord code: ' . $response->get_error_message();
-				} else {
-					$body = json_decode( wp_remote_retrieve_body( $response ), true );
-					if ( isset( $body['error'] ) ) {
-						$status = 'error';
-						$message = 'Discord API Error: ' . ( $body['error_description'] ?? $body['error'] );
-					} else {
-						$access_token = $body['access_token'];
-						$payload['token'] = $access_token;
-
-						// Fetch user and auto-login
-						$user_response = wp_remote_get( 'https://discord.com/api/users/@me', array(
-							'headers' => array(
-								'Authorization' => 'Bearer ' . $access_token,
-							),
-						) );
-
-						if ( is_wp_error( $user_response ) ) {
-							$status = 'error';
-							$message = 'Failed to fetch Discord profile: ' . $user_response->get_error_message();
-						} else {
-							$discord_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
-							
-							if ( ! isset( $discord_user['id'] ) ) {
-								$status = 'error';
-								$message = 'No Discord ID associated with this account.';
-							} elseif ( ! isset( $discord_user['email'] ) ) {
-								$status = 'error';
-								$message = 'No email associated with this Discord account.';
-							} else {
-								$user = null;
-								$discord_id = $discord_user['id'];
-								
-								if ( is_user_logged_in() ) {
-									$user = wp_get_current_user();
-								} else {
-									// 1. Try to find by strong link (Discord ID)
-									$users = get_users( array(
-										'meta_key' => 'discord_oauth_id',
-										'meta_value' => $discord_id,
-										'number' => 1
-									) );
-									
-									if ( ! empty( $users ) ) {
-										$user = $users[0];
-									} else {
-										// 2. Fall back to email matching
-										$user = get_user_by( 'email', $discord_user['email'] );
-									}
-								}
-
-								if ( ! $user ) {
-									$username = $discord_user['username'];
-									if ( username_exists( $username ) ) {
-										$username = $username . '_' . wp_generate_password( 4, false );
-									}
-									$password = wp_generate_password();
-									$user_id = wp_create_user( $username, $password, $discord_user['email'] );
-									
-									if ( is_wp_error( $user_id ) ) {
-										$status = 'error';
-										$message = 'Failed to create user account: ' . $user_id->get_error_message();
-									} else {
-										$user = get_user_by( 'id', $user_id );
-										wp_update_user( array(
-											'ID' => $user_id,
-											'display_name' => $discord_user['global_name'] ?? $discord_user['username']
-										) );
-									}
-								}
-
-								if ( $user && ! is_wp_error( $user ) ) {
-									// 3. Always ensure the Discord ID is saved/updated for strong linking
-									update_user_meta( $user->ID, 'discord_oauth_id', $discord_id );
-									
-									wp_set_current_user( $user->ID );
-									wp_set_auth_cookie( $user->ID, true );
-									
-									$payload['wp_user'] = array(
-										'user_id' => $user->ID,
-										'user_email' => $user->user_email,
-										'user_nicename' => $user->user_nicename,
-										'user_display_name' => $user->display_name,
-										'user_roles' => $user->roles,
-										'nonce' => wp_create_nonce( 'wp_rest' ),
-										'token' => wp_create_nonce( 'wp_rest' )
-									);
-									$status = 'success';
-									$message = 'Login successful! Closing window...';
-								} elseif ( $status !== 'error' ) {
-									$status = 'error';
-									$message = 'Unexpected authentication failure.';
-								}
-							}
-						}
-					}
-				}
+				$payload = $result;
+				$status = 'success';
+				$message = 'Login successful! Closing window...';
 			}
 		}
 
@@ -399,22 +292,24 @@ class Xophz_Compass_Event_Horizon_Public {
 				<p><?php echo esc_html( $message ); ?></p>
 				
 				<script>
-					// Send message back to parent window
-					const payload = <?php echo json_encode( $payload ); ?>;
+					// Send the result back to the opener, and only if the opener is this site.
+					// No Discord token is sent: it stays on the server.
+					const payload = <?php echo wp_json_encode( $payload, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ); ?>;
 					const status = '<?php echo esc_js( $status ); ?>';
-					
+					const targetOrigin = window.location.origin;
+
 					if (window.opener) {
 						if (status === 'success') {
 							window.opener.postMessage({
 								type: 'DISCORD_AUTH_SUCCESS',
-								token: payload.token,
+								discord_user: payload.discord_user,
 								wp_user: payload.wp_user
-							}, '*');
+							}, targetOrigin);
 						} else if (status === 'error') {
 							window.opener.postMessage({
 								type: 'DISCORD_AUTH_ERROR',
 								message: '<?php echo esc_js( $message ); ?>'
-							}, '*');
+							}, targetOrigin);
 						}
 						
 						// Close popup after a short delay
@@ -434,6 +329,17 @@ class Xophz_Compass_Event_Horizon_Public {
 		<?php
 	}
 
+	/**
+	 * The Google OAuth redirect URI is public configuration, not a credential.
+	 */
+	private static function google_redirect_uri(): string {
+		if ( defined( 'GOOGLE_REDIRECT_URI' ) ) {
+			return (string) GOOGLE_REDIRECT_URI;
+		}
+
+		return (string) ( $_ENV['GOOGLE_REDIRECT_URI'] ?? get_option( 'google_redirect_uri', '' ) );
+	}
+
 	private function render_google_callback_page() {
 		$code = $_GET['code'] ?? '';
 		$error = $_GET['error'] ?? '';
@@ -449,9 +355,9 @@ class Xophz_Compass_Event_Horizon_Public {
 			$status = 'error';
 			$message = 'No authorization code provided.';
 		} else {
-			$client_id     = defined( 'GOOGLE_CLIENT_ID' ) ? GOOGLE_CLIENT_ID : ( $_ENV['GOOGLE_CLIENT_ID'] ?? get_option( 'google_client_id' ) );
-			$client_secret = defined( 'GOOGLE_CLIENT_SECRET' ) ? GOOGLE_CLIENT_SECRET : ( $_ENV['GOOGLE_CLIENT_SECRET'] ?? get_option( 'google_client_secret' ) );
-			$redirect_uri  = defined( 'GOOGLE_REDIRECT_URI' ) ? GOOGLE_REDIRECT_URI : ( $_ENV['GOOGLE_REDIRECT_URI'] ?? get_option( 'google_redirect_uri' ) );
+			$client_id     = Xophz_Compass_Event_Horizon_Connectors::get_key( 'google_oauth_client_id' );
+			$client_secret = Xophz_Compass_Event_Horizon_Connectors::get_key( 'google_oauth_client_secret' );
+			$redirect_uri  = self::google_redirect_uri();
 
 			if ( ! $client_id || ! $client_secret || ! $redirect_uri ) {
 				$status = 'error';
@@ -515,8 +421,9 @@ class Xophz_Compass_Event_Horizon_Public {
 									if ( ! empty( $users ) ) {
 										$user = $users[0];
 									} else {
-										// 2. Fall back to email matching
-										$user = get_user_by( 'email', $google_user['email'] );
+										// 2. Fall back to email matching, only for an address Google has verified.
+										// An unverified address would let anyone sign in as the member who owns it.
+										$user = ! empty( $google_user['verified_email'] ) ? get_user_by( 'email', $google_user['email'] ) : null;
 									}
 								}
 
@@ -635,12 +542,12 @@ class Xophz_Compass_Event_Horizon_Public {
 								type: 'GOOGLE_AUTH_SUCCESS',
 								token: payload.token,
 								wp_user: payload.wp_user
-							}, '*');
+							}, window.location.origin);
 						} else if (status === 'error') {
 							window.opener.postMessage({
 								type: 'GOOGLE_AUTH_ERROR',
 								message: '<?php echo esc_js( $message ); ?>'
-							}, '*');
+							}, window.location.origin);
 						}
 						
 						setTimeout(() => {
@@ -1310,10 +1217,11 @@ class Xophz_Compass_Event_Horizon_Public {
 			'siteUrl' => get_bloginfo('url'),
 			'compassVersion' => $compassVersion,
 			'eventHorizonVersion' => $this->version,
-			'googleClientId' => defined( 'GOOGLE_CLIENT_ID' ) ? GOOGLE_CLIENT_ID : ( $_ENV['GOOGLE_CLIENT_ID'] ?? get_option( 'google_client_id' ) ),
-			'googleRedirectUri' => defined( 'GOOGLE_REDIRECT_URI' ) ? GOOGLE_REDIRECT_URI : ( $_ENV['GOOGLE_REDIRECT_URI'] ?? get_option( 'google_redirect_uri' ) ),
-			'discordClientId' => defined( 'DISCORD_CLIENT_ID' ) ? DISCORD_CLIENT_ID : ( $_ENV['DISCORD_CLIENT_ID'] ?? get_option( 'discord_client_id' ) ),
-			'discordRedirectUri' => defined( 'DISCORD_REDIRECT_URI' ) ? DISCORD_REDIRECT_URI : ( $_ENV['DISCORD_REDIRECT_URI'] ?? get_option( 'discord_redirect_uri' ) ),
+			// OAuth client ids are public (they appear in the authorize URL). Secrets never leave the server.
+			'googleClientId' => Xophz_Compass_Event_Horizon_Connectors::get_key( 'google_oauth_client_id' ),
+			'googleRedirectUri' => self::google_redirect_uri(),
+			'discordClientId' => Xophz_Compass_Event_Horizon_Connectors::get_key( 'discord_client_id' ),
+			'discordRedirectUri' => Xophz_Compass_Event_Horizon_Discord::redirect_uri(),
 			'whitelabel' => $whitelabel,
 			'visuals' => $visuals,
 			'sparks' => $sparks_config,
@@ -2369,12 +2277,8 @@ window.addEventListener('beforeinstallprompt', function(e) {
 			'permission_callback' => '__return_true',
 		) );
 
-		register_rest_route( 'xophz-compass/v1', '/discord/token', array(
-			'methods' => 'POST',
-			'callback' => array( $this, 'handle_discord_token_exchange' ),
-			'permission_callback' => '__return_true', // You might want to restrict this to logged in users if they already have an account
-		) );
-		
+		// POST /xophz-compass/v1/discord/token lives in Xophz_Compass_Event_Horizon_Discord.
+
 		register_rest_route( 'xophz-compass/v1', '/mission-tags', array(
 			'methods' => 'GET',
 			'callback' => array( $this, 'get_mission_tags' ),
@@ -3073,95 +2977,6 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		}
 		
 		return rest_ensure_response( array( 'success' => true, 'id' => $post_id ) );
-	}
-
-	public function handle_discord_token_exchange( $request ) {
-		$code = $request->get_param( 'code' );
-
-		if ( ! $code ) {
-			return new WP_Error( 'missing_code', 'No authorization code provided.', array( 'status' => 400 ) );
-		}
-
-		// Check constants, options, and environment variables
-		$client_id     = defined( 'DISCORD_CLIENT_ID' ) ? DISCORD_CLIENT_ID : ( $_ENV['DISCORD_CLIENT_ID'] ?? get_option( 'discord_client_id' ) );
-		$client_secret = defined( 'DISCORD_CLIENT_SECRET' ) ? DISCORD_CLIENT_SECRET : ( $_ENV['DISCORD_CLIENT_SECRET'] ?? get_option( 'discord_client_secret' ) );
-		$redirect_uri  = defined( 'DISCORD_REDIRECT_URI' ) ? DISCORD_REDIRECT_URI : ( $_ENV['DISCORD_REDIRECT_URI'] ?? get_option( 'discord_redirect_uri' ) );
-
-		if ( ! $client_id || ! $client_secret || ! $redirect_uri ) {
-			return new WP_Error( 'missing_config', 'Discord API configuration is missing on the server.', array( 'status' => 500 ) );
-		}
-
-		$response = wp_remote_post( 'https://discord.com/api/oauth2/token', array(
-			'body' => array(
-				'client_id' => $client_id,
-				'client_secret' => $client_secret,
-				'grant_type' => 'authorization_code',
-				'code' => $code,
-				'redirect_uri' => $redirect_uri,
-			),
-		) );
-
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		$body = json_decode( wp_remote_retrieve_body( $response ), true );
-
-		if ( isset( $body['error'] ) ) {
-			return new WP_Error( 'discord_api_error', $body['error_description'] ?? $body['error'], array( 'status' => 400 ) );
-		}
-
-		$access_token = $body['access_token'];
-
-		$user_response = wp_remote_get( 'https://discord.com/api/users/@me', array(
-			'headers' => array(
-				'Authorization' => 'Bearer ' . $access_token,
-			),
-		) );
-
-		if ( ! is_wp_error( $user_response ) ) {
-			$discord_user = json_decode( wp_remote_retrieve_body( $user_response ), true );
-			if ( isset( $discord_user['email'] ) ) {
-				$user = get_user_by( 'email', $discord_user['email'] );
-
-				if ( ! $user ) {
-					$username = $discord_user['username'];
-					if ( username_exists( $username ) ) {
-						$username = $username . '_' . wp_generate_password( 4, false );
-					}
-					$password = wp_generate_password();
-					$user_id = wp_create_user( $username, $password, $discord_user['email'] );
-					
-					if ( ! is_wp_error( $user_id ) ) {
-						$user = get_user_by( 'id', $user_id );
-						wp_update_user( array(
-							'ID' => $user_id,
-							'display_name' => $discord_user['global_name'] ?? $discord_user['username']
-						) );
-					}
-				}
-
-				if ( $user && ! is_wp_error( $user ) ) {
-					wp_set_current_user( $user->ID );
-					wp_set_auth_cookie( $user->ID, true );
-					
-					$display_name = ! empty( $user->display_name ) ? $user->display_name : ( ! empty( $user->user_login ) ? $user->user_login : ( ! empty( $user->user_nicename ) ? $user->user_nicename : 'Explorer' ) );
-					$user_nicename = ! empty( $user->user_nicename ) ? $user->user_nicename : ( ! empty( $user->user_login ) ? $user->user_login : $display_name );
-
-					$body['wp_user'] = array(
-						'user_id' => $user->ID,
-						'user_email' => $user->user_email,
-						'user_nicename' => $user_nicename,
-						'user_display_name' => $display_name,
-						'user_roles' => $user->roles,
-						'nonce' => wp_create_nonce( 'wp_rest' ),
-						'token' => wp_create_nonce( 'wp_rest' )
-					);
-				}
-			}
-		}
-
-		return rest_ensure_response( $body );
 	}
 
 	public function handle_get_me( $request ) {
@@ -3986,23 +3801,8 @@ window.addEventListener('beforeinstallprompt', function(e) {
 		$default_success = home_url( '/callback/stripe?status=success' . ( ! empty( $tier ) ? '&tier=' . urlencode( $tier ) : '' ) . $plan_query . '&session_id={CHECKOUT_SESSION_ID}' );
 		$default_cancel  = home_url( '/callback/stripe?status=cancel' . ( ! empty( $tier ) ? '&tier=' . urlencode( $tier ) : '' ) . $plan_query );
 
-		// Retrieve Stripe Secret Key from WP options, constants, or environment
-		$stripe_secret_key = get_option( 'compass_stripe_secret_key' );
-		if ( empty( $stripe_secret_key ) ) {
-			$stripe_secret_key = get_option( 'xophz_compass_stripe_secret_key' );
-		}
-		if ( empty( $stripe_secret_key ) ) {
-			$stripe_secret_key = get_option( 'stripe_secret_key' );
-		}
-		if ( empty( $stripe_secret_key ) && defined( 'STRIPE_SECRET_KEY' ) ) {
-			$stripe_secret_key = STRIPE_SECRET_KEY;
-		}
-		if ( empty( $stripe_secret_key ) ) {
-			$stripe_secret_key = getenv( 'STRIPE_SECRET_KEY' );
-		}
-		if ( empty( $stripe_secret_key ) && isset( $_ENV['STRIPE_SECRET_KEY'] ) ) {
-			$stripe_secret_key = $_ENV['STRIPE_SECRET_KEY'];
-		}
+		// The Stripe secret key resolves server-side through the stripe_secret_key connector.
+		$stripe_secret_key = Xophz_Compass_Event_Horizon_Connectors::get_key( 'stripe_secret_key' );
 
 		// Fallback to built-in simulator if no key is configured in dev
 		if ( empty( $stripe_secret_key ) || strpos( $stripe_secret_key, 'sk_test_Mock' ) === 0 ) {

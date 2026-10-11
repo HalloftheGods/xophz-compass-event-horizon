@@ -114,9 +114,9 @@ class Xophz_Compass_Event_Horizon_Settings {
 				'enable_ambient_autoplay' => false,
 			),
 			'integrations' => array(
-				'google_client_id'          => (string) get_option( 'compass_google_client_id', get_option( 'google_client_id', defined( 'GOOGLE_CLIENT_ID' ) ? GOOGLE_CLIENT_ID : '' ) ),
+				'google_client_id'          => Xophz_Compass_Event_Horizon_Connectors::get_key( 'google_oauth_client_id' ),
 				'google_redirect_uri'       => (string) get_option( 'google_redirect_uri', defined( 'GOOGLE_REDIRECT_URI' ) ? GOOGLE_REDIRECT_URI : '' ),
-				'discord_client_id'         => (string) get_option( 'compass_discord_client_id', get_option( 'discord_client_id', defined( 'DISCORD_CLIENT_ID' ) ? DISCORD_CLIENT_ID : '' ) ),
+				'discord_client_id'         => Xophz_Compass_Event_Horizon_Connectors::get_key( 'discord_client_id' ),
 				'discord_redirect_uri'      => (string) get_option( 'discord_redirect_uri', defined( 'DISCORD_REDIRECT_URI' ) ? DISCORD_REDIRECT_URI : '' ),
 				'vapid_public_key'          => (string) get_option( 'compass_vapid_public_key', get_option( 'youmeos_vapid_public_key', '' ) ),
 				'enable_blackbox_telemetry' => !empty( getenv('HOG_BLACKBOX_ACTIVE') ) || !empty( $_ENV['HOG_BLACKBOX_ACTIVE'] ),
@@ -256,17 +256,15 @@ class Xophz_Compass_Event_Horizon_Settings {
 			);
 			update_option( self::OPTION_INTEGRATIONS, $sanitized_integrations );
 
-			// Dual-sync to WP Connectors canonical options & legacy options
+			// Client ids are stored in the Connectors API options (google_oauth_client_id, discord_client_id).
 			if ( isset( $body['integrations']['google_client_id'] ) ) {
 				update_option( 'compass_google_client_id', $sanitized_integrations['google_client_id'] );
-				update_option( 'google_client_id', $sanitized_integrations['google_client_id'] );
 			}
 			if ( isset( $body['integrations']['google_redirect_uri'] ) ) {
 				update_option( 'google_redirect_uri', $sanitized_integrations['google_redirect_uri'] );
 			}
 			if ( isset( $body['integrations']['discord_client_id'] ) ) {
 				update_option( 'compass_discord_client_id', $sanitized_integrations['discord_client_id'] );
-				update_option( 'discord_client_id', $sanitized_integrations['discord_client_id'] );
 			}
 			if ( isset( $body['integrations']['discord_redirect_uri'] ) ) {
 				update_option( 'discord_redirect_uri', $sanitized_integrations['discord_redirect_uri'] );

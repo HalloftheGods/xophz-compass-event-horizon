@@ -20,7 +20,7 @@ class Xophz_Compass_Event_Horizon_Patreon {
     }
 
     public function get_auth_url( WP_REST_Request $request ) {
-        $client_id = defined( 'PATREON_CLIENT_ID' ) ? PATREON_CLIENT_ID : ( $_ENV['PATREON_CLIENT_ID'] ?? get_option( 'patreon_client_id' ) );
+        $client_id = Xophz_Compass_Event_Horizon_Connectors::get_key( 'patreon_client_id' );
         if ( empty( $client_id ) ) {
             return new WP_Error( 'missing_client_id', 'Patreon Client ID is not configured.', array( 'status' => 500 ) );
         }
@@ -45,8 +45,9 @@ class Xophz_Compass_Event_Horizon_Patreon {
             exit;
         }
 
-        $client_id     = defined( 'PATREON_CLIENT_ID' ) ? PATREON_CLIENT_ID : ( $_ENV['PATREON_CLIENT_ID'] ?? get_option( 'patreon_client_id' ) );
-        $client_secret = defined( 'PATREON_CLIENT_SECRET' ) ? PATREON_CLIENT_SECRET : ( $_ENV['PATREON_CLIENT_SECRET'] ?? get_option( 'patreon_client_secret' ) );
+        // Credentials resolve server-side through the patreon_client_id and patreon_client_secret connectors.
+        $client_id     = Xophz_Compass_Event_Horizon_Connectors::get_key( 'patreon_client_id' );
+        $client_secret = Xophz_Compass_Event_Horizon_Connectors::get_key( 'patreon_client_secret' );
         $redirect_uri  = site_url( '/wp-json/xophz/v1/auth/patreon/callback' );
 
         if ( empty( $client_id ) || empty( $client_secret ) ) {
@@ -79,7 +80,7 @@ class Xophz_Compass_Event_Horizon_Patreon {
         $access_token = $token_body['access_token'];
 
         // 2. Fetch user profile and memberships
-        $profile_response = wp_remote_get( 'https://www.patreon.com/api/oauth2/v2/identity?include=memberships.campaign&fields%5Buser%5D=email,full_name,thumb_url&fields%5Bmember%5D=patron_status', array(
+        $profile_response = wp_remote_get( 'https://www.patreon.com/api/oauth2/v2/identity?include=memberships.campaign&fields%5Buser%5D=email,is_email_verified,full_name,thumb_url&fields%5Bmember%5D=patron_status', array(
             'headers' => array(
                 'Authorization' => 'Bearer ' . $access_token,
             )
@@ -102,6 +103,12 @@ class Xophz_Compass_Event_Horizon_Patreon {
 
         if ( empty( $email ) ) {
             wp_redirect( site_url( '/?error=missing_patreon_email' ) );
+            exit;
+        }
+
+        // Accounts are matched by email below, so only a verified address is trusted.
+        if ( empty( $user_data['attributes']['is_email_verified'] ) ) {
+            wp_redirect( site_url( '/?error=unverified_patreon_email' ) );
             exit;
         }
 

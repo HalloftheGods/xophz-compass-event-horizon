@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [2026-10-10]
 
 ### Security
+- Removed the "local dev" admin password auto-heal from `POST /xophz-compass/v1/login`. On any site with `WP_DEBUG` on (or `localhost` in the home URL), a failed administrator login used to set the submitted password and sign the caller in. A wrong password now fails with 403 and leaves the stored hash untouched. `POST /xophz-compass/v1/lostpassword` no longer logs the reset link or returns it to the requester.
+- Discord login keeps the user's Discord access token on the server (protected user meta). The `/callback/discord` popup and `POST /xophz-compass/v1/discord/token` return only Discord profile fields (`discord_user`) and the WordPress session (`wp_user`). New `GET /xophz-compass/v1/discord/me` returns the signed-in user's Discord profile and guilds, and `DELETE` on it revokes and forgets the token. OAuth popups now post their result only to the site's own origin instead of `*`.
+- Discord, Google and Patreon logins match an existing account by email only when the provider says the address is verified.
+- `POST /xophz/v1/passport/sign` no longer signs caller-supplied JSON. It needs the `read` capability, ignores the request body, and signs server-built claims (`iss`, `sub`, `iat`, and the XP record from the XP plugin) with a key derived from the auth salt under a fixed label. The claims are returned with the proof.
+- Discord, Google, Stripe and Patreon credentials now resolve only through the WordPress Connectors API (`discord_client_id`, `discord_client_secret`, `google_oauth_client_id`, `google_oauth_client_secret`, `stripe_secret_key`, `patreon_client_id`, `patreon_client_secret`) via `Xophz_Compass_Event_Horizon_Connectors::get_key()`. The old option, constant, `getenv()` and `$_ENV` fallbacks are gone. Set missing values in Settings > Connectors.
 - Rebuilt `public/dist` without the Pinata API key, secret and JWT that a bare `import.meta.env` read in the shared logger had inlined into the YouMeOS bundles. Profile pinning now goes through the core plugin's server route `POST /xophz/v1/passport/pin`, and the root build fails if any secret-named env value reaches the output. The old values remain in this repository's git history: rotate them at Pinata.
 
 ## [2026-09-20]

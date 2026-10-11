@@ -87,7 +87,9 @@ class Xophz_Compass_Event_Horizon extends Xophz_Compass_Plugin_Base {
 		$plugin_dir = plugin_dir_path( dirname( __FILE__ ) );
 
 		require_once $plugin_dir . 'admin/class-xophz-compass-event-horizon-admin.php';
+		require_once $plugin_dir . 'includes/class-xophz-compass-event-horizon-connectors.php';
 		require_once $plugin_dir . 'public/class-xophz-compass-event-horizon-public.php';
+		require_once $plugin_dir . 'includes/api/class-xophz-compass-event-horizon-discord.php';
 		require_once $plugin_dir . 'includes/api/class-xophz-compass-event-horizon-default-sparks.php';
 		require_once $plugin_dir . 'includes/api/class-xophz-compass-event-horizon-spark-registry.php';
 		require_once $plugin_dir . 'includes/api/class-xophz-compass-event-horizon-tasks.php';
@@ -177,6 +179,10 @@ class Xophz_Compass_Event_Horizon extends Xophz_Compass_Plugin_Base {
 		// Register System Stats API
 		$system_stats_api = new Xophz_Compass_Event_Horizon_System_Stats();
 		$this->add_action( 'rest_api_init', $system_stats_api, 'register_routes' );
+
+		// Register Discord OAuth API (token stays server-side)
+		$discord_api = new Xophz_Compass_Event_Horizon_Discord();
+		$this->add_action( 'rest_api_init', $discord_api, 'register_routes' );
 
 		// Register Patreon API
 		$patreon_api = new Xophz_Compass_Event_Horizon_Patreon();
