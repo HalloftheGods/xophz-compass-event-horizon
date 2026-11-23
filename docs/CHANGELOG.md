@@ -4,6 +4,11 @@ All notable changes to the Xophz COMPASS Event Horizon module will be documented
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [2026-11-22]
+
+### Changed
+- Integrated floating pi trigger with the BlackBOX Frontend Compass Bar: suppresses the standalone fixed `#youmeos-pi-trigger` when the frontend Compass bar is active, delegating YouMeOS presentation directly to the dock navigation slot for administrators.
+
 ## [2026-10-10]
 
 ### Security

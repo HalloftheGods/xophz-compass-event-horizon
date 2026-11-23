@@ -1013,6 +1013,15 @@ class Xophz_Compass_Event_Horizon_Public {
 			return;
 		}
 
+		// When the frontend compass bar is active, YouMeOS registers directly on the bar for admins
+		if ( class_exists( '\BlackBOX\PublicFace\Frontend_Compass_Bar' ) && current_user_can( 'manage_options' ) ) {
+			$bar_enabled = get_option( 'blackbox_bedrock_frontend_compass_bar', '1' );
+			$is_native   = isset( $_GET['native_bar'] ) && $_GET['native_bar'] === '1';
+			if ( ( $bar_enabled === '1' || $bar_enabled === 1 || $bar_enabled === true ) && ! $is_native ) {
+				return;
+			}
+		}
+
 		global $wp_query;
 		$isRouteMatch = isset( $wp_query->query_vars['youmeos'] ) || isset( $wp_query->query_vars['os'] );
 		
